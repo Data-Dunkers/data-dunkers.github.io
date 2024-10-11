@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="generator" content="RSD 5.0.3490">
+  <meta name="description" content="Data Dunkers Video Coaching">
+  <title>Data Dunkers Video Coaching</title>
+  <link rel="stylesheet" href="css/foundation.min.css">
+  <link rel="stylesheet" href="css/wireframe-theme.min.css">
+  
+  <script>document.createElement( "picture" );</script>
+  <script class="picturefill" async="async" src="js/picturefill.min.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chelsea+Market%7CRoboto">    
+ <style>
+    .video-group {
+      margin: 40px 0;
+    }
+
+    .video-group-title {
+      text-align: center;
+      font-size: 24px;
+      font-weight: bold;
+      margin-bottom: 20px;
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: space-around;
+      flex-wrap: wrap;
+    }
+
+    .video-item {
+      margin: 10px;
+      flex-basis: calc(33.33% - 20px); /* Ensure 3 columns with some margin */
+      box-sizing: border-box;
+      position: relative; /* Required for overlay */
+    }
+
+    .thumbnail,
+    .video-item iframe {
+      width: 100%; /* Ensure same width for both thumbnail and video */
+      height: auto;
+      max-width: 560px; /* Consistent max width for both elements */
+      aspect-ratio: 16/9; /* Maintain 16:9 ratio */
+      display: block;
+      margin: 0 auto;
+    }
+
+    .thumbnail {
+      cursor: pointer;
+    }
+
+    .video-item iframe {
+      display: none; /* Hide video initially */
+    }
+
+    .play-button {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 50px;
+      height: 50px;
+      background: rgba(0, 0, 0, 0.6);
+      border-radius: 50%;
+      text-align: center;
+      line-height: 50px;
+      color: #fff;
+      font-size: 24px;
+    }
+
+    .name {
+      text-align: center;
+      font-size: 18px;
+      margin: 10px 0;
+    }
+
+    .bio {
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .resource-links {
+      text-align: center;
+      margin: 10px 0;
+    }
+  </style>
+  <script>
+    function showVideo(iframeId, thumbnailId) {
+      var iframe = document.getElementById(iframeId);
+      var thumbnail = document.getElementById(thumbnailId);
+      
+      // Ensure video and thumbnail have the same dimensions before switching
+      iframe.style.width = thumbnail.offsetWidth + "px";
+      iframe.style.height = thumbnail.offsetHeight + "px";
+      
+      // Hide the thumbnail and show the video
+      thumbnail.style.display = 'none';
+      iframe.style.display = 'block';
+    }
+  </script>
+</head>
+
+<body class="no-js">
+    <div class="container menu-container">
+      <a class="link-text nav-link smooth-scroll" href="index.html">Home</a>
+      <a class="link-text nav-link smooth-scroll" href="overview.html">About</a>
+      <a class="link-text nav-link smooth-scroll" href="coaching.html">Video Coaching</a>
+    </div>
+  </div>
+  <img src="images/data-dunkers-header-1.png" width="100%" alt="Data Dunkers" title="Data Dunkers" />
+  <h2 class="hero-heading">Welcome to <span class="highlight-blue"> our Video Coaching</span></h2>  
+  <p class="paragraph">Our Independent Dunker model enables teachers to guide students through the content of our two immersive half-day sessions focused on data collection and analysis. These sessions are designed for flexibility, allowing you to incorporate the content at your own pace. You will find resources such as lesson notebooks, coding activities, and step-by-step guidance to make it easy for you to facilitate active, hands-on learning.
+
+               
+A central hub for all lesson materials, designed to guide both teachers and students through the fundamentals of coding, data analysis, and visualization. Available on <a href='https://github.com/Data-Dunkers/'>our GitHub Repository</a>. These activities are created in Jupyter Notebooks, which can be opened in either Google Colab or Callysto. After your coaching sessions below, explore the <a href='https://github.com/Data-Dunkers/lessons/blob/main/lessons.ipynb'>full set of lessons and resources</a>. 
+The videos below will guide you through understanding the Data Dunkers Program itself, becoming better acquainted with our approach and becoming familiar with our actual activities. </p>
+   
+ 
+ <!-- Group 1 -->
+  <div class="video-group">
+    <div class="video-group-title">Understanding the Program</div>
+    <div class="video-container">
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail1" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video1', 'thumbnail1')">
+        <iframe id="video1" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578548266'></iframe>
+        <h2 class="name">Overview of Program</h2>
+        <p class="bio">An introduction to the program, featuring video clips and narration to explain the structure and purpose of Data Dunkers.</p>
+      </div>
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail2" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video2', 'thumbnail2')">
+        <iframe id="video2" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578543946'></iframe>
+        <h2 class="name">Structure of the Program</h2>
+        <p class="bio">Explores the various components (or 'chunks') of the program and explains how each aligns with educational goals. Also provides an overview of the different pathways available for implementation.</p>
+      </div>
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail3" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video3', 'thumbnail3')">
+        <iframe id="video3" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578528529'></iframe>
+        <h2 class="name">Understanding the DD Fundamentals Program</h2>
+        <p class="bio">A comprehensive guide to running the Data Dunkers Fundamentals program, covering the key objectives and expected student outcomes.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 2 -->
+  <div class="video-group">
+    <div class="video-group-title">Understanding Our Approach</div>
+    <div class="video-container">
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail4" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video4', 'thumbnail4')">
+        <iframe id="video4" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578549162'></iframe>
+        <h2 class="name">GitHub Resources Overview</h2>
+        <p class="bio">A tour of the essential resources needed to run the program, including Jupyter Notebooks, slide decks, and module descriptions. Learn how to navigate <a href='https://github.com/Data-Dunkers/'>Our Github Repository</a>.</p>
+      </div>
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail5" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video5', 'thumbnail5')">
+        <iframe id="video5" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578526443'></iframe>
+        <h2 class="name">Coding - Big Picture</h2>
+        <p class="bio">An explanation of the IPO (Input-Process-Output) model and its application in coding. Learn how to think critically about commands, variables, and data structures to build a solid coding foundation for students.</p>
+      </div>
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail6" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video6', 'thumbnail6')">
+        <iframe id="video6" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578537218'></iframe>
+        <h2 class="name">Instructional Approach</h2>
+        <p class="bio">A look into the instructional flow of the program and key decision points for teachers, providing guidance on how to facilitate student learning effectively.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Group 3 -->
+  <div class="video-group">
+    <div class="video-group-title">Preparing for the Activities</div>
+    <div class="video-container">
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail7" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video7', 'thumbnail7')">
+        <iframe id="video7" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578539041'></iframe>
+        <h2 class="name">Understanding Jupyter Notebooks</h2>
+        <p class="bio">An introduction to Jupyter Notebooks, detailing how to use them within the program and reviewing the Mini-Hoops activity as an example.</p>
+        <div class="resource-links">
+          <!-- Add resource links here -->
+          <p><a href="#">Link to Jupyter Notebooks Resource</a></p>
+        </div>
+      </div>
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail8" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video8', 'thumbnail8')">
+        <iframe id="video8" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578549564'></iframe>
+        <h2 class="name">Mini-Hoops Activity</h2>
+        <p class="bio">A detailed explanation of the Mini-Hoops activity, including a review of the corresponding Jupyter Notebook to support hands-on learning.</p>
+        <div class="resource-links">
+          <!-- Add resource links here -->
+          <p><a href="#">Link to Mini-Hoops Resource</a></p>
+        </div>
+      </div>
+      <div class="video-item">
+        <img src="images/DataDunkersIntro-Still.jpg" class="thumbnail" id="thumbnail9" alt="Data Dunkers Video Thumbnail" onclick="showVideo('video9', 'thumbnail9')">
+        <iframe id="video9" allowfullscreen scrolling='no' frameborder='0' src='https://www.wevideo.com/embed/#3578542454'></iframe>
+        <h2 class="name">Labyrinth Activity</h2>
+        <p class="bio">An overview of the Labyrinth activity, focusing on how to implement it in the classroom and use the Labyrinth Notebook for guided practice.</p>
+        <div class="resource-links">
+          <!-- Add resource links here -->
+          <p><a href="#">Link to Labyrinth Resource</a></p>
+        </div>
+      </div>
+    </div>
+  </div>
+ 
+ 
+  <div class="container contact-container" id="contact">
+    <div class="container location">
+      <h3 class="footer-section-header">Partners</h3>
+      <p class="paragraph footer-paragraph">PS43 Foundation<br>Dell Technologies<br>Callysto<br>Digital Moments</p>
+    </div>
+    <div class="container contac-us-footer">
+      <h3 class="footer-section-header">Contact Us</h3>
+      <p class="paragraph footer-paragraph"><a href="mailto:datadunkers@dell.com">datadunkers@dell.com</a></p>
+     </div>
+    </div>
+  </div>
+  <div class="container filmstrip-container"><div class="responsive-picture film-strip">
+      <picture><!--[if IE 9]><video style="display: none;"><![endif]-->
+        <source srcset="./images/footer/IMG_1719.jpg" media="(min-width: 64em)"><!--[if IE 9]></video><![endif]-->
+        <img alt="Placeholder Picture" width="480" height="443" src="./images/footer/IMG_1719.jpg">
+      </picture>
+    </div><div class="responsive-picture film-strip">
+      <picture><!--[if IE 9]><video style="display: none;"><![endif]-->
+        <source srcset="./images/footer/IMG_6317-scaled.jpg" media="(min-width: 64em)"><!--[if IE 9]></video><![endif]-->
+        <img alt="Placeholder Picture" width="400" height="369" src="./images/footer/IMG_6317-scaled.jpg">
+      </picture>
+    </div><div class="responsive-picture film-strip">
+      <picture><!--[if IE 9]><video style="display: none;"><![endif]-->
+        <source srcset="./images/footer/IMG_4610.jpg" media="(min-width: 64em)"><!--[if IE 9]></video><![endif]-->
+        <img alt="Placeholder Picture" width="400" height="369" src="./images/footer/IMG_4610.jpg">
+      </picture>
+    </div><div class="responsive-picture film-strip">
+      <picture><!--[if IE 9]><video style="display: none;"><![endif]-->
+        <source srcset="./images/footer/IMG_4614.jpg" media="(min-width: 64em)"><!--[if IE 9]></video><![endif]-->
+        <img alt="Placeholder Picture" width="400" height="369" src="./images/footer/IMG_4614.jpg">
+      </picture>
+    </div><div class="responsive-picture film-strip">
+      <picture><!--[if IE 9]><video style="display: none;"><![endif]-->
+        <source srcset="./images/footer/IMG_4664.jpg" media="(min-width: 64em)"><!--[if IE 9]></video><![endif]-->
+        <img alt="Placeholder Picture" width="400" height="369" src="./images/footer/IMG_4664.jpg">
+      </picture>
+    </div><div class="responsive-picture film-strip">
+      <picture><!--[if IE 9]><video style="display: none;"><![endif]-->
+        <source srcset="./images/footer/IMG_4836.jpg" media="(min-width: 64em)"><!--[if IE 9]></video><![endif]-->
+        <img alt="Placeholder Picture" width="400" height="369" src="./images/footer/IMG_4836.jpg">
+      </picture>
+    </div>
+ 
+  </div>
+  <script src="js/jquery.min.js"></script>
+  <script src="js/outofview.js"></script>
+  <script src="js/what-input.min.js"></script>
+  <script src="js/foundation.min.js"></script>
+  <script>$(document).foundation();</script>
+<!-- SMOOTH SCROLL -->
+<script>
+$(function() {
+  $('a.smooth-scroll[href*="#"]:not([href="#"])').click(function() {
+    if (location.pathname.replace(/^\//,'') == this.pathname.replace(/^\//,'') && location.hostname == this.hostname) {
+      var target = $(this.hash);
+      target = target.length ? target : $('[name=' + this.hash.slice(1) +']');
+      if (target.length) {
+        $('html,body').animate({
+          scrollTop: target.offset().top
+        }, 1000);
+        return false;
+      }
+    }
+  });
+});
+</script>
+<!-- End of SMOOTH SCROLL -->
+</body>
+
+</html>
