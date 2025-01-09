@@ -25,10 +25,11 @@
 
 ## Optional Activities
 
-* [Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/index.html?path=data-labyrith%2Fmini-basketball%2Fmini-basketball.ipynb) (key = 'WNBA')
+* [Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/index.html?path=data-labyrith%2Fmini-basketball%2Fmini-basketball.ipynb)
+  * key = 'WNBA'
 * [Pixel Art](https://www.piskelapp.com)
   * Basketball
   * Bev Facey Logo
   * Data Dunkers Logo
-  * Animation of a person running
+  * Animation of a person dribbling
 * Shooting more hoops
