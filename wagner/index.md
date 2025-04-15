@@ -25,7 +25,7 @@
 
 ## Additional Activities
 
-* [Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/index.html?path=data-labyrith%2Fmini-basketball%2Fmini-basketball.ipynb)
+* [Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/)
   * key = 'WNBA'
 * [Pixel Art](https://www.piskelapp.com)
   * Basketball
