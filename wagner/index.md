@@ -4,6 +4,7 @@
 
 * [Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLSelpPWaRrx7LbhziIoCAZg__j1KYI2CVATgdZmR7vYhK-BVYg/viewform)
 * [Reaction Timer](https://datadunkers.ca/reaction-timer)
+* [Stopwatch](https://datadunkers.ca/stopwatch)
 * [Data Analysis Notebook](https://colab.research.google.com/drive/1xvS_UzSbI6toJymoT9tfD7bQYqs-xDDG)
 
 ## How to play Bump (Knock-Out)

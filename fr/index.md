@@ -4,6 +4,7 @@
 
 * [Formulaire de collecte de données](https://docs.google.com/forms/d/e/1FAIpQLSckvzRsyt2a7xiTHalMJ_IcfezyZVbnbk52UFrlpZFGAbq_hg/viewform)
 * [Chronomètre de réaction](https://datadunkers.ca/reaction-timer/fr)
+* [Chronomètre](https://datadunkers.ca/stopwatch/fr)
 * [Carnet d'analyse de données](https://colab.research.google.com/drive/1xvS_UzSbI6toJymoT9tfD7bQYqs-xDDG)
 
 ## Comment jouer au bump (knock-out)
