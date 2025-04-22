@@ -5,7 +5,7 @@
 * [Formulaire de collecte de données](https://docs.google.com/forms/d/e/1FAIpQLSckvzRsyt2a7xiTHalMJ_IcfezyZVbnbk52UFrlpZFGAbq_hg/viewform)
 * [Chronomètre de réaction](https://datadunkers.ca/reaction-timer/fr)
 * [Chronomètre](https://datadunkers.ca/stopwatch/fr)
-* [Carnet d'analyse de données](https://colab.research.google.com/drive/1xvS_UzSbI6toJymoT9tfD7bQYqs-xDDG)
+* [Carnet d'analyse de données](https://github.com/Data-Dunkers/lecons/blob/principale/data-dunkers-d%C3%A9mo.ipynb)
 
 ## Comment jouer au bump (knock-out)
 
@@ -28,6 +28,8 @@
 
 * [Data Labyrinth](https://labyrinth.datadunkers.ca/petit-basketball/)
   * clé = 'WNBA'
+* [Leçons](https://github.com/Data-Dunkers/lecons/blob/principale/README.md)
+  * (also available in English: [Lessons](https://github.com/Data-Dunkers/lessons/blob/main/lessons.ipynb))
 * [Pixel Art](https://www.piskelapp.com)
   * Basket-ball
   * Logo de l'école
