@@ -29,7 +29,24 @@
 * [Data Labyrinth](https://labyrinth.datadunkers.ca/petit-basketball/)
   * clé = 'WNBA'
 * [Leçons](https://github.com/Data-Dunkers/lecons/blob/principale/README.md)
-  * (also available in English: [Lessons](https://github.com/Data-Dunkers/lessons/blob/main/lessons.ipynb))
+  * Entrée
+    * [Données de l'intérieur](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-de-l%27int%C3%A9rieur.ipynb)
+    * [Données de CSV](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-de-csv.ipynb)
+    * [Données de Excel](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-de-excel.ipynb)
+    * [Données de Google Sheet](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-de-google-sheet.ipynb)
+    * [Données de page web](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-de-page-web.ipynb)
+    * [Données du panier](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-du-panier.ipynb)
+  * Traitement
+    * [Colonnes de données](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/colonnes-de-donn%C3%A9es.ipynb)
+    * [Filtrage des données](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/filtrage-des-donn%C3%A9es.ipynb)
+    * [Données statistiques](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-statistiques.ipynb)
+    * [Données nouvelles colonnes](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/donn%C3%A9es-nouvelles-colonnes.ipynb)
+  * Sortie
+    * [Graphisme Graphes Barres](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/graphisme-graphes-barres.ipynb)
+    * [Graphiques Diagrammes de Dispersion](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/graphiques-diagrammes-de-dispersion.ipynb)
+    * [Graphique Pie Charts](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/graphique-pie-charts.ipynb)
+    * [Graphiques Histogrammes](https://colab.research.google.com/github/data-dunkers/lecons/blob/principale/graphiques-histogrammes.ipynb)
+* [Lessons in English](https://github.com/Data-Dunkers/lessons/blob/main/lessons.ipynb)
 * [Pixel Art](https://www.piskelapp.com)
   * Basket-ball
   * Logo de l'école
