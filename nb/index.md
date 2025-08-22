@@ -2,6 +2,9 @@
 
 ## Data Science Activities
 
+* [Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/)
+  * key = 'WNBA'
+
 ### Gagetown
 
 * [Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLScz5N2rI8cuERdZjOAUu5viXxpOPRtpmneTg70rIq5GgPKb6A/viewform)
@@ -33,8 +36,6 @@
 
 ## Additional Activities
 
-* [Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/)
-  * key = 'WNBA'
 * [Pixel Art](https://www.piskelapp.com)
   * Basketball
   * School Logo
