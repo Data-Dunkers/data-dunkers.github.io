@@ -1,7 +1,7 @@
 # Data Dunkers in New Brunswick
 
-[Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/)
-* key = 'WNBA'
+* [Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/)
+  * key = 'WNBA'
 
 ## Data Science Activities
 
