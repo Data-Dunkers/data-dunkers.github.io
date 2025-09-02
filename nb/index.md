@@ -5,15 +5,17 @@
 
 ## Data Science Activities
 
-### Gagetown
-
-* [Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLScz5N2rI8cuERdZjOAUu5viXxpOPRtpmneTg70rIq5GgPKb6A/viewform)
-* [Data Analysis Notebook](https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&branch=main&subPath=Data_Dunkers_Detailed_Form_Analysis_Gagetown.ipynb&depth=1)
-
 ### Sunny Brae
 
 * [Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLSfgE6b3uxF6ScGNnttq47x8urR2DWUOwukSLlCJtM2MopBB3w/viewform)
 * [Data Analysis Notebook](https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&branch=main&subPath=Data_Dunkers_Detailed_Form_Analysis_Sunny_Brae.ipynb&depth=1)
+
+### Gagetown
+
+* [Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLScz5N2rI8cuERdZjOAUu5viXxpOPRtpmneTg70rIq5GgPKb6A/viewform)
+* [Data Analysis Notebook](https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&branch=main&subPath=Data_Dunkers_Detailed_Form_Analysis_Gagetown.ipynb&depth=1)
+* [Alternate Labyrinth for Gagetown](https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2Fdata-dunkers%2Flessons&branch=main&subPath=labyrinths/mini-basketball/mini-basketball.ipynb&depth=1)
+
 
 ### Post-Game Analysis Questions
 
