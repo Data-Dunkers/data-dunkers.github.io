@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>ISTE+ASCD AI Innovators Studio Guide</title>
+<style>
+:root {
+  --accent: #2e3b8e;
+  --text: #1f2937;
+  --bg: #ffffff;
+  --muted: #6b7280;
+  --card: #f8fafc;
+  --ring: rgba(46,59,142,0.15);
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font: 16px/1.6 system-ui, -apple-system, Segoe UI, Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji"; }
+h1, h2, h3, h4, h5 { line-height: 1.25; }
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
+/* Layout */
+.header {
+  position: sticky; top: 0; z-index: 10;
+  backdrop-filter: saturate(180%) blur(8px);
+  background: color-mix(in oklab, var(--bg) 85%, white 15%);
+  border-bottom: 1px solid #eef2f7;
+}
+.header-inner {
+  max-width: 1200px; margin: 0 auto; padding: 0.6rem 1rem;
+  display: grid; grid-template-columns: 1fr auto; gap: 1rem; align-items: center;
+}
+.brand { display: flex; align-items: center; gap: .6rem; }
+.brand .logo { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); display: inline-grid; place-items: center; color: white; font-weight: 700; }
+.brand h1 { font-size: 1.1rem; margin: 0; }
+.tools { display: flex; gap: .5rem; align-items: center; }
+.tools input[type="search"] {
+  border: 1px solid #e5e7eb; border-radius: 10px; padding: .45rem .7rem; min-width: 220px;
+}
+.button { border: 1px solid #e5e7eb; background: #fff; padding: .45rem .7rem; border-radius: 10px; cursor: pointer; }
+.button:hover { box-shadow: 0 0 0 3px var(--ring); }
+.container { max-width: 1200px; margin: 0 auto; padding: 1rem; display: grid; grid-template-columns: 260px 1fr; gap: 1.2rem; }
+@media (max-width: 960px) {
+  .container { grid-template-columns: 1fr; }
+  .sidebar { position: sticky; top: 52px; }
+}
+.sidebar {
+  border: 1px solid #eef2f7; border-radius: 14px; padding: .8rem; background: var(--card);
+}
+.sidebar h3 { margin-top: .2rem; font-size: 1rem; }
+.toc { list-style: none; padding: 0; margin: 0; }
+.toc li { margin: .25rem 0; }
+.toc a { display: block; padding: .3rem .4rem; border-radius: 8px; }
+.toc a:hover, .toc a.active { background: #eef2ff; text-decoration: none; }
+.main { min-width: 0; }
+.section { border: 1px solid #eef2f7; border-radius: 16px; padding: 1rem 1.2rem; margin-bottom: 1rem; background: #fff; }
+.section h2 { display: flex; align-items: center; gap: .5rem; font-size: 1.4rem; margin-top: 0; }
+.section .icon { font-size: 1.2rem; }
+.subtitle { color: var(--muted); margin-top: .2rem; }
+blockquote { margin: 1rem 0; padding: .8rem 1rem; border-left: 4px solid var(--accent); background: #f6f7ff; border-radius: 6px; }
+.framework-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: .8rem; }
+.card { border: 1px solid #eef2f7; background: #fff; border-radius: 12px; padding: .8rem; }
+.badge { font-size: .8rem; color: #fff; background: var(--accent); padding: .1rem .5rem; border-radius: 999px; margin-left: .3rem; }
+.flow { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: .4rem; padding-left: 1.1rem; }
+.small-note { color: var(--muted); font-size: .9rem; }
+details { background: #fbfcff; border: 1px solid #eef2f7; border-radius: 10px; padding: .6rem .8rem; margin: .6rem 0; }
+summary { cursor: pointer; font-weight: 600; }
+.phase-table { width: 100%; border-collapse: collapse; }
+.phase-table th, .phase-table td { border-bottom: 1px solid #e5e7eb; padding: .5rem .4rem; text-align: left; vertical-align: top; }
+.pill-list { display: flex; flex-wrap: wrap; gap: .4rem; list-style: none; padding: 0; }
+.pill-list li { background: #f3f4f6; border: 1px solid #e5e7eb; padding: .3rem .6rem; border-radius: 999px; }
+.to-top { margin-top: .8rem; font-size: .9rem; }
+footer { max-width: 1200px; margin: 2rem auto; padding: 0 1rem 2rem; color: var(--muted); }
+mark.search-hit { background: #fff59d; padding: 0 .15em; border-radius: 2px; }
+/* Print */
+@media print {
+  .header, .sidebar, .to-top { display: none !important; }
+  .container { display: block; }
+  .section { page-break-inside: avoid; }
+}
+</style>
+</head>
+<body id="top">
+<header class="header">
+  <div class="header-inner">
+    <div class="brand">
+      <div class="logo" aria-hidden="true">AI</div>
+      <h1>ISTE+ASCD AI Innovators Studio Guide</h1>
+    </div>
+    <div class="tools">
+      <input id="search" type="search" placeholder="Search the guide…" aria-label="Search the guide" />
+      <button class="button" id="toggleDark" aria-pressed="false" title="Toggle dark mode">Dark</button>
+      <button class="button" onclick="window.print()" title="Print or save as PDF">Print</button>
+    </div>
+  </div>
+</header>
+
+<div class="container">
+  <nav class="sidebar" aria-label="Table of contents">
+    <h3>Explore the Guide</h3>
+    <ul class="toc">
+      <li><a href="#title-page">Title Page</a></li>
+<li><a href="#word-from-iste-ascd">A Word from ISTE + ASCD</a></li>
+<li><a href="#welcome">Welcome to the AI Innovator Studio</a></li>
+<li><a href="#what-youll-find">What You’ll Find in This Guide</a></li>
+<li><a href="#role-of-facilitator">The Role of the Facilitator</a></li>
+<li><a href="#studio-approach">How The Studio Approach Works</a></li>
+<li><a href="#using-lessons">Using the Lessons</a></li>
+<li><a href="#educator-use">How Educators Can Use the Studio</a></li>
+<li><a href="#challenge">Connecting to the AI Innovator Challenge</a></li>
+<li><a href="#appendix">Appendix</a></li>
+    </ul>
+  </nav>
+
+  <main class="main" id="content">
+    
+    <section id="title-page" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            Title Page
+        </h2>
+        
+<h1>ISTE+ASCD AI Innovators Studio Guide</h1>
+<p class="subtitle">Companion to the AI Innovators Studio Lessons</p>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="word-from-iste-ascd" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            A Word from ISTE + ASCD
+        </h2>
+        
+<p>The AI Innovator Studio was created through the collaboration of ISTE + ASCD and our partners Lenovo, Microsoft, and Intel, who share a commitment to helping educators and students explore the possibilities of AI through purposeful, human-centered design.</p>
+<p>The Studio emerged from the success of the AI Innovator Challenge, where students around the world demonstrated remarkable creativity and curiosity in applying AI to solve real problems. The AI Innovator Challenge was expanded to include additional support for educators.</p>
+<p>The Studio provides educators with structured lessons, flexible models, and globally aligned frameworks that help students learn to design with AI—ethically, creatively, and collaboratively.</p>
+<p>This work builds on a shared foundation of learning principles and standards that have guided ISTE and ASCD’s work for decades. The Studio draws upon:</p>
+<ul>
+    <li><strong>Transformational Learning Principles (TLPs)</strong> — agency, authenticity, collaboration, creativity, opportunity, and sustainability.</li>
+    <li><strong>ISTE Standards for Students</strong> and <strong>DigCit Competencies</strong>.</li>
+    <li><strong>AI Literacy Framework (AILit)</strong> from the OECD, European Commission, and Code.org.</li>
+    <li><strong>Profile of an AI-Ready Graduate</strong> (ISTE + ASCD) — Learner, Researcher, Synthesizer, Ideator, Connector, Storyteller.</li>
+</ul>
+<p>Together, these frameworks and partnerships ensure that the AI Innovator Studio is grounded in both research and relevance, offering schools around the world a pathway to build capacity for innovation while preparing students to become the AI-ready graduates of tomorrow.</p>
+<p><em>ISTE + ASCD is proud to continue this journey—connecting curiosity to purpose, and technology to humanity.</em></p>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="welcome" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            Welcome to the AI Innovator Studio
+        </h2>
+        
+<p>The AI Innovator Studio is more than a set of lessons—it’s a space for educators and students to learn how to design with AI, not just about it. The Studio invites learners to explore how artificial intelligence can support creativity, problem-solving, and innovation with purpose.</p>
+<p>Rather than focusing on step-by-step technical instruction or programming skills, the Studio emphasizes the design process itself—how ideas take shape, evolve, and come to life when AI becomes part of the toolkit. Each lesson opens a pathway for students to imagine, test, and reflect on how AI can amplify human potential while keeping ethics, empathy, and inclusion at the center.</p>
+<p>For educators, the Studio provides ready-to-use lessons, flexible models, and a clear design framework that can be used in classrooms, clubs, or innovation spaces. Each lesson stands on its own or can connect to others in a progression.</p>
+<blockquote>When students see themselves as designers, innovators, and responsible creators, they begin to shape the future—not just adapt to it.</blockquote>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="what-youll-find" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            What You’ll Find in This Guide
+        </h2>
+        
+<ul>
+    <li><strong>Your Role as Facilitator</strong> — selecting lessons, shaping experiences, and using built-in supports.</li>
+    <li><strong>How the Studio Approach Works</strong> — the design framework, learning flow, and alignment to standards.</li>
+    <li><strong>Using the Lessons</strong> — structure, student experience, and sequencing.</li>
+    <li><strong>How Educators Can Use the Studio</strong> — planning, adapting, and implementing in diverse contexts.</li>
+    <li><strong>Reference Tools (Appendix)</strong> — quick-access resources and planning aids.</li>
+</ul>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="role-of-facilitator" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            The Role of the Facilitator
+        </h2>
+        
+<p>Just as AI depends on human direction to act with purpose, the Studio depends on the educator to guide the experience with intention. The lessons, tools, and frameworks are designed to support you—but it is your insight, decision-making, and connection to students that bring the Studio to life.</p>
+<h4>Your Role in the Studio</h4>
+<ul>
+    <li><strong>Selecting Lessons &amp; Planning</strong> — use the AI Learning Progression and AI Creation Menu to build pathways.</li>
+    <li><strong>Implementing the Studio</strong> — adapt to classrooms, clubs, or innovation pathways.</li>
+    <li><strong>Facilitating Learning</strong> — guide curiosity; leverage Facilitator Notes for pacing, scaffolds, and reflection.</li>
+</ul>
+<h4>Supports for You</h4>
+<ul>
+    <li>This Facilitator Guide</li>
+    <li>AI Learning Progression &amp; AI Creation Menu</li>
+    <li>Lesson-embedded Facilitator Notes</li>
+</ul>
+<h4>Facilitation Tips</h4>
+<ul>
+    <li>Model curiosity and critical thinking.</li>
+    <li>Emphasize iterative design: test, learn, improve.</li>
+    <li>Connect designs to real people and needs.</li>
+    <li>Prioritize reflection and ethical considerations.</li>
+    <li>Celebrate creativity, inclusion, and risk-taking.</li>
+</ul>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="studio-approach" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            How The Studio Approach Works
+        </h2>
+        
+<p>The Studio lessons are structured opportunities for exploration, creativity, and responsible innovation.</p>
+<div class="framework-grid">
+    <div class="card">
+        <h5>Foundation — Real-World Challenges <span class="badge">What</span></h5>
+        <p>Begin with empathy and local relevance; connect to real people and communities.</p>
+    </div>
+    <div class="card">
+        <h5>Methods &amp; Tools — AI Literacy + CT <span class="badge">How</span></h5>
+        <p>Use AI as partner in thinking and creation; apply computational &amp; design thinking.</p>
+    </div>
+    <div class="card">
+        <h5>Reflection &amp; Citizenship — Global Competencies <span class="badge">So What</span></h5>
+        <p>Consider impact, values, and ethics; reflect on how AI shaped process and outcomes.</p>
+    </div>
+</div>
+<h4>The Studio Flow</h4>
+<ol class="flow">
+    <li><strong>Spark</strong> — ignite curiosity</li>
+    <li><strong>Explore</strong> — investigate examples</li>
+    <li><strong>Experiment</strong> — test possibilities</li>
+    <li><strong>Create</strong> — build solutions</li>
+    <li><strong>Share</strong> — present and get feedback</li>
+    <li><strong>Reflect</strong> — synthesize insights and impact</li>
+</ol>
+<p class="small-note">Influenced by design thinking (Intel® SFI), global perspectives (Two‑Eyed Seeing, Ubuntu, Frugal Innovation), PBL, 5E, and Maker Education.</p>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="using-lessons" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            Using the Lessons
+        </h2>
+        
+<p>Each lesson follows a mini studio cycle with six phases. Below is a compact reference.</p>
+<details open>
+    <summary><strong>Phase Reference</strong></summary>
+    <table class="phase-table">
+        <thead><tr><th>Phase</th><th>Purpose / Focus</th><th>Student Experience</th></tr></thead>
+        <tbody>
+            <tr><td>Spark</td><td>Ignite curiosity and frame a meaningful challenge.</td><td>Encounter an idea, question, or scenario of relevance.</td></tr>
+            <tr><td>Explore</td><td>Investigate and gather perspectives.</td><td>Examine AI + human creativity in context.</td></tr>
+            <tr><td>Experiment</td><td>Try ideas and tools in low-stakes ways.</td><td>Quick prototypes and reflection.</td></tr>
+            <tr><td>Create</td><td>Build a solution, artifact, or concept.</td><td>Main challenge combining creativity, data, and AI.</td></tr>
+            <tr><td>Share</td><td>Communicate and receive feedback.</td><td>Present and learn from peers’ perspectives.</td></tr>
+            <tr><td>Reflect</td><td>Synthesize insights and consider impact.</td><td>Evaluate process, ethics, and AI’s role.</td></tr>
+        </tbody>
+    </table>
+</details>
+<details>
+    <summary><strong>Inside Each Lesson</strong></summary>
+    <ol>
+        <li><strong>Front Matter</strong> — title, duration, Studio stage, ISTE links, learning goals, facilitator notes.</li>
+        <li><strong>Studio Flow</strong> — per-phase purpose, student challenge, facilitator moves, inputs/tools.</li>
+        <li><strong>Artifacts &amp; Assessment</strong> — tangible outputs + rubric dimensions.</li>
+        <li><strong>Extensions &amp; Connections</strong> — remix/extend and tie-ins to the Challenge.</li>
+        <li><strong>Resources</strong> — tools, media, downloads.</li>
+    </ol>
+</details>
+<details>
+    <summary><strong>Lesson Progression</strong></summary>
+    <p><em>Insert local lesson progression here to match your program or course.</em></p>
+</details>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="educator-use" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            How Educators Can Use the Studio
+        </h2>
+        
+<h4>Planning Considerations</h4>
+<ul>
+    <li>Student readiness &amp; interest (use the AI Learning Progression).</li>
+    <li>Time &amp; scope (from single sessions to extended projects).</li>
+    <li>Local goals &amp; standards alignment.</li>
+    <li>AI literacy growth (explore multiple AI Creation Menu domains).</li>
+</ul>
+<h4>Sequencing the Lessons</h4>
+<p>Use both the <strong>AI Learning Progression</strong> and the <strong>AI Creation Menu</strong> to decide where to begin and what to create.</p>
+<details>
+    <summary><strong>AI Learning Progression (8 Levels)</strong></summary>
+    <ol>
+        <li>Engage with AI — curiosity &amp; awareness</li>
+        <li>Interact with AI — exploration &amp; comfort</li>
+        <li>Create with AI — guided design</li>
+        <li>Evaluate AI — critical thinking &amp; analysis</li>
+        <li>Manage AI — ethics &amp; responsibility</li>
+        <li>Design with AI — applied problem-solving</li>
+        <li>Build or Adapt AI — technical exploration</li>
+        <li>Evaluate &amp; Share AI Systems — usability &amp; impact</li>
+    </ol>
+</details>
+<details>
+    <summary><strong>AI Creation Menu (Focus Areas)</strong></summary>
+    <ul>
+        <li>Human &amp; Social Impact</li>
+        <li>Creativity &amp; Expression</li>
+        <li>Learning &amp; Growth</li>
+        <li>Data &amp; Discovery</li>
+        <li>Advanced Design &amp; Development</li>
+    </ul>
+</details>
+<h4>Implementation Options</h4>
+<ul class="pill-list">
+    <li>Embedded Classroom Units</li><li>Project-Based Learning Modules</li><li>Cross-Curricular Collaborations</li>
+    <li>After-School Innovation Clubs</li><li>Independent/Capstone Paths</li><li>Advisory/Homeroom Prompts</li>
+    <li>Innovation Weeks / Hackathons</li><li>Family/Community Nights</li><li>Pop-Up Innovation Labs</li>
+    <li>Elective/Innovation Courses</li><li>Community Partnership Projects</li><li>Regional Cohorts &amp; Showcases</li>
+    <li>Innovation Incubators / Makerspaces</li>
+</ul>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="challenge" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            Connecting to the AI Innovator Challenge
+        </h2>
+        
+<p>The Studio can serve as a pathway into the global AI Innovator Challenge. Teams design AI‑enabled solutions to local or global problems aligned to the UN SDGs.</p>
+<h4>How the Studio Prepares Students</h4>
+<ul>
+    <li><strong>Real‑World Relevance</strong> — human‑centered problems.</li>
+    <li><strong>Creative Problem‑Solving</strong> — ideate, test, refine.</li>
+    <li><strong>Ethical &amp; Responsible AI</strong> — reflect on data, bias, and impact.</li>
+    <li><strong>Collaboration &amp; Communication</strong> — iterative feedback and presentation.</li>
+</ul>
+<h4>Facilitator Guidance</h4>
+<ul>
+    <li>Run Challenge as capstone after a sequence of lessons.</li>
+    <li>Offer as club/elective extension.</li>
+    <li>Use AI Learning Progression to gauge readiness.</li>
+    <li>Use AI Creation Menu to select focus areas.</li>
+</ul>
+
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+
+    <section id="appendix" class="section">
+        <h2>
+            <span class="icon" aria-hidden="true">📘</span>
+            Appendix
+        </h2>
+        <p><em>Quick-access resources, frameworks, and planning aids can be linked here.</em></p>
+        <div class="to-top"><a href="#top" aria-label="Back to top">↑ Back to top</a></div>
+    </section>
+    
+  </main>
+</div>
+
+<footer>
+  <p>© ISTE + ASCD — AI Innovators Studio. Built for web viewing. This HTML rendering preserves the intent and organization of the provided guide.</p>
+</footer>
+
+<script>
+// TOC active link on scroll
+const sections = Array.from(document.querySelectorAll('.section'));
+const tocLinks = Array.from(document.querySelectorAll('.toc a'));
+const byId = id => document.getElementById(id);
+const searchInput = byId('search');
+
+function onScroll() {
+  let current = sections[0].id;
+  const scrollY = window.scrollY + 100;
+  for (const sec of sections) {
+    if (sec.offsetTop <= scrollY) current = sec.id;
+  }
+  tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + current));
+}
+window.addEventListener('scroll', onScroll);
+onScroll();
+
+// Smooth scroll
+tocLinks.forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    document.querySelector(a.getAttribute('href')).scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+
+// Dark mode (optional; keeps white default)
+const toggle = byId('toggleDark');
+const root = document.documentElement;
+toggle.addEventListener('click', () => {
+  const dark = root.hasAttribute('data-dark');
+  if (dark) {
+    root.removeAttribute('data-dark');
+    toggle.setAttribute('aria-pressed','false');
+    // reset to default white palette
+    root.style.setProperty('--bg', '#ffffff');
+    root.style.setProperty('--text', '#1f2937');
+    root.style.setProperty('--card', '#f8fafc');
+  } else {
+    root.setAttribute('data-dark','');
+    toggle.setAttribute('aria-pressed','true');
+    root.style.setProperty('--bg', '#0b0f19');
+    root.style.setProperty('--text', '#e5e7eb');
+    root.style.setProperty('--card', '#0f1525');
+  }
+});
+
+// Client-side search with highlight
+let lastMarks = [];
+function clearMarks() {
+  lastMarks.forEach(m => {
+    const parent = m.parentNode;
+    parent.replaceChild(document.createTextNode(m.textContent), m);
+    parent.normalize();
+  });
+  lastMarks = [];
+}
+function highlight(term) {
+  if (!term) return;
+  const rx = new RegExp(term.replace(/[.*+?^${}()|[\]\]/g, '\\$&'), 'gi');
+  sections.forEach(sec => {
+    sec.querySelectorAll('p, li, td, blockquote').forEach(node => {
+      const html = node.innerHTML;
+      const replaced = html.replace(rx, m => '<mark class="search-hit">'+m+'</mark>');
+      if (replaced !== html) {
+        node.innerHTML = replaced;
+        node.querySelectorAll('mark.search-hit').forEach(m => lastMarks.push(m));
+      }
+    });
+  });
+}
+let searchTimer;
+searchInput.addEventListener('input', () => {
+  clearMarks();
+  const term = searchInput.value.trim();
+  if (!term) return;
+  clearTimeout(searchTimer);
+  searchTimer = setTimeout(() => highlight(term), 200);
+});
+</script>
+</body>
+</html>

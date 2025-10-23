@@ -1,0 +1,452 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lesson 1 – Redesign the Everyday</title>
+  <style>
+    :root{
+      --ink:#1f2937;         /* gray-800 */
+      --muted:#6b7280;       /* gray-500 */
+      --line:#e5e7eb;        /* gray-200 */
+      --card:#ffffff;        /* white */
+      --wash:#fafafa;        /* light panel */
+      --brand:#7c3aed;       /* violet-600 */
+      --brand-sub:#4f46e5;   /* indigo-600 */
+      --accent:#0891b2;      /* cyan-700 */
+      --ring: rgba(124,58,237,.25);
+      --radius:14px;
+      --shadow:0 6px 18px rgba(0,0,0,.08);
+    }
+    html,body{height:100%}
+    body{
+      margin:0; font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, "Helvetica Neue", Arial;
+      background:#fff; color:var(--ink); line-height:1.6;
+    }
+    .shell{max-width:980px; margin:0 auto; padding:28px 18px 80px}
+    header.hero{background:linear-gradient(135deg,#f8fafc,#eef2ff); border:1px solid #e0e7ff; border-radius:20px; padding:28px; box-shadow:var(--shadow)}
+    .kicker{font-size:12px; letter-spacing:.3px; text-transform:uppercase; color:var(--brand-sub)}
+    h1{margin:.2rem 0 .4rem; font-size: clamp(28px, 4vw, 40px); color:#4c1d95}
+    .subtitle{color:var(--muted); margin:0}
+
+    .toc{display:grid; grid-template-columns:1fr; gap:8px; margin-top:16px}
+    .toc a{display:block; padding:10px 12px; border:1px solid var(--line); border-radius:10px; text-decoration:none; color:#111; background:#fff}
+    .toc a:hover{border-color:#c7d2fe; box-shadow:0 2px 10px rgba(99,102,241,.15)}
+
+    section.card{background:var(--card); border:1px solid var(--line); border-radius:var(--radius); box-shadow:var(--shadow); padding:20px 22px; margin:18px 0}
+    section.card h2{display:flex; align-items:center; gap:10px; margin:0 0 10px; color:var(--brand)}
+    section.card h3{color:var(--brand-sub); margin:14px 0 6px}
+
+    .callout{border-left:4px solid var(--brand); background:#f5f3ff; padding:12px 14px; border-radius:10px}
+    .checklist{list-style:none; padding-left:0}
+    .checklist li{padding-left:28px; position:relative; margin:6px 0}
+    .checklist li::before{content:"✔"; position:absolute; left:0; top:0; color:#10b981}
+
+    details{border:1px solid var(--line); background:#fff; border-radius:12px; padding:12px 14px; box-shadow:0 2px 10px rgba(0,0,0,.04)}
+    details summary{cursor:pointer; font-weight:700; color:#111}
+
+    .phase{border:1px solid var(--line); border-radius:12px; background:var(--wash); padding:16px; margin:14px 0}
+    .phase h3{margin:0 0 6px}
+
+    .note{color:var(--muted); font-size:.95rem}
+    .btns a{display:inline-block; margin-right:10px; text-decoration:none; background:var(--brand); color:#fff; padding:10px 14px; border-radius:10px}
+    .btns a.secondary{background:var(--accent)}
+    .small{font-size:.95rem}
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <!-- HERO -->
+    <header class="hero" id="top">
+      <div class="kicker">Studio Lesson 1</div>
+      <h1>Redesign the Everyday</h1>
+      <p class="subtitle">Human‑centered design meets responsible AI — prototype a practical “now” redesign and imagine a future “AI‑embedded” version.</p>
+      <nav class="toc" aria-label="On this page">
+        <a href="#organization">Lesson Organization</a>
+        <a href="#overview">Lesson Overview</a>
+        <a href="#flow">Studio Flow</a>
+        <a href="#support">Lesson Support</a>
+        <a href="#resources">Resources & References</a>
+      </nav>
+    </header>
+
+    <!-- LESSON ORGANIZATION -->
+    <section id="organization" class="card">
+      <h2>📐 Lesson Organization</h2>
+      <p>This lesson has three major parts to it:</p>
+      <ol>
+        <li><strong>Lesson Overview – Get Oriented</strong> Start here for a quick sense of what the lesson is about, why it matters, and how it connects to the Studio framework. You’ll find the learning goals, key standards, and facilitation tips for pacing, setup, and context.</li>
+        <li><strong>Studio Flow – Teach and Create</strong> The main body of the lesson follows the Studio process: Spark → Explore → Experiment → Create → Share → Reflect. Each phase includes clear student activities, facilitator moves, and checkpoints to guide learning from curiosity to purposeful creation.</li>
+        <li><strong>Lesson Support – Deepen and Extend</strong> Wrap up with practical supports: Artifacts & Assessment ideas, Extensions & Connections for enrichment or next steps, and a link to the Resources & References Folder with lesson materials and examples.</li>
+      </ol>
+    </section>
+
+    <!-- LESSON OVERVIEW -->
+    <section id="overview" class="card">
+      <h2>🎯 Lesson Overview</h2>
+      <p><strong>Focus:</strong> Redesign a familiar object or everyday process for inclusivity, accessibility, or sustainability — using AI both as a coach (evaluator/critic) and as an envisioner of how AI could be embedded to transform its use.</p>
+      <p><strong>Estimated Duration:</strong> 2 hours (can be split across 2–3 shorter sessions or run as a studio block)</p>
+      <p><strong>Stage of the Studio Process:</strong> Problem Scoping</p>
+
+      <h3>ISTE Standards Alignment</h3>
+      <ul>
+        <li><strong>1.4 Innovative Designer –</strong> Students apply a design process  to create two versions of a solution: a feasible “now” redesign and a future “AI-embedded” redesign, iterating based on feedback and constraints.</li>
+        <li><strong>1.6 Creative Communicator –</strong> Students communicate their problem, rationale, and design choices through sketches, storyboards, and short pitches; they compare “now” vs. “AI-embedded” versions and explain how AI changes the experience.</li>
+        <li><strong>1.1 Empowered Learner –</strong> Students use AI purposefully (as coach/evaluator and role-player), make informed decisions about when to accept or reject AI outputs, and reflect on AI’s limits, ethics, and their own responsibility as designers.</li>
+      </ul>
+
+      <h3>Learning Goals</h3>
+      <ul>
+        <li>Analyze where everyday designs succeed or fail for different users.</li>
+        <li>Use AI as a coach to critique designs and as a role-player to surface diverse perspectives.</li>
+        <li>Write a clear problem statement grounded in personas, lived experiences, and AI feedback.</li>
+        <li>Prototype two versions of a redesign: what we could do now and what we could do with AI embedded.</li>
+        <li>Explain how AI changes user experience, benefits, risks, and ethical considerations.</li>
+        <li>Reflect on where human judgment mattered most in my design process.</li>
+      </ul>
+
+      <details>
+        <summary>🧑‍🏫 Facilitator Notes (click to expand)</summary>
+        <div class="small">
+          <h3>Big Goal of the Lesson</h3>
+          <p>This lesson grounds students in human-centered design while modeling sophisticated AI use. Students practice empathy and critical evaluation of AI, then produce two connected prototypes: a practical “now” redesign and a visionary “AI-embedded” redesign that shows how intelligence could transform usability, access, and sustainability.</p>
+          <h3>How the Lesson Flows</h3>
+          <ul>
+            <li><strong>Spark:</strong> Notice “everyday design fails” and identify opportunities.</li>
+            <li><strong>Explore:</strong> Use AI , build personas, and talk with real people; write a concise problem statement.</li>
+            <li><strong>Experiment:</strong> Generate and critique redesign ideas, including at least one with AI embedded.</li>
+            <li><strong>Create:</strong> Build two prototypes — feasible now and AI-embedded next — annotating how each improves experience.</li>
+            <li><strong>Share:</strong> Present both versions; gather targeted peer feedback.</li>
+            <li><strong>Reflect:</strong> Evaluate AI’s role , ethics, and where human judgment was essential.</li>
+          </ul>
+          <h3>Facilitation Moves</h3>
+          <ul>
+            <li>Keep empathy central; consistently ask “Who benefits? Who’s left out?”</li>
+            <li>Require students to annotate AI outputs as useful, impractical, or biased before building.</li>
+            <li>Encourage low-tech prototyping first; advanced tools like Autodesk, Tinkercad, SketchUp, or 3D printers are optional extensions.</li>
+            <li>Incorporate lived voices (students, staff, family) alongside personas.</li>
+            <li>If a real, solvable school problem emerges, guide students in preparing a short pitch to administration or facilities.</li>
+          </ul>
+          <h3>Challenge Question</h3>
+          <p><em>How might we redesign an everyday object or process so that it works better for more people today — and how could embedding AI meaningfully change that experience tomorrow?</em></p>
+          <h3>By the end of the lesson, each team will have:</h3>
+          <ul class="checklist">
+            <li>A clear, empathy-based problem statement</li>
+            <li>A set of annotated redesign ideas (including at least one AI-embedded concept)</li>
+            <li>Two connected prototypes: a feasible “Now” redesign and an “AI-Embedded” redesign</li>
+            <li>A short presentation and a personal reflection on AI’s value, risks, and limits</li>
+          </ul>
+        </div>
+      </details>
+    </section>
+
+    <!-- STUDIO FLOW (FULL CONTENT) -->
+    <section id="flow" class="card">
+      <h2>🎛️ Studio Flow</h2>
+
+      <!-- Spark -->
+      <div class="phase" id="spark">
+        <h3>🔥 Spark</h3>
+        <p><strong>Purpose:</strong> Help students see that everyday designs often fail and can exclude users.</p>
+        <p><strong>Intended Outcome:</strong> Students identify examples of poor design and begin noticing opportunities for redesign.</p>
+        <h4>Mini-Challenge</h4>
+        <ul>
+          <li>Look at 2–3 examples of poor design (images or videos provided).</li>
+          <li>Discuss in pairs: What makes each a “fail”? Who might be left out or struggle to use it?</li>
+          <li>Brainstorm 2–3 everyday objects or processes from your own life that could be redesigned.</li>
+        </ul>
+        <p><strong>Artifact:</strong> Class list of “design fails” with possible targets for redesign.</p>
+        <h4>Facilitator Moves</h4>
+        <ul>
+          <li>Choose examples that are funny, surprising, or relatable to grab attention.</li>
+          <li>Probe with: “Who is excluded here?” not just “Why is this annoying?”</li>
+          <li>Record brainstorms visibly for all to see. You may want to restrict this to being something at school or in the community to focus on a group issue.</li>
+        </ul>
+        <h4>References</h4>
+        <p>Images/videos of poor design.</p>
+        <p><strong>Checkpoint:</strong> Students each have at least one object/process they’re interested in redesigning.</p>
+      </div>
+
+      <!-- Explore -->
+      <div class="phase" id="explore">
+        <h3>🔎 Explore</h3>
+        <p><strong>Purpose:</strong> Gather insights through multiple perspectives to ground the design challenge in empathy.</p>
+        <p><strong>Intended Outcome:</strong> Students develop a problem statement supported by AI, personas, and lived experiences.</p>
+        <h4>Mini-Challenge</h4>
+        <ul>
+          <li>Select one object or process from your Spark brainstorm.</li>
+          <li>Use AI to review it:
+            <ul>
+              <li><strong>Option A:</strong> Upload a photo.</li>
+              <li><strong>Option B:</strong> Describe it in detail. Record the AI’s feedback on accessibility, usability, or sustainability.</li>
+            </ul>
+          </li>
+          <li>Create 3–4 personas representing diverse users (e.g., elderly adult, multilingual student, someone with mobility challenges, eco-minded user).</li>
+          <li>Interview 1–2 real people (classmates, family, staff) and ask: “What is your experience with this object? What works well? What doesn’t?”</li>
+          <li>Compare AI insights, persona perspectives, and real experiences.</li>
+          <li>Write a short problem statement: “The problem with [object] is… This affects [users] because…”</li>
+        </ul>
+        <p><strong>Artifact:</strong>  Problem statement capturing AI feedback, persona insights, and lived experiences.</p>
+        <h4>Facilitator Moves</h4>
+        <ul>
+          <li>Remind students that personas are imaginative, but lived experience brings authenticity.</li>
+          <li>Remind students that personas are individual insights, not representative of an entire group of people.</li>
+          <li>Model a short, focused problem statement.</li>
+          <li>Encourage identifying contradictions between AI and humans.</li>
+        </ul>
+        <h4>References</h4>
+        <p>Access to an LLM/open chatbot for interactions.</p>
+        <p><strong>Checkpoint:</strong> Teams can share a clear problem statement that names the object, affected users, and the issue.</p>
+      </div>
+
+      <!-- Experiment -->
+      <div class="phase" id="experiment">
+        <h3>🧪 Experiment</h3>
+        <p><strong>Purpose:</strong> Stretch creativity and test redesign options with AI as a thought partner.</p>
+        <p><strong>Intended Outcome:</strong> Students generate multiple annotated redesign ideas, including one with AI embedded.</p>
+        <h4>Mini-Challenge</h4>
+        <ul>
+          <li>Ask AI: “How could this object be redesigned to be more inclusive or sustainable?”</li>
+          <li>Ask AI: “How could AI be embedded in this object/process to change how it is used?”</li>
+          <li>Record at least 3 ideas from AI.</li>
+          <li>Annotate each idea: ✔ useful, ✖ impractical, ⚠ biased/problematic.</li>
+          <li>Optional: Share the critique of AI’s responses with AI and ask it to improve.</li>
+          <li>Add at least one original idea of your own.</li>
+        </ul>
+        <p><strong>Artifact:</strong> Annotated set of redesign options with quick sketches or notes.</p>
+        <h4>Facilitator Moves</h4>
+        <ul>
+          <li>Emphasize critique — don’t just accept AI’s outputs.</li>
+          <li>Support sketching for visual thinkers (even stick figures are enough).</li>
+          <li>Push for both short-term practical and long-term imaginative redesigns.</li>
+        </ul>
+        <h4>References</h4>
+        <p>LLM or open chatbot for text responses</p>
+        <p><strong>Checkpoint:</strong> Students have 3+ redesign ideas annotated with critiques, including at least one AI-embedded idea.</p>
+      </div>
+
+      <!-- Create -->
+      <div class="phase" id="create">
+        <h3>🛠️ Create</h3>
+        <p><strong>Purpose:</strong> Students move from ideas to action by developing prototypes that demonstrate how human-centered design and AI-enhanced possibilities can coexist. This is where thinking becomes tangible.</p>
+        <p><strong>Intended Outcome:</strong> Students produce two related prototypes: one feasible today and one that envisions a future version with AI embedded. Both demonstrate empathy, inclusivity, and sustainability.</p>
+        <h4>Challenge Activity: “Build It Better—Now and Next.”</h4>
+        <h5>Step 1 – Define the Prototype Goal</h5>
+        <ul>
+          <li>Review your problem statement from Explore.</li>
+          <li>Circle or highlight the biggest user challenge you’re addressing.</li>
+          <li>Decide whether your prototype will:
+            <ul>
+              <li>Fix an existing barrier, or</li>
+              <li>Reimagine an entirely new experience.</li>
+            </ul>
+          </li>
+        </ul>
+        <h5>Step 2 – Map Your Two Paths</h5>
+        <ul>
+          <li>On one sheet (or slide), draw two columns titled:
+            <ul>
+              <li><em>What We Could Do Now</em></li>
+              <li><em>What We Could Do With AI Embedded</em></li>
+            </ul>
+          </li>
+          <li>Jot  ideas for each: materials, look/feel, interactions, and who benefits.</li>
+        </ul>
+        <h5>Step 3 – Create the ‘Now’ Prototype</h5>
+        <ul>
+          <li>Use low-tech materials first: paper, cardboard, modeling clay, slides, or  diagrams.</li>
+          <li>Keep it simple—focus on usability and empathy.</li>
+          <li>Label parts that address accessibility or sustainability (e.g., recycled materials, clearer signage, easier grip).</li>
+        </ul>
+        <h5>Step 4 – Create the ‘AI-Embedded’ Prototype</h5>
+        <ul>
+          <li>Ask AI tools for help without letting them take over. Example prompts:
+            <ul>
+              <li>“Describe how AI could make this object adaptive to users’ needs.”</li>
+              <li>“Generate a visual of this design functioning in real time.”</li>
+            </ul>
+          </li>
+          <li>Incorporate the best ideas into your prototype:
+            <ul>
+              <li>Storyboard how the AI feature works (sensors, data, voice, automation).</li>
+              <li>Ora digital mockup showing the AI interaction.</li>
+              <li>Add call-outs: What would the AI actually do? What data would it need?</li>
+            </ul>
+          </li>
+        </ul>
+        <h5>Step 5 – Iterate and Combine</h5>
+        <ul>
+          <li>Compare both versions side by side.</li>
+          <li>Ask peers: Which design better meets the user's needs? What ethical or privacy issues appear when AI is added?</li>
+          <li>Revise accordingly.</li>
+        </ul>
+        <h5>Step 6 – Optional Extensions</h5>
+        <ul>
+          <li><strong>3D Modeling:</strong> Recreate either prototype digitally using Autodesk, Tinkercad, or SketchUp.</li>
+          <li><strong>3D Printing:</strong> Print a scaled model and test physical usability.</li>
+          <li><strong>AR/VR Visualization:</strong> Import into a simple AR viewer to see how it fits in real space.</li>
+          <li><strong>Community Pitch:</strong> If your redesign solves a genuine school problem, prepare to present it to an administrator or facilities manager for feedback.</li>
+        </ul>
+        <h4>Artifact</h4>
+        <ul>
+          <li>Two clear prototypes (feasible Now + AI-Embedded Future).</li>
+          <li>Annotated explanation of design choices, materials, and AI functions.</li>
+          <li>Optional digital or physical 3D representation.</li>
+        </ul>
+        <h4>Facilitator Moves</h4>
+        <ul>
+          <li>Model dual-level thinking: show a quick example of “today” vs. “AI-augmented” redesign (e.g., standard classroom light switch to motion-sensing adaptive lighting).</li>
+          <li>Circulate early to check that students keep empathy at the core; remind them who they are designing for.</li>
+          <li>Prompt reflection mid-build:
+            <ul>
+              <li>“What evidence tells you this solves the problem?”</li>
+              <li>“How will the AI know what to do?”</li>
+              <li>“Could the AI ever make a harmful or biased choice?”</li>
+            </ul>
+          </li>
+          <li>Encourage sketch-and-label over perfection—visual communication matters more than precision modeling.</li>
+          <li>Provide tech-tiered support: paper first, digital second, advanced tools optional.</li>
+          <li>Celebrate iteration—have students photograph stages to show growth.</li>
+        </ul>
+        <h4>Checkpoint</h4>
+        <p>Before moving to Share, ensure each team can:</p>
+        <ul>
+          <li>Display both prototypes side by side.</li>
+          <li>Clearly explain the design improvements in the “Now” version.</li>
+          <li>Describe specifically how AI operates in the “Future” version and why it adds value.</li>
+          <li>Identify at least one ethical or practical consideration introduced by the AI feature.</li>
+        </ul>
+      </div>
+
+      <!-- Share -->
+      <div class="phase" id="share">
+        <h3>📣 Share</h3>
+        <p><strong>Purpose:</strong> Give students practice explaining their design choices and receiving feedback.</p>
+        <p><strong>Intended Outcome:</strong> Students communicate their problem, process, and two prototypes clearly.</p>
+        <h4>Mini-Challenge</h4>
+        <ul>
+          <li>Present your work in a gallery walk or short 2–3 minute pitch.</li>
+          <li>Share:
+            <ul>
+              <li>The problem you identified.</li>
+              <li>Your redesign for today.</li>
+              <li>Your redesign with AI embedded.</li>
+            </ul>
+          </li>
+          <li>Collect 2–3 pieces of peer feedback.</li>
+        </ul>
+        <p><strong>Artifact:</strong> Presentation or display + peer feedback notes.</p>
+        <h4>Facilitator Moves</h4>
+        <ul>
+          <li>Keep time tight to ensure all voices are heard.</li>
+          <li>Guide peer feedback toward questions and suggestions.</li>
+          <li>Highlight where students thoughtfully balanced feasibility and imagination.</li>
+        </ul>
+        <h4>References</h4>
+        <p>Sustainable Fashion pack: concluding reflection on community impact to model for framing presentations as more than just “products.”</p>
+        <p><strong>Checkpoint:</strong> Students explain both prototypes clearly and respond to at least one peer question.</p>
+      </div>
+
+      <!-- Reflect -->
+      <div class="phase" id="reflect">
+        <h3>💭 Reflect</h3>
+        <p><strong>Purpose:</strong> Deepen students’ understanding of AI’s role and their own judgment in design.</p>
+        <p><strong>Intended Outcome:</strong> Students identify the value and limitations of AI and recognize the human role in responsible design.</p>
+        <h4>Activity</h4>
+        <ul>
+          <li>Write or record a short reflection.</li>
+          <li>Answer:
+            <ul>
+              <li>How did AI act as a coach or evaluator in your process?</li>
+              <li>How might embedding AI in your redesign change people’s experiences (positive and negative)?</li>
+              <li>Where was human judgment most important?</li>
+            </ul>
+          </li>
+        </ul>
+        <p><strong>Artifact:</strong> Reflection log (written or video).</p>
+        <h4>Facilitator Moves</h4>
+        <ul>
+          <li>Normalize naming AI’s flaws as well as its helpfulness.</li>
+          <li>Encourage connecting reflections back to inclusivity and sustainability.</li>
+          <li>Push for specific examples, not general statements.</li>
+        </ul>
+        <h4>References</h4>
+        <p>Sustainable Fashion pack: “ego vs. eco” fashion choice and an analogy for AI’s double-edged potential.</p>
+        <p><strong>Checkpoint:</strong> Each student identifies at least one way AI helped, one limitation, and one area where human judgment was critical.</p>
+      </div>
+    </section>
+
+    <!-- LESSON SUPPORT -->
+    <section id="support" class="card">
+      <h2>🧰 Lesson Support</h2>
+      <h3>Artifacts & Assessment</h3>
+      <h4>Student Artifacts</h4>
+      <ul>
+        <li>Problem statement synthesizing AI, persona, and lived-experience perspectives.</li>
+        <li>Annotated AI outputs (ideas + critiques).</li>
+        <li>Two-part prototype (practical redesign + AI-embedded redesign).</li>
+        <li>Reflection (written, audio, or video).</li>
+      </ul>
+      <h4>Assessment Focus (rubric-aligned)</h4>
+      <ul>
+        <li><strong>Community Connection & Empathy:</strong> Depth of analysis using personas + real voices.</li>
+        <li><strong>Responsible & Ethical AI Use:</strong> Clear attribution, critical evaluation of AI outputs.</li>
+        <li><strong>Design Quality:</strong> Creativity, inclusivity, feasibility of the “now” redesign.</li>
+        <li><strong>Future Visioning:</strong> Imagination and critical thinking in the AI-embedded redesign.</li>
+        <li><strong>Reflection:</strong> Insight into AI’s role vs. human judgment.</li>
+      </ul>
+
+      <h3>Extension</h3>
+      <h4>Technological Extensions</h4>
+      <ul>
+        <li>3D Design Tools – Move prototypes from sketches to digital design using tools such as Autodesk, SketchUp, or Tinkercad.</li>
+        <li>3D Printing – Print the redesigned object as a physical prototype; compare functionality and usability across iterations.</li>
+        <li>AR/VR Visualization – Import designs into AR/VR platforms to simulate scale, environment, or user interactions.</li>
+        <li>AI Simulation – Use AI modeling tools to simulate sustainability impacts (e.g., energy use, materials lifecycle) or accessibility (e.g., text-to-speech, color contrast evaluators).</li>
+      </ul>
+      <h4>Applied Extensions</h4>
+      <ul>
+        <li>Pitch to School Administration – Students formally present their redesigned object/process to school leadership if it addresses a real challenge (e.g., accessibility of water fountains, recycling bins, cafeteria flow).</li>
+        <li>Community Consultation – Share prototypes with stakeholders who might use the redesign (custodial staff, younger students, families) and gather authentic feedback.</li>
+        <li>Field Testing – If feasible, test small-scale versions of the redesign in the school or community setting and collect user feedback.</li>
+      </ul>
+      <h4>Academic Extensions</h4>
+      <ul>
+        <li>Research Connection – Link the object to global examples of inclusive/sustainable design (e.g., universal design in architecture, sustainable product case studies).</li>
+        <li><strong>Cross-Disciplinary Collaboration –</strong> Partner with other subject areas:
+          <ul>
+            <li><em>Science</em> — sustainability metrics, material analysis.</li>
+            <li><em>Social Studies</em> — equity and access across cultures.</li>
+            <li><em>Language Arts</em> — persuasive writing for proposals.</li>
+          </ul>
+        </li>
+        <li>Policy Exploration – Students investigate what rules, policies, or guidelines would support or hinder the adoption of their redesign.</li>
+      </ul>
+      <h4>Creative Extensions</h4>
+      <ul>
+        <li>Marketing Campaign – Design posters, videos, or social media content to advocate for the redesigned object.</li>
+        <li>Storytelling Prototype – Create a comic, storyboard, or video that shows a “day in the life” of someone using the redesigned object.</li>
+        <li>Futurecasting – Write or illustrate a vision of how their AI-embedded redesign might evolve 10–20 years from now.</li>
+      </ul>
+      <h4>Reflection Extensions</h4>
+      <ul>
+        <li>Ethics Roundtable – Students debate: If AI is embedded in everyday objects, what risks or responsibilities come with it?</li>
+        <li>User Advisory Board Simulation – Students role-play as different user groups (e.g., admin, parents, accessibility advocates) and critique designs.</li>
+        <li>Personal Action Plan – Students identify one everyday item they can change in their own lives (clothing choice, study setup, digital tool use) using lessons learned.</li>
+      </ul>
+    </section>
+
+    <!-- RESOURCES -->
+    <section id="resources" class="card">
+      <h2>📂 Resources & References</h2>
+      <p>To support flexible use and continual improvement, all lesson resources are housed in shared online folders. This approach allows us to update materials as new tools and examples emerge or suggestions are made. This also ensures they align with your school or district’s preferred platform. Each link below will take you to a list of the editable templates, example artifacts, and any supporting media referenced in the lesson.</p>
+      <p><strong>Access the full set of resources through your preferred platform:</strong></p>
+      <div class="btns">
+        <a class="primary" href="#">Google Documents Resource List</a>
+        <a class="secondary" href="#">Microsoft Documents Resource List</a>
+      </div>
+    </section>
+
+  </div>
+</body>
+</html>
