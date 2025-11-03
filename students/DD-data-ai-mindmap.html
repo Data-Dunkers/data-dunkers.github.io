@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data & AI Interactive Mindmap</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #0072CE 0%, #005A9C 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        .header {
+            width: 100%;
+            max-width: 1400px;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .center-title {
+            background: linear-gradient(135deg, #0072CE 0%, #005A9C 100%);
+            color: white;
+            font-size: 2.5em;
+            padding: 25px 60px;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            border: 4px solid white;
+            display: inline-block;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .instructions {
+            color: white;
+            margin-top: 15px;
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+
+        .main-container {
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            gap: 20px;
+            align-items: stretch;
+            min-height: 600px;
+        }
+
+        .side-panel {
+            flex: 0 0 200px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            justify-content: center;
+        }
+
+        .main-branch-btn {
+            background: linear-gradient(135deg, #00A9E0 0%, #0072CE 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+            border: none;
+            font-size: 1.2em;
+            font-weight: 600;
+            text-align: center;
+            user-select: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .main-branch-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+
+        .main-branch-btn.active {
+            background: linear-gradient(135deg, #00B5E2 0%, #00A9E0 100%);
+            border: 3px solid white;
+        }
+
+        .emoji {
+            font-size: 2em;
+        }
+
+        .center-display {
+            flex: 1;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+            padding: 40px;
+            position: relative;
+            overflow-y: auto;
+            max-height: 700px;
+        }
+
+        .welcome-message {
+            text-align: center;
+            color: #666;
+            font-size: 1.3em;
+            padding: 100px 20px;
+            line-height: 1.8;
+        }
+
+        .welcome-message h2 {
+            color: #0072CE;
+            font-size: 2em;
+            margin-bottom: 20px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .category-card {
+            background: linear-gradient(135deg, #00B5E2 0%, #00A9CE 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .category-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .category-card h3 {
+            font-size: 1.3em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .category-card .emoji {
+            font-size: 1.5em;
+        }
+
+        .detail-view {
+            animation: fadeIn 0.4s ease;
+        }
+
+        .detail-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 3px solid #0072CE;
+        }
+
+        .detail-header h2 {
+            color: #0072CE;
+            font-size: 2em;
+        }
+
+        .detail-header .emoji {
+            font-size: 2.5em;
+        }
+
+        .back-btn {
+            background: #0072CE;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1em;
+            margin-left: auto;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: #005A9C;
+            transform: scale(1.05);
+        }
+
+        .detail-list {
+            list-style: none;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .detail-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            border-left: 4px solid #0072CE;
+            line-height: 1.6;
+            font-size: 1.05em;
+            color: #333;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+        }
+
+        .detail-item:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        }
+
+        .section-title {
+            color: #0072CE;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container {
+                flex-direction: column;
+            }
+
+            .side-panel {
+                flex-direction: row;
+                flex: none;
+                width: 100%;
+            }
+
+            .center-title {
+                font-size: 1.8em;
+                padding: 20px 40px;
+            }
+
+            .category-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="center-title">🧠 Data & AI</div>
+        <p class="instructions">💡 Click on "Careers" or "How Data & AI Are Used" to explore!</p>
+    </div>
+
+    <div class="main-container">
+        <!-- Left Side Panel -->
+        <div class="side-panel">
+            <button class="main-branch-btn" id="careers-btn" onclick="showBranch('careers')">
+                <span class="emoji">💼</span>
+                <span>Careers</span>
+            </button>
+        </div>
+
+        <!-- Center Display Area -->
+        <div class="center-display" id="center-display">
+            <div class="welcome-message">
+                <h2>Welcome to the Data & AI Explorer!</h2>
+                <p>Select <strong>Careers</strong> to discover exciting career paths that use data and AI.</p>
+                <p>Or choose <strong>How Data & AI Are Used</strong> to learn about the ways professionals apply these tools across industries.</p>
+                <p style="margin-top: 30px; color: #0072CE; font-weight: 600;">Click a button on either side to begin your journey! 🚀</p>
+            </div>
+        </div>
+
+        <!-- Right Side Panel -->
+        <div class="side-panel">
+            <button class="main-branch-btn" id="uses-btn" onclick="showBranch('uses')">
+                <span class="emoji">🧩</span>
+                <span>How Data & AI Are Used</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        const content = {
+            careers: {
+                title: "Careers Where Data Science Plays a Part",
+                categories: {
+                    sports: {
+                        emoji: "🏀",
+                        title: "Sports & Performance",
+                        items: [
+                            "Sports Analyst / Data Scientist – Evaluates players, predicts outcomes, improves strategy",
+                            "Performance Coach – Tracks speed, accuracy, reaction time data",
+                            "Recruiting Analyst / Scout – Analyzes player stats to identify talent",
+                            "Sports Equipment Engineer – Uses sensor data to design better gear"
+                        ]
+                    },
+                    tech: {
+                        emoji: "💻",
+                        title: "Technology & AI",
+                        items: [
+                            "AI Developer / ML Engineer – Designs algorithms that learn from data",
+                            "Data Engineer – Builds systems to collect and organize data",
+                            "Data Visualization Specialist – Creates dashboards and interactive visuals",
+                            "Ethical AI Researcher – Studies fairness, bias, and societal impact"
+                        ]
+                    },
+                    business: {
+                        emoji: "🌍",
+                        title: "Business & Industry",
+                        items: [
+                            "Marketing Analyst – Uses customer data to understand buying behavior",
+                            "Financial Analyst – Predicts trends and guides investments",
+                            "Operations Manager – Optimizes workflows and reduces costs",
+                            "Entrepreneur / Startup Founder – Tests ideas and reaches audiences with data"
+                        ]
+                    },
+                    health: {
+                        emoji: "🏥",
+                        title: "Health & Science",
+                        items: [
+                            "Biomedical Data Scientist – Analyzes patient data to improve treatments",
+                            "Public Health Analyst – Tracks disease outbreaks and guides policy",
+                            "Environmental Data Scientist – Studies climate change using sensor data"
+                        ]
+                    },
+                    education: {
+                        emoji: "🧑‍🏫",
+                        title: "Education & Social Impact",
+                        items: [
+                            "Learning Analyst – Uses classroom data to personalize instruction",
+                            "Policy Analyst – Evaluates community data for better decisions",
+                            "Digital Ethicist / Researcher – Ensures AI is used responsibly"
+                        ]
+                    }
+                }
+            },
+            uses: {
+                title: "How People Use Data and AI Across Careers",
+                categories: {
+                    analyzing: {
+                        emoji: "🧠",
+                        title: "Analyzing and Making Sense of Information",
+                        items: [
+                            "Collecting, cleaning, and organizing large sets of information (sales data, sensor data, survey results)",
+                            "Using AI to detect patterns or trends that humans might miss",
+                            "Running simulations or models to predict outcomes (e.g., demand forecasting, game results, patient recovery rates)",
+                            "Comparing multiple data sources to verify accuracy or find insights",
+                            "Summarizing complex data into short reports or dashboards"
+                        ]
+                    },
+                    visualizing: {
+                        emoji: "📊",
+                        title: "Visualizing and Communicating Data",
+                        items: [
+                            "Turning raw data into charts, infographics, or interactive dashboards",
+                            "Using AI tools to automatically generate visual summaries or presentations",
+                            "Creating short videos or narratives that 'tell the story' behind the numbers",
+                            "Adjusting visuals for different audiences (e.g., executives, customers, students)"
+                        ]
+                    },
+                    automating: {
+                        emoji: "⚙️",
+                        title: "Automating and Streamlining Work",
+                        items: [
+                            "Using AI assistants to summarize meetings, draft emails, or create documentation",
+                            "Automating repetitive tasks like scheduling, tracking, or sorting data",
+                            "Setting up alerts that notify when data changes or when certain conditions are met",
+                            "Building chatbots or recommendation systems that learn from user data"
+                        ]
+                    },
+                    deciding: {
+                        emoji: "💬",
+                        title: "Making Better Decisions",
+                        items: [
+                            "Using predictive analytics to guide decisions (e.g., when to rest an athlete, order supplies, or launch a product)",
+                            "Asking AI 'what-if' questions to test possible scenarios",
+                            "Balancing data-driven insights with human judgment and ethics",
+                            "Running A/B tests to compare strategies or marketing campaigns"
+                        ]
+                    },
+                    personalizing: {
+                        emoji: "🧍‍♂️",
+                        title: "Personalizing Experiences",
+                        items: [
+                            "Using data to tailor learning plans, customer recommendations, or medical treatments",
+                            "Applying AI to suggest products, playlists, or reading materials based on past behavior",
+                            "Adjusting systems to match user preferences (accessibility settings, adaptive learning platforms)"
+                        ]
+                    },
+                    solving: {
+                        emoji: "🌍",
+                        title: "Solving Real-World Problems",
+                        items: [
+                            "Tracking environmental data to reduce waste or carbon emissions",
+                            "Using AI to analyze public data and improve city planning or safety",
+                            "Studying social media data to understand public sentiment",
+                            "Analyzing performance data to increase fairness in sports or hiring"
+                        ]
+                    },
+                    learning: {
+                        emoji: "🧑‍🏫",
+                        title: "Learning and Creating",
+                        items: [
+                            "Using AI to brainstorm ideas, generate outlines, or summarize readings",
+                            "Learning new skills faster by having AI tutors or assistants",
+                            "Testing hypotheses or projects with virtual simulations before real-world trials",
+                            "Collaborating with AI to co-create art, music, stories, or code"
+                        ]
+                    }
+                }
+            }
+        };
+
+        let currentBranch = null;
+        let currentCategory = null;
+
+        function showBranch(branch) {
+            currentBranch = branch;
+            currentCategory = null;
+
+            // Update button states
+            document.getElementById('careers-btn').classList.remove('active');
+            document.getElementById('uses-btn').classList.remove('active');
+            document.getElementById(branch + '-btn').classList.add('active');
+
+            // Display category grid
+            const display = document.getElementById('center-display');
+            const branchData = content[branch];
+            
+            let html = `<h2 class="section-title">${branchData.title}</h2>`;
+            html += '<div class="category-grid">';
+            
+            for (const [key, category] of Object.entries(branchData.categories)) {
+                html += `
+                    <div class="category-card" onclick="showCategory('${branch}', '${key}')">
+                        <h3>
+                            <span class="emoji">${category.emoji}</span>
+                            <span>${category.title}</span>
+                        </h3>
+                    </div>
+                `;
+            }
+            
+            html += '</div>';
+            display.innerHTML = html;
+        }
+
+        function showCategory(branch, categoryKey) {
+            currentCategory = categoryKey;
+            const category = content[branch].categories[categoryKey];
+            
+            const display = document.getElementById('center-display');
+            
+            let html = '<div class="detail-view">';
+            html += '<div class="detail-header">';
+            html += `<span class="emoji">${category.emoji}</span>`;
+            html += `<h2>${category.title}</h2>`;
+            html += '<button class="back-btn" onclick="showBranch(\'' + branch + '\')">← Back</button>';
+            html += '</div>';
+            
+            html += '<ul class="detail-list">';
+            category.items.forEach(item => {
+                html += `<li class="detail-item">${item}</li>`;
+            });
+            html += '</ul>';
+            html += '</div>';
+            
+            display.innerHTML = html;
+        }
+    </script>
+</body>
+</html>
