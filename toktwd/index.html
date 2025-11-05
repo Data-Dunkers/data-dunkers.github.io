@@ -1,0 +1,495 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Dunkers Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body class="bg-gradient-to-br from-purple-50 to-blue-50 min-h-screen">
+    <div class="p-6">
+        <div class="max-w-7xl mx-auto">
+            <header class="text-center mb-8">
+                <h1 class="text-4xl font-bold text-gray-800 mb-2">🏀 Data Dunkers Dashboard</h1>
+                <p class="text-gray-600">TOKTWD Ottawa 2025 - Basketball Analytics</p>
+            </header>
+
+            <div id="stats" class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8"></div>
+
+            <div class="flex flex-wrap gap-2 mb-6">
+                <button onclick="switchView('overview')" class="view-btn px-4 py-2 rounded-lg font-medium transition-colors bg-purple-600 text-white" data-view="overview">Overview</button>
+                <button onclick="switchView('shooting')" class="view-btn px-4 py-2 rounded-lg font-medium transition-colors bg-white text-gray-700 hover:bg-purple-100" data-view="shooting">Shooting</button>
+                <button onclick="switchView('physical')" class="view-btn px-4 py-2 rounded-lg font-medium transition-colors bg-white text-gray-700 hover:bg-purple-100" data-view="physical">Physical</button>
+                <button onclick="switchView('demographics')" class="view-btn px-4 py-2 rounded-lg font-medium transition-colors bg-white text-gray-700 hover:bg-purple-100" data-view="demographics">Demographics</button>
+            </div>
+
+            <div id="overview" class="view-content grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Free Throw Performance</h3>
+                    <canvas id="freeThrowChart"></canvas>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Birth Month Distribution</h3>
+                    <canvas id="birthMonthChart"></canvas>
+                </div>
+            </div>
+
+            <div id="shooting" class="view-content hidden grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Reaction Time vs Free Throws</h3>
+                    <canvas id="reactionChart"></canvas>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Height vs Free Throws</h3>
+                    <canvas id="heightFTChart"></canvas>
+                </div>
+            </div>
+
+            <div id="physical" class="view-content hidden grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Height vs Wingspan</h3>
+                    <canvas id="heightWingspanChart"></canvas>
+                    <p class="text-sm text-gray-600 mt-2" id="physicalStats"></p>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Wingspan/Height Ratio Distribution</h3>
+                    <canvas id="ratioChart"></canvas>
+                    <p class="text-sm text-gray-600 mt-2">Ratio = 1.0 means wingspan equals height</p>
+                </div>
+            </div>
+
+            <div id="demographics" class="view-content hidden grid md:grid-cols-2 gap-6">
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Hair Color Distribution</h3>
+                    <canvas id="hairColorChart"></canvas>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-6">
+                    <h3 class="text-xl font-bold mb-4">Key Insights</h3>
+                    <div id="insights" class="space-y-4"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const csvData = `Timestamp,Initials,Height (cm),Wingspan (cm),Reaction time (ms),Free-throws made (out of five),Birth month,Hair colour
+11/5/2025 9:42:25,OG,160,157,297,3,November-novembre,Black
+11/5/2025 9:43:13,ST22,184,184,441,5,November-novembre,Brown
+11/5/2025 9:43:30,AO81,165,164,398,4,August-août,Brown
+11/5/2025 9:44:44,ZP79 ,183,162,640,3,May-mai,Brown 
+11/5/2025 9:44:47,MT3,160,152,600,5,May-mai,Brown
+11/5/2025 9:45:25,"E.S, 25",163,110,374,3,July-juillet,Black
+11/5/2025 9:45:52,JM76,143,150,410,3,July-juillet,Brown 
+11/5/2025 9:45:56,S.B. 14,180,163,418,5,October-octobre,Dirty blond
+11/5/2025 9:46:01,BM14,170.2,175.3,350,4,September-septembre,Light brown
+11/5/2025 9:46:15,ND7,170,155,390,2,November-novembre,Brown
+11/5/2025 9:46:43,JS6,170.2,160,361,3,September-septembre,Brown
+11/5/2025 9:46:43,JM10,172,170,370,3,October-octobre,Black
+11/5/2025 9:46:46,DH7,140,144,551,4,May-mai,Dark brown 
+11/5/2025 9:46:46,K R,180,175,413,4,July-juillet,Light brown
+11/5/2025 9:46:50,TK13,167,163,408,4,May-mai,Brown
+11/5/2025 9:47:26,HP56,178,179,376,4,July-juillet,Brown
+11/5/2025 9:47:26,SW 23,178,178,424,3,January-janvier,Brown
+11/5/2025 9:47:26,VF87,149,130,422,4,October-octobre,Brown
+11/5/2025 9:47:41,Lrs59,165,165,460,3,February-février,Brown
+11/5/2025 9:47:43,PY13,160,150,521,2,July-juillet,Brown
+11/5/2025 9:47:50,BD8,160,155,403,3,March-mars,Brown 
+11/5/2025 9:48:07,Ab7,140,139,424,2,March-mars,Black 
+11/5/2025 9:48:10,RB10,160,155,448,4,March-mars,Brown
+11/5/2025 9:48:10,ER36,153.67,147,424,5,October-octobre,Brown with blonde highlights 
+11/5/2025 9:48:10,EL20,160.02,150,397,2,January-janvier,Black 
+11/5/2025 9:48:12,MP6,168,170,324,3,December-décembre,blonde 
+11/5/2025 9:48:13,EW12,157,144,387,1,May-mai,Brown
+11/5/2025 9:48:19,AA55,171,172,500,3,October-octobre,Black
+11/5/2025 9:48:25,DD55,170,173,386,0,May-mai,Brown 
+11/5/2025 9:48:25,HH,168,174,400,4,April-avril,Black
+11/5/2025 9:48:31,"B,C11",152,152,354,4,June-juin,Purple
+11/5/2025 9:48:32,ML11,175,172,348,4,October-octobre,Black
+11/5/2025 9:48:38,ES12,157,148,441,3,November-novembre,Black
+11/5/2025 9:48:42,JG22,188,199,391,4,April-avril,Black 
+11/5/2025 9:48:45,MP23,158,158,361,5,December-décembre,Blond
+11/5/2025 9:49:05,YF7,172,162,406,4,September-septembre,Brown
+11/5/2025 9:49:11,DH7,140,144,374,4,May-mai,Dark brown 
+11/5/2025 9:49:27,td21,157,151,500,3,July-juillet,Blond
+11/5/2025 9:49:31,CN25,183,63,374,1,May-mai,Black
+11/5/2025 9:49:35,E.t 14,173,185,751,3,August-août,Black
+11/5/2025 9:49:44,AC 23,172,176,460,3,December-décembre,Blond
+11/5/2025 9:49:44,Ac5,166,153,416,3,August-août,Light brown 
+11/5/2025 9:49:51,SM55,158,144,411,5,May-mai,Brown
+11/5/2025 9:49:55,SO,183,160,308,4,December-décembre,Blond
+11/5/2025 9:50:05,CL1,165,148,386,4,October-octobre,Brown
+11/5/2025 9:50:12,JY6,164,179,456,4,April-avril,Brown
+11/5/2025 9:50:27,MM19,180,178,411,2,May-mai,Brown
+11/5/2025 9:50:30,BT10,158,158,656,2,April-avril,Brown
+11/5/2025 9:50:46,Jm√2,187,140,323,0,January-janvier,Dark brown `;
+
+        let data = [];
+        let charts = {};
+
+        function parseCSV() {
+            const parsed = Papa.parse(csvData, {
+                header: true,
+                dynamicTyping: true,
+                skipEmptyLines: true,
+                transformHeader: (header) => header.trim()
+            });
+            data = parsed.data;
+            initializeApp();
+        }
+
+        function avg(arr) {
+            return arr.reduce((a, b) => a + b, 0) / arr.length;
+        }
+
+        function median(arr) {
+            const sorted = [...arr].sort((a, b) => a - b);
+            const mid = Math.floor(sorted.length / 2);
+            return sorted.length % 2 ? sorted[mid] : (sorted[mid - 1] + sorted[mid]) / 2;
+        }
+
+        function calculateStats() {
+            const heights = data.map(d => d['Height (cm)']).filter(v => v);
+            const wingspans = data.map(d => d['Wingspan (cm)']).filter(v => v);
+            const reactionTimes = data.map(d => d['Reaction time (ms)']).filter(v => v);
+            const freeThrows = data.map(d => d['Free-throws made (out of five)']).filter(v => v !== undefined);
+
+            return {
+                totalParticipants: data.length,
+                avgHeight: avg(heights).toFixed(1),
+                avgWingspan: avg(wingspans).toFixed(1),
+                avgReactionTime: avg(reactionTimes).toFixed(0),
+                avgFreeThrows: avg(freeThrows).toFixed(2),
+                medianHeight: median(heights).toFixed(1),
+                medianWingspan: median(wingspans).toFixed(1),
+                perfectShooters: freeThrows.filter(v => v === 5).length,
+                minHeight: Math.min(...heights),
+                maxHeight: Math.max(...heights)
+            };
+        }
+
+        function renderStats() {
+            const stats = calculateStats();
+            const statsHTML = `
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="text-gray-500 text-sm">Participants</div>
+                    <div class="text-3xl font-bold text-purple-600">${stats.totalParticipants}</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="text-gray-500 text-sm">Avg Height</div>
+                    <div class="text-3xl font-bold text-blue-600">${stats.avgHeight} cm</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="text-gray-500 text-sm">Avg Reaction</div>
+                    <div class="text-3xl font-bold text-green-600">${stats.avgReactionTime} ms</div>
+                </div>
+                <div class="bg-white rounded-lg shadow-md p-4">
+                    <div class="text-gray-500 text-sm">Perfect Scores</div>
+                    <div class="text-3xl font-bold text-pink-600">${stats.perfectShooters}</div>
+                </div>
+            `;
+            document.getElementById('stats').innerHTML = statsHTML;
+        }
+
+        function createFreeThrowChart() {
+            const counts = [0, 0, 0, 0, 0, 0];
+            data.forEach(row => {
+                const ft = row['Free-throws made (out of five)'];
+                if (ft !== undefined && ft >= 0 && ft <= 5) {
+                    counts[ft]++;
+                }
+            });
+
+            const ctx = document.getElementById('freeThrowChart');
+            charts.freeThrow = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['0', '1', '2', '3', '4', '5'],
+                    datasets: [{
+                        label: 'Count',
+                        data: counts,
+                        backgroundColor: ['#8b5cf6', '#ec4899', '#f59e0b', '#10b981', '#3b82f6', '#ef4444']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Shots Made' } },
+                        y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function createBirthMonthChart() {
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+            const counts = {};
+            months.forEach(m => counts[m] = 0);
+            
+            data.forEach(row => {
+                const month = row['Birth month'];
+                if (month) {
+                    const cleanMonth = month.split('-')[0];
+                    if (counts[cleanMonth] !== undefined) {
+                        counts[cleanMonth]++;
+                    }
+                }
+            });
+
+            const ctx = document.getElementById('birthMonthChart');
+            charts.birthMonth = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: months.map(m => m.substring(0, 3)),
+                    datasets: [{
+                        label: 'Count',
+                        data: months.map(m => counts[m]),
+                        backgroundColor: '#3b82f6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function createReactionChart() {
+            const scatterData = data.map(row => ({
+                x: row['Reaction time (ms)'],
+                y: row['Free-throws made (out of five)']
+            })).filter(d => d.x && d.y !== undefined);
+
+            const ctx = document.getElementById('reactionChart');
+            charts.reaction = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Participants',
+                        data: scatterData,
+                        backgroundColor: '#ec4899'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: { title: { display: true, text: 'Reaction Time (ms)' } },
+                        y: { title: { display: true, text: 'Free Throws Made' }, min: 0, max: 5 }
+                    }
+                }
+            });
+        }
+
+        function createHeightFTChart() {
+            const scatterData = data.map(row => ({
+                x: row['Height (cm)'],
+                y: row['Free-throws made (out of five)']
+            })).filter(d => d.x && d.y !== undefined);
+
+            const ctx = document.getElementById('heightFTChart');
+            charts.heightFT = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Participants',
+                        data: scatterData,
+                        backgroundColor: '#10b981'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: { title: { display: true, text: 'Height (cm)' } },
+                        y: { title: { display: true, text: 'Free Throws Made' }, min: 0, max: 5 }
+                    }
+                }
+            });
+        }
+
+        function createHeightWingspanChart() {
+            const scatterData = data.map(row => ({
+                x: row['Height (cm)'],
+                y: row['Wingspan (cm)']
+            })).filter(d => d.x && d.y);
+
+            const ctx = document.getElementById('heightWingspanChart');
+            charts.heightWingspan = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Participants',
+                        data: scatterData,
+                        backgroundColor: '#8b5cf6'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    scales: {
+                        x: { title: { display: true, text: 'Height (cm)' } },
+                        y: { title: { display: true, text: 'Wingspan (cm)' } }
+                    }
+                }
+            });
+
+            const stats = calculateStats();
+            document.getElementById('physicalStats').textContent = 
+                `Median Height: ${stats.medianHeight} cm | Median Wingspan: ${stats.medianWingspan} cm`;
+        }
+
+        function createRatioChart() {
+            const ratioData = data.map(row => ({
+                ratio: row['Wingspan (cm)'] / row['Height (cm)']
+            })).filter(d => d.ratio && !isNaN(d.ratio) && isFinite(d.ratio));
+
+            const bins = {};
+            ratioData.forEach(d => {
+                const bin = (Math.floor(d.ratio * 20) / 20).toFixed(2);
+                bins[bin] = (bins[bin] || 0) + 1;
+            });
+
+            const sortedBins = Object.keys(bins).sort((a, b) => parseFloat(a) - parseFloat(b));
+
+            const ctx = document.getElementById('ratioChart');
+            charts.ratio = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: sortedBins,
+                    datasets: [{
+                        label: 'Count',
+                        data: sortedBins.map(bin => bins[bin]),
+                        backgroundColor: '#f59e0b'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { title: { display: true, text: 'Wingspan/Height Ratio' } },
+                        y: { title: { display: true, text: 'Count' }, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function createHairColorChart() {
+            const counts = {};
+            data.forEach(row => {
+                const color = row['Hair colour'];
+                if (color) {
+                    const cleaned = color.trim().toLowerCase();
+                    const key = cleaned.includes('brown') ? 'Brown' :
+                               cleaned.includes('black') ? 'Black' :
+                               cleaned.includes('blond') ? 'Blonde' :
+                               'Other';
+                    counts[key] = (counts[key] || 0) + 1;
+                }
+            });
+
+            const ctx = document.getElementById('hairColorChart');
+            charts.hairColor = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: Object.keys(counts),
+                    datasets: [{
+                        label: 'Count',
+                        data: Object.values(counts),
+                        backgroundColor: '#ec4899'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: true,
+                    plugins: {
+                        legend: { display: false }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function renderInsights() {
+            const stats = calculateStats();
+            const months = ['January', 'February', 'March', 'April', 'May', 'June', 
+                            'July', 'August', 'September', 'October', 'November', 'December'];
+            const monthCounts = {};
+            months.forEach(m => monthCounts[m] = 0);
+            
+            data.forEach(row => {
+                const month = row['Birth month'];
+                if (month) {
+                    const cleanMonth = month.split('-')[0];
+                    if (monthCounts[cleanMonth] !== undefined) {
+                        monthCounts[cleanMonth]++;
+                    }
+                }
+            });
+
+            const maxMonth = Object.entries(monthCounts).reduce((max, [month, count]) => 
+                count > max[1] ? [month, count] : max, ['', 0]);
+
+            const insightsHTML = `
+                <div class="p-4 bg-purple-50 rounded-lg">
+                    <div class="font-semibold text-purple-900">Most Common Birth Month</div>
+                    <div class="text-purple-700">${maxMonth[0]}</div>
+                </div>
+                <div class="p-4 bg-blue-50 rounded-lg">
+                    <div class="font-semibold text-blue-900">Average Free Throw Success</div>
+                    <div class="text-blue-700">${stats.avgFreeThrows} out of 5 (${(stats.avgFreeThrows / 5 * 100).toFixed(1)}%)</div>
+                </div>
+                <div class="p-4 bg-green-50 rounded-lg">
+                    <div class="font-semibold text-green-900">Height Range</div>
+                    <div class="text-green-700">${stats.minHeight} - ${stats.maxHeight} cm</div>
+                </div>
+            `;
+            document.getElementById('insights').innerHTML = insightsHTML;
+        }
+
+        function switchView(viewName) {
+            document.querySelectorAll('.view-content').forEach(el => el.classList.add('hidden'));
+            document.getElementById(viewName).classList.remove('hidden');
+
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                if (btn.dataset.view === viewName) {
+                    btn.className = 'view-btn px-4 py-2 rounded-lg font-medium transition-colors bg-purple-600 text-white';
+                } else {
+                    btn.className = 'view-btn px-4 py-2 rounded-lg font-medium transition-colors bg-white text-gray-700 hover:bg-purple-100';
+                }
+            });
+        }
+
+        function initializeApp() {
+            renderStats();
+            createFreeThrowChart();
+            createBirthMonthChart();
+            createReactionChart();
+            createHeightFTChart();
+            createHeightWingspanChart();
+            createRatioChart();
+            createHairColorChart();
+            renderInsights();
+        }
+
+        parseCSV();
+    </script>
+</body>
+</html>
