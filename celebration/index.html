@@ -1,1 +1,1164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Dunkers Leaderboard</title>
+<link href="https://fonts.googleapis.com/css2?family=Bangers&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --court-orange: #E8611A;
+    --court-brown: #C4A265;
+    --navy: #1B2838;
+    --navy-light: #243447;
+    --gold: #FFD700;
+    --gold-dim: #B8960F;
+    --fire-red: #FF4136;
+    --neon-green: #39FF14;
+    --ice-blue: #00D4FF;
+    --purple-pop: #BF5AF2;
+    --bg-dark: #0D1117;
+    --card-bg: rgba(27, 40, 56, 0.85);
+    --card-border: rgba(255, 215, 0, 0.15);
+    --text-primary: #F0F0F0;
+    --text-secondary: #9AA5B4;
+    --text-muted: #5C6B7A;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'Barlow', sans-serif;
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background:
+      repeating-linear-gradient(90deg, transparent, transparent 60px, rgba(160,120,76,0.03) 60px, rgba(160,120,76,0.03) 62px),
+      radial-gradient(ellipse at 50% 0%, rgba(232,97,26,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 50% 100%, rgba(0,212,255,0.05) 0%, transparent 50%);
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  .header {
+    position: relative;
+    text-align: center;
+    padding: 3rem 1rem 2rem;
+  }
+
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 10%;
+    right: 10%;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+  }
+
+  .header-ball {
+    font-size: 3.5rem;
+    display: inline-block;
+    animation: bounce 2s ease-in-out infinite;
+    filter: drop-shadow(0 0 20px rgba(232,97,26,0.5));
+  }
+
+  @keyframes bounce {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+
+  .header h1 {
+    font-family: 'Bangers', cursive;
+    font-size: clamp(2.5rem, 7vw, 4.5rem);
+    letter-spacing: 0.06em;
+    background: linear-gradient(180deg, #FFD700 0%, #FFA500 50%, #FF6B00 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    filter: drop-shadow(0 2px 8px rgba(255,165,0,0.3));
+    margin: 0.3rem 0;
+    line-height: 1.1;
+  }
+
+  .header .subtitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+  }
+
+  .form-link-bar {
+    text-align: center;
+    margin: 1.5rem auto;
+    position: relative;
+    z-index: 1;
+  }
+
+  .form-link-btn {
+    display: inline-block;
+    font-family: 'Bangers', cursive;
+    font-size: 1.3rem;
+    letter-spacing: 0.06em;
+    color: var(--navy);
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    padding: 0.7rem 2rem;
+    border-radius: 50px;
+    text-decoration: none;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    box-shadow: 0 4px 15px rgba(255, 165, 0, 0.3);
+  }
+
+  .form-link-btn:hover {
+    transform: translateY(-2px) scale(1.03);
+    box-shadow: 0 6px 25px rgba(255, 165, 0, 0.45);
+  }
+
+  .controls {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 1rem;
+    flex-wrap: wrap;
+    position: relative;
+    z-index: 1;
+  }
+
+  .tab-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    border: 2px solid var(--text-muted);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--text-secondary);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .tab-btn:hover { border-color: var(--gold); color: var(--gold); }
+
+  .tab-btn.active {
+    background: var(--gold);
+    border-color: var(--gold);
+    color: var(--navy);
+  }
+
+  .refresh-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 0.6rem 1.4rem;
+    border: 2px solid var(--ice-blue);
+    border-radius: 50px;
+    background: transparent;
+    color: var(--ice-blue);
+    cursor: pointer;
+    transition: all 0.25s ease;
+  }
+
+  .refresh-btn:hover { background: var(--ice-blue); color: var(--navy); }
+  .refresh-btn.spinning .refresh-icon { animation: spin 0.8s linear; }
+
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 0 1rem 4rem;
+    position: relative;
+    z-index: 1;
+  }
+
+  .panel { display: none; }
+  .panel.active { display: block; animation: fadeUp 0.4s ease; }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-title {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    letter-spacing: 0.04em;
+    color: var(--gold);
+    margin: 2rem 0 1rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+  }
+
+  .section-title .emoji { font-family: initial; }
+
+  .how-it-works {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 12px;
+    padding: 1rem 1.5rem;
+    margin-bottom: 1.5rem;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+
+  .how-it-works strong { color: var(--text-primary); }
+  .how-it-works .gold { color: var(--gold); font-weight: 600; }
+
+  .scoring-legend {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .legend-chip {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 20px;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    color: var(--text-secondary);
+  }
+
+  .legend-chip span { color: var(--gold); }
+
+  /* ── View Toggle ── */
+  .view-toggle {
+    display: flex;
+    gap: 0;
+    margin-bottom: 1.5rem;
+    background: rgba(255,255,255,0.04);
+    border-radius: 10px;
+    padding: 4px;
+    width: fit-content;
+  }
+
+  .view-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.95rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    padding: 0.5rem 1.2rem;
+    border: none;
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .view-btn:hover { color: var(--text-secondary); }
+
+  .view-btn.active {
+    background: var(--card-bg);
+    color: var(--gold);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+
+  /* ── Table ── */
+  .board {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0 6px;
+  }
+
+  .board thead th {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    color: var(--text-muted);
+    text-align: left;
+    padding: 0 1rem 0.5rem;
+  }
+
+  .board thead th.center { text-align: center; }
+  .board thead th.right { text-align: right; }
+
+  .board tbody tr {
+    background: var(--card-bg);
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .board tbody tr:hover {
+    transform: scale(1.01);
+    box-shadow: 0 4px 20px rgba(255,215,0,0.1);
+  }
+
+  .board tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    border-top: 1px solid var(--card-border);
+    border-bottom: 1px solid var(--card-border);
+  }
+
+  .board tbody td:first-child {
+    border-left: 1px solid var(--card-border);
+    border-radius: 10px 0 0 10px;
+  }
+
+  .board tbody td:last-child {
+    border-right: 1px solid var(--card-border);
+    border-radius: 0 10px 10px 0;
+  }
+
+  .rank {
+    font-family: 'Bangers', cursive;
+    font-size: 1.4rem;
+    text-align: center;
+    width: 50px;
+  }
+
+  .rank-1 { color: #FFD700; text-shadow: 0 0 12px rgba(255,215,0,0.5); }
+  .rank-2 { color: #C0C0C0; }
+  .rank-3 { color: #CD7F32; }
+
+  .rank-medal { font-family: initial; font-size: 1.2rem; }
+
+  .player-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.15rem;
+    color: var(--text-primary);
+  }
+
+  .player-team {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    font-weight: 400;
+  }
+
+  .player-entries {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+    font-style: italic;
+  }
+
+  .shot-cell {
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+
+  .shot-avg { color: var(--text-primary); }
+  .shot-empty { color: var(--text-muted); font-size: 0.8rem; }
+
+  .score-cell {
+    text-align: right;
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    color: var(--gold);
+    padding-right: 1.2rem !important;
+  }
+
+  .board tbody tr.top-1 {
+    background: linear-gradient(90deg, rgba(255,215,0,0.12), var(--card-bg) 60%);
+  }
+  .board tbody tr.top-1 td { border-color: rgba(255,215,0,0.25); }
+  .board tbody tr.top-2 { background: linear-gradient(90deg, rgba(192,192,192,0.08), var(--card-bg) 60%); }
+  .board tbody tr.top-3 { background: linear-gradient(90deg, rgba(205,127,50,0.08), var(--card-bg) 60%); }
+
+  /* ── Team Cards ── */
+  .team-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.2rem 1.5rem;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 1.2rem;
+    transition: transform 0.15s ease;
+  }
+
+  .team-card:hover { transform: scale(1.01); }
+
+  .team-rank {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    min-width: 50px;
+    text-align: center;
+  }
+
+  .team-info { flex: 1; }
+
+  .team-name {
+    font-family: 'Bangers', cursive;
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .team-stat-row {
+    display: flex;
+    gap: 1.5rem;
+    margin-top: 0.3rem;
+    flex-wrap: wrap;
+  }
+
+  .team-stat {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+  }
+
+  .team-stat strong { color: var(--text-primary); }
+
+  .team-bar-wrap {
+    width: 200px;
+    height: 18px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 9px;
+    overflow: hidden;
+    flex-shrink: 0;
+  }
+
+  .team-bar {
+    height: 100%;
+    border-radius: 9px;
+    background: linear-gradient(90deg, var(--court-orange), var(--gold));
+    transition: width 0.8s ease;
+  }
+
+  .team-total {
+    font-family: 'Bangers', cursive;
+    font-size: 1.8rem;
+    color: var(--gold);
+    min-width: 60px;
+    text-align: right;
+  }
+
+  /* ── Awards ── */
+  .awards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+    margin-top: 1rem;
+  }
+
+  .award-card {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    text-align: center;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .award-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 30px rgba(255,215,0,0.1);
+  }
+
+  .award-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+  }
+
+  .award-card.gold::before { background: linear-gradient(90deg, #FFD700, #FFA500); }
+  .award-card.blue::before { background: linear-gradient(90deg, #00D4FF, #0088FF); }
+  .award-card.green::before { background: linear-gradient(90deg, #39FF14, #00C853); }
+  .award-card.purple::before { background: linear-gradient(90deg, #BF5AF2, #8B5CF6); }
+  .award-card.red::before { background: linear-gradient(90deg, #FF4136, #FF6B6B); }
+  .award-card.orange::before { background: linear-gradient(90deg, #FF8C00, #FFB347); }
+
+  .award-emoji { font-size: 2.5rem; display: block; margin-bottom: 0.5rem; }
+
+  .award-title {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 0.03em;
+    color: var(--gold);
+    margin-bottom: 0.3rem;
+  }
+
+  .award-winner {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.3rem;
+    color: var(--text-primary);
+  }
+
+  .award-detail {
+    font-size: 0.85rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .loading {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+  }
+
+  .loading .spinner {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    border: 3px solid var(--text-muted);
+    border-top-color: var(--gold);
+    border-radius: 50%;
+    animation: spin 0.8s linear infinite;
+    margin-bottom: 1rem;
+  }
+
+  .empty-state {
+    text-align: center;
+    padding: 4rem 1rem;
+    color: var(--text-muted);
+    font-size: 1.1rem;
+  }
+
+  .empty-state .big-emoji { font-size: 3rem; display: block; margin-bottom: 1rem; }
+
+  .last-updated {
+    text-align: center;
+    padding: 1rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    font-family: 'Barlow Condensed', sans-serif;
+    letter-spacing: 0.05em;
+  }
+
+  .auto-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    background: var(--neon-green);
+    border-radius: 50%;
+    margin-right: 0.4rem;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.3; }
+  }
+
+  @media (max-width: 768px) {
+    .board { font-size: 0.85rem; }
+    .board thead th { font-size: 0.7rem; padding: 0 0.5rem 0.4rem; }
+    .board tbody td { padding: 0.6rem 0.5rem; }
+    .player-name { font-size: 1rem; }
+    .score-cell { font-size: 1.2rem; }
+    .team-bar-wrap { width: 100px; }
+    .team-card { gap: 0.8rem; padding: 1rem; }
+    .shot-cell { font-size: 0.85rem; }
+    .distance-cols { display: none; }
+    .hide-mobile { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header class="header">
+  <div class="header-ball">🏀</div>
+  <h1>Data Dunkers Leaderboard</h1>
+  <div class="subtitle">Who's got the hot hand?</div>
+</header>
+
+<div class="form-link-bar">
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSeu3ThYYhTuJCGAM3YMSrccUXiaU_H83DRMq25VmjhTHE5_lQ/viewform?usp=header" target="_blank" rel="noopener" class="form-link-btn">📝 Submit Your Shots!</a>
+</div>
+
+<nav class="controls">
+  <button class="tab-btn active" data-tab="individuals">🏆 Top Scorers</button>
+  <button class="tab-btn" data-tab="teams">👥 Teams</button>
+  <button class="tab-btn" data-tab="awards">🎖️ Awards</button>
+  <button class="refresh-btn" id="refreshBtn" title="Refresh data">
+    <span class="refresh-icon" style="display:inline-block">↻</span> Refresh
+  </button>
+</nav>
+
+<main class="main">
+
+  <section id="individuals" class="panel active">
+    <h2 class="section-title"><span class="emoji">🔥</span> Individual Leaderboard</h2>
+
+    <div class="how-it-works">
+      <strong>How scoring works:</strong> Every make earns points based on distance —
+      <span class="gold">2 ft = 1 pt</span>,
+      <span class="gold">4 ft = 2 pts</span>,
+      <span class="gold">6 ft = 3 pts</span>,
+      <span class="gold">8 ft = 4 pts</span>,
+      <span class="gold">10 ft = 5 pts</span>.
+      Points <strong>stack</strong> — the more you shoot, the more you score!
+      Grind it out up close or go big from deep. Your call. 🏀
+    </div>
+
+    <div class="scoring-legend">
+      <div class="legend-chip">2 ft = <span>1 pt</span> per make</div>
+      <div class="legend-chip">4 ft = <span>2 pts</span></div>
+      <div class="legend-chip">6 ft = <span>3 pts</span></div>
+      <div class="legend-chip">8 ft = <span>4 pts</span></div>
+      <div class="legend-chip">10 ft = <span>5 pts</span></div>
+      <div class="legend-chip">Points <span>stack!</span></div>
+    </div>
+
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="score">🏆 Total Score</button>
+      <button class="view-btn" data-view="pct">🎯 Shooting %</button>
+    </div>
+
+    <div id="individualContent">
+      <div class="loading"><div class="spinner"></div><br>Loading leaderboard…</div>
+    </div>
+  </section>
+
+  <section id="teams" class="panel">
+    <h2 class="section-title"><span class="emoji">👥</span> Team Standings</h2>
+    <p style="color: var(--text-secondary); margin-bottom:1rem; font-size:0.95rem;">
+      Ranked by <strong style="color:var(--gold)">total shots made</strong> across all players and distances (no weighting).
+    </p>
+    <div id="teamContent">
+      <div class="loading"><div class="spinner"></div><br>Loading teams…</div>
+    </div>
+  </section>
+
+  <section id="awards" class="panel">
+    <h2 class="section-title"><span class="emoji">🎖️</span> Awards &amp; Superlatives</h2>
+    <div id="awardsContent">
+      <div class="loading"><div class="spinner"></div><br>Calculating awards…</div>
+    </div>
+  </section>
+
+</main>
+
+<div class="last-updated" id="lastUpdated"></div>
+
+<script>
+// ── Google Sheet Config ──
+const GOOGLE_SHEET_ID = '1TObDL8_bVBJevWnKgwHjDnfi1BnYaMzA1U5Vd-ivS2E';
+// Columns: Nickname | Team/Hoop | Distance | Shots Made
+
+// If your data lives on a specific tab, put its name here (empty = first sheet)
+const SHEET_TAB_NAME = '';
+
+// Auto-refresh interval in seconds (0 = off)
+const AUTO_REFRESH_SECONDS = 30;
+
+// ── Weighted multipliers ──
+const WEIGHTS = { 2: 1, 4: 2, 6: 3, 8: 4, 10: 5 };
+const DISTANCES = [2, 4, 6, 8, 10];
+
+// ── State ──
+let aggregatedPlayers = [];
+let currentView = 'score'; // 'score' or 'pct'
+
+// ── Helpers ──
+function fmt(n) { return n % 1 === 0 ? String(n) : n.toFixed(1); }
+
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
+}
+
+// ══════════════════════════════════════════════════════════════
+// FETCH & AGGREGATE
+// ══════════════════════════════════════════════════════════════
+async function fetchSheetData() {
+  const tabParam = SHEET_TAB_NAME ? `&sheet=${encodeURIComponent(SHEET_TAB_NAME)}` : '';
+  const url = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEET_ID}/gviz/tq?tqx=out:json${tabParam}`;
+
+  try {
+    const resp = await fetch(url);
+    const text = await resp.text();
+
+    const jsonStr = text.match(/google\.visualization\.Query\.setResponse\(([\s\S]+?)\);?\s*$/);
+    if (!jsonStr) throw new Error('Could not parse sheet response');
+
+    const data = JSON.parse(jsonStr[1]);
+    const rows = data.table.rows;
+
+    // Data loaded successfully
+
+    // ── Step 1: Collect raw submissions ──
+    const rawEntries = [];
+    for (const row of rows) {
+      const cells = row.c;
+      if (!cells || !cells[0] || !cells[0].v) continue;
+
+      const nickname = String(cells[0].v).trim();
+      const team = cells[1] ? String(cells[1].v).trim() : '—';
+      const distance = cells[2] ? Number(cells[2].v) : 0;
+      const shotsMade = cells[3] ? Number(cells[3].v) : 0;
+
+      if (!DISTANCES.includes(distance)) continue;
+
+      rawEntries.push({
+        nickname,
+        team,
+        distance,
+        shotsMade: Math.max(0, Math.min(3, shotsMade))
+      });
+    }
+
+    // ── Step 2: Aggregate by player (case-insensitive key) ──
+    const playerMap = {};
+
+    for (const entry of rawEntries) {
+      const key = entry.nickname.toLowerCase();
+
+      if (!playerMap[key]) {
+        playerMap[key] = {
+          nickname: entry.nickname,
+          team: entry.team,
+          distanceEntries: {},
+          totalSubmissions: 0
+        };
+      }
+
+      if (!playerMap[key].distanceEntries[entry.distance]) {
+        playerMap[key].distanceEntries[entry.distance] = [];
+      }
+
+      playerMap[key].distanceEntries[entry.distance].push(entry.shotsMade);
+      playerMap[key].totalSubmissions++;
+      playerMap[key].team = entry.team; // keep latest team value
+    }
+
+    // ── Step 3: Sum all makes & calculate weighted scores ──
+    aggregatedPlayers = Object.values(playerMap).map(p => {
+      const distStats = {}; // { distance: { made, attempts } }
+      let totalMade = 0;
+      let weightedScore = 0;
+      let distancesAttempted = 0;
+
+      for (const d of DISTANCES) {
+        const entries = p.distanceEntries[d];
+        if (entries && entries.length > 0) {
+          const made = entries.reduce((sum, v) => sum + v, 0);
+          const attempts = entries.length * 3;
+          distStats[d] = { made, attempts };
+          totalMade += made;
+          weightedScore += made * WEIGHTS[d];
+          distancesAttempted++;
+        } else {
+          distStats[d] = null;
+        }
+      }
+
+      return {
+        nickname: p.nickname,
+        team: p.team,
+        distStats,
+        totalMade,
+        weightedScore,
+        distancesAttempted,
+        totalSubmissions: p.totalSubmissions
+      };
+    });
+
+    renderAll();
+    document.getElementById('lastUpdated').innerHTML =
+      `<span class="auto-dot"></span>Last updated: ${new Date().toLocaleTimeString()}` +
+      ` · ${rawEntries.length} submissions from ${aggregatedPlayers.length} players` +
+      (AUTO_REFRESH_SECONDS ? ` · Auto-refreshes every ${AUTO_REFRESH_SECONDS}s` : '');
+
+  } catch (err) {
+    console.error('Sheet fetch error:', err);
+    document.getElementById('individualContent').innerHTML =
+      `<div class="empty-state"><span class="big-emoji">📡</span>Could not load data.<br>Make sure your sheet is published and the ID is correct.</div>`;
+    document.getElementById('teamContent').innerHTML = '';
+    document.getElementById('awardsContent').innerHTML = '';
+  }
+}
+
+function renderAll() {
+  renderIndividuals();
+  renderTeams();
+  renderAwards();
+}
+
+// ══════════════════════════════════════════════════════════════
+// INDIVIDUAL LEADERBOARD
+// ══════════════════════════════════════════════════════════════
+function renderIndividuals() {
+  const container = document.getElementById('individualContent');
+
+  if (aggregatedPlayers.length === 0) {
+    container.innerHTML = `<div class="empty-state"><span class="big-emoji">🏀</span>No shots recorded yet. Get shooting!</div>`;
+    return;
+  }
+
+  const isPct = currentView === 'pct';
+
+  // Calculate accuracy for each player
+  const withAccuracy = aggregatedPlayers.map(p => {
+    const totalAttempts = DISTANCES.reduce((sum, d) => sum + (p.distStats[d] ? p.distStats[d].attempts : 0), 0);
+    const accuracy = totalAttempts > 0 ? p.totalMade / totalAttempts : 0;
+    return { ...p, accuracy, totalAttempts };
+  });
+
+  // Sort by view mode
+  const sorted = isPct
+    ? [...withAccuracy].sort((a, b) => b.accuracy - a.accuracy || b.totalMade - a.totalMade)
+    : [...withAccuracy].sort((a, b) => b.weightedScore - a.weightedScore);
+
+  const lastColHeader = isPct ? 'Pct' : 'Score';
+  const midColHeader = isPct ? 'Made / Att' : 'Made';
+
+  let html = `
+    <table class="board">
+      <thead>
+        <tr>
+          <th class="center" style="width:50px">#</th>
+          <th>Player</th>
+          <th class="center distance-cols">2 ft</th>
+          <th class="center distance-cols">4 ft</th>
+          <th class="center distance-cols">6 ft</th>
+          <th class="center distance-cols">8 ft</th>
+          <th class="center distance-cols">10 ft</th>
+          <th class="center hide-mobile">${midColHeader}</th>
+          <th class="right">${lastColHeader}</th>
+        </tr>
+      </thead>
+      <tbody>`;
+
+  sorted.forEach((p, i) => {
+    const rank = i + 1;
+    const topClass = rank <= 3 ? ` top-${rank}` : '';
+    const medal = rank === 1 ? '<span class="rank-medal">👑</span>' :
+                  rank === 2 ? '<span class="rank-medal">🥈</span>' :
+                  rank === 3 ? '<span class="rank-medal">🥉</span>' : rank;
+    const rankColor = rank <= 3 ? ` rank-${rank}` : '';
+
+    html += `
+      <tr class="${topClass}">
+        <td class="rank${rankColor}">${medal}</td>
+        <td>
+          <div class="player-name">${escapeHtml(p.nickname)}</div>
+          <div class="player-team">Hoop ${escapeHtml(p.team)}</div>
+          <div class="player-entries">${p.totalSubmissions} submission${p.totalSubmissions !== 1 ? 's' : ''}</div>
+        </td>`;
+
+    DISTANCES.forEach(d => {
+      const s = p.distStats[d];
+      if (s !== null) {
+        if (isPct) {
+          const dpct = Math.round((s.made / s.attempts) * 100);
+          html += `<td class="shot-cell distance-cols"><span class="shot-avg">${dpct}%</span></td>`;
+        } else {
+          html += `<td class="shot-cell distance-cols"><span class="shot-avg">${s.made}/${s.attempts}</span></td>`;
+        }
+      } else {
+        html += `<td class="shot-cell distance-cols"><span class="shot-empty">—</span></td>`;
+      }
+    });
+
+    if (isPct) {
+      html += `
+        <td class="shot-cell hide-mobile">${p.totalMade}/${p.totalAttempts}</td>
+        <td class="score-cell">${Math.round(p.accuracy * 100)}%</td>
+      </tr>`;
+    } else {
+      html += `
+        <td class="shot-cell hide-mobile">${p.totalMade}</td>
+        <td class="score-cell">${p.weightedScore}</td>
+      </tr>`;
+    }
+  });
+
+  html += `</tbody></table>`;
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════════
+// TEAM LEADERBOARD
+// ══════════════════════════════════════════════════════════════
+function renderTeams() {
+  const container = document.getElementById('teamContent');
+
+  if (aggregatedPlayers.length === 0) {
+    container.innerHTML = `<div class="empty-state"><span class="big-emoji">👥</span>No team data yet.</div>`;
+    return;
+  }
+
+  const teamMap = {};
+  aggregatedPlayers.forEach(p => {
+    if (!teamMap[p.team]) teamMap[p.team] = { name: p.team, totalMade: 0, players: 0, submissions: 0 };
+    teamMap[p.team].totalMade += p.totalMade;
+    teamMap[p.team].players++;
+    teamMap[p.team].submissions += p.totalSubmissions;
+  });
+
+  const teams = Object.values(teamMap).sort((a, b) => b.totalMade - a.totalMade);
+  const maxMade = teams[0]?.totalMade || 1;
+
+  let html = '';
+  teams.forEach((t, i) => {
+    const rank = i + 1;
+    const medal = rank === 1 ? '🥇' : rank === 2 ? '🥈' : rank === 3 ? '🥉' : `#${rank}`;
+    const barPct = Math.round((t.totalMade / maxMade) * 100);
+    const rankColor = rank === 1 ? 'var(--gold)' : rank === 2 ? '#C0C0C0' : rank === 3 ? '#CD7F32' : 'var(--text-secondary)';
+
+    html += `
+      <div class="team-card">
+        <div class="team-rank" style="color:${rankColor}">${medal}</div>
+        <div class="team-info">
+          <div class="team-name">Hoop ${escapeHtml(t.name)}</div>
+          <div class="team-stat-row">
+            <span class="team-stat"><strong>${t.players}</strong> player${t.players !== 1 ? 's' : ''}</span>
+            <span class="team-stat"><strong>${fmt(t.totalMade)}</strong> shots made</span>
+            <span class="team-stat"><strong>${t.submissions}</strong> submissions</span>
+          </div>
+        </div>
+        <div class="team-bar-wrap"><div class="team-bar" style="width:${barPct}%"></div></div>
+        <div class="team-total">${fmt(t.totalMade)}</div>
+      </div>`;
+  });
+
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════════
+// AWARDS & SUPERLATIVES
+// ══════════════════════════════════════════════════════════════
+function renderAwards() {
+  const container = document.getElementById('awardsContent');
+
+  if (aggregatedPlayers.length < 2) {
+    container.innerHTML = `<div class="empty-state"><span class="big-emoji">🎖️</span>Need more players for awards!</div>`;
+    return;
+  }
+
+  const awards = [];
+
+  // Helper: shooting percentage at a distance
+  function pct(p, d) {
+    const s = p.distStats[d];
+    return s ? s.made / s.attempts : 0;
+  }
+
+  // 1) The Hot Hand — highest weighted score
+  const byScore = [...aggregatedPlayers].sort((a, b) => b.weightedScore - a.weightedScore);
+  awards.push({
+    emoji: '🔥', title: 'The Hot Hand',
+    subtitle: 'Highest Weighted Score',
+    winner: byScore[0].nickname,
+    detail: `${byScore[0].weightedScore} pts`,
+    color: 'gold'
+  });
+
+  // 2) Bucket Collector — most total makes
+  const byMade = [...aggregatedPlayers].sort((a, b) => b.totalMade - a.totalMade);
+  awards.push({
+    emoji: '🪣', title: 'The Bucket Collector',
+    subtitle: 'Most Total Makes',
+    winner: byMade[0].nickname,
+    detail: `${byMade[0].totalMade} total buckets`,
+    color: 'red'
+  });
+
+  // 3) From Downtown — most makes from 10ft
+  const by10 = [...aggregatedPlayers]
+    .filter(p => p.distStats[10] !== null)
+    .sort((a, b) => b.distStats[10].made - a.distStats[10].made);
+
+  if (by10.length > 0 && by10[0].distStats[10].made > 0) {
+    const s = by10[0].distStats[10];
+    awards.push({
+      emoji: '🌟', title: 'From Downtown',
+      subtitle: 'Most makes from 10 feet',
+      winner: by10[0].nickname,
+      detail: `${s.made}/${s.attempts} from way back`,
+      color: 'blue'
+    });
+  }
+
+  // 4) Layup Legend — most makes from 2ft
+  const by2 = [...aggregatedPlayers]
+    .filter(p => p.distStats[2] !== null)
+    .sort((a, b) => b.distStats[2].made - a.distStats[2].made);
+
+  if (by2.length > 0 && by2[0].distStats[2].made > 0) {
+    const s = by2[0].distStats[2];
+    awards.push({
+      emoji: '👑', title: 'Layup Legend',
+      subtitle: 'Most makes from 2 feet',
+      winner: by2[0].nickname,
+      detail: `${s.made}/${s.attempts} up close`,
+      color: 'gold'
+    });
+  }
+
+  // 5) The Metronome — most consistent shooting % across distances (3+ distances)
+  const withMultiple = aggregatedPlayers.filter(p => p.distancesAttempted >= 3);
+  if (withMultiple.length > 0) {
+    const consistency = withMultiple.map(p => {
+      const pcts = DISTANCES.filter(d => p.distStats[d] !== null).map(d => pct(p, d));
+      const avg = pcts.reduce((s, v) => s + v, 0) / pcts.length;
+      const variance = pcts.reduce((s, v) => s + (v - avg) ** 2, 0) / pcts.length;
+      return { ...p, variance, avgPct: avg };
+    }).sort((a, b) => a.variance - b.variance);
+
+    if (consistency[0].totalMade > 0) {
+      const pctStr = DISTANCES.map(d => {
+        const s = consistency[0].distStats[d];
+        return s ? Math.round((s.made / s.attempts) * 100) + '%' : '—';
+      }).join(' - ');
+      awards.push({
+        emoji: '🧘', title: 'The Metronome',
+        subtitle: 'Most consistent shooting % across distances',
+        winner: consistency[0].nickname,
+        detail: `Accuracy: ${pctStr}`,
+        color: 'green'
+      });
+    }
+
+    // 6) The Wild Card — highest variance in shooting %
+    const wildest = [...consistency].sort((a, b) => b.variance - a.variance);
+    if (wildest[0].variance > 0.01) {
+      const pctStr = DISTANCES.map(d => {
+        const s = wildest[0].distStats[d];
+        return s ? Math.round((s.made / s.attempts) * 100) + '%' : '—';
+      }).join(' - ');
+      awards.push({
+        emoji: '🎲', title: 'The Wild Card',
+        subtitle: 'Most unpredictable accuracy across distances',
+        winner: wildest[0].nickname,
+        detail: `Accuracy: ${pctStr}`,
+        color: 'purple'
+      });
+    }
+  }
+
+  // 7) Lights Out — best overall shooting percentage (min 3 submissions)
+  const qualified = aggregatedPlayers.filter(p => p.totalSubmissions >= 3);
+  if (qualified.length > 0) {
+    const byAccuracy = qualified.map(p => {
+      const totalAttempts = DISTANCES.reduce((sum, d) => sum + (p.distStats[d] ? p.distStats[d].attempts : 0), 0);
+      return { ...p, accuracy: totalAttempts > 0 ? p.totalMade / totalAttempts : 0, totalAttempts };
+    }).sort((a, b) => b.accuracy - a.accuracy);
+
+    awards.push({
+      emoji: '💡', title: 'Lights Out',
+      subtitle: 'Best overall shooting percentage',
+      winner: byAccuracy[0].nickname,
+      detail: `${Math.round(byAccuracy[0].accuracy * 100)}% (${byAccuracy[0].totalMade}/${byAccuracy[0].totalAttempts})`,
+      color: 'blue'
+    });
+  }
+
+  // 8) The Hustler — most submissions
+  const bySubmissions = [...aggregatedPlayers].sort((a, b) => b.totalSubmissions - a.totalSubmissions);
+  if (bySubmissions[0].totalSubmissions >= 3) {
+    awards.push({
+      emoji: '⚡', title: 'The Hustler',
+      subtitle: 'Most active — never stops shooting',
+      winner: bySubmissions[0].nickname,
+      detail: `${bySubmissions[0].totalSubmissions} submissions`,
+      color: 'orange'
+    });
+  }
+
+  // 9) The Long Ranger — most combined makes from 8ft + 10ft
+  const longRange = [...aggregatedPlayers]
+    .filter(p => p.distStats[8] !== null && p.distStats[10] !== null)
+    .map(p => ({ ...p, longMade: p.distStats[8].made + p.distStats[10].made }))
+    .sort((a, b) => b.longMade - a.longMade);
+
+  if (longRange.length > 0 && longRange[0].longMade > 0) {
+    awards.push({
+      emoji: '🚀', title: 'The Long Ranger',
+      subtitle: 'Most combined makes from 8 ft + 10 ft',
+      winner: longRange[0].nickname,
+      detail: `${longRange[0].longMade} buckets from deep`,
+      color: 'purple'
+    });
+  }
+
+  // 10) All-Star Five — attempted all 5 distances with highest score
+  const allFive = [...aggregatedPlayers]
+    .filter(p => p.distancesAttempted === 5)
+    .sort((a, b) => b.weightedScore - a.weightedScore);
+
+  if (allFive.length > 0) {
+    awards.push({
+      emoji: '⭐', title: 'All-Star Five',
+      subtitle: 'Completed all 5 distances with best score',
+      winner: allFive[0].nickname,
+      detail: `${allFive[0].weightedScore} pts across every distance`,
+      color: 'gold'
+    });
+  }
+
+  // Render
+  let html = '<div class="awards-grid">';
+  awards.forEach(a => {
+    html += `
+      <div class="award-card ${a.color}">
+        <span class="award-emoji">${a.emoji}</span>
+        <div class="award-title">${a.title}</div>
+        <div class="award-winner">${escapeHtml(a.winner)}</div>
+        <div class="award-detail">${a.detail}</div>
+      </div>`;
+  });
+  html += '</div>';
+  container.innerHTML = html;
+}
+
+// ══════════════════════════════════════════════════════════════
+// TAB SWITCHING & REFRESH
+// ══════════════════════════════════════════════════════════════
+document.querySelectorAll('.tab-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById(btn.dataset.tab).classList.add('active');
+  });
+});
+
+// ── View toggle (Score vs Shooting %) ──
+document.querySelectorAll('.view-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.view-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    currentView = btn.dataset.view;
+    renderIndividuals();
+  });
+});
+
+document.getElementById('refreshBtn').addEventListener('click', () => {
+  const btn = document.getElementById('refreshBtn');
+  btn.classList.add('spinning');
+  fetchSheetData().then(() => {
+    setTimeout(() => btn.classList.remove('spinning'), 600);
+  });
+});
+
+// ── Init ──
+fetchSheetData();
+if (AUTO_REFRESH_SECONDS > 0) {
+  setInterval(fetchSheetData, AUTO_REFRESH_SECONDS * 1000);
+}
+</script>
+
+</body>
+</html>
 
