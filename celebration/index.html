@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Data Dunkers Leaderboard</title>
 <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <style>
   :root {
     --court-orange: #E8611A;
@@ -570,6 +571,437 @@
     .distance-cols { display: none; }
     .hide-mobile { display: none; }
   }
+
+  /* ══════════════ DATA LAB ══════════════ */
+  .lab-subnav {
+    display: flex;
+    gap: 0.4rem;
+    flex-wrap: wrap;
+    margin-bottom: 1.5rem;
+  }
+
+  .lab-subnav-btn {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.85rem;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    padding: 0.45rem 1rem;
+    border: 1px solid var(--text-muted);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s ease;
+  }
+
+  .lab-subnav-btn:hover { border-color: var(--ice-blue); color: var(--ice-blue); }
+
+  .lab-subnav-btn.active {
+    background: var(--ice-blue);
+    border-color: var(--ice-blue);
+    color: var(--navy);
+  }
+
+  .lab-panel { display: none; }
+  .lab-panel.active { display: block; animation: fadeUp 0.35s ease; }
+
+  .lab-description {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    margin-bottom: 1.2rem;
+    line-height: 1.5;
+    padding: 0.8rem 1rem;
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+  }
+
+  .lab-description strong { color: var(--gold); }
+
+  .chart-container {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+    position: relative;
+  }
+
+  .chart-container canvas { max-height: 420px; }
+
+  .chart-controls {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-bottom: 1rem;
+  }
+
+  .chart-toggle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.82rem;
+    padding: 0.35rem 0.9rem;
+    border: 1px solid var(--card-border);
+    border-radius: 6px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+
+  .chart-toggle:hover { color: var(--text-secondary); border-color: var(--text-secondary); }
+  .chart-toggle.active { background: var(--gold); color: var(--navy); border-color: var(--gold); }
+
+  /* Heat Map */
+  .heatmap-grid {
+    display: grid;
+    grid-template-columns: 120px repeat(5, 1fr);
+    gap: 4px;
+    margin-bottom: 1rem;
+  }
+
+  .heatmap-header {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--text-muted);
+    padding: 0.6rem 0.4rem;
+    text-align: center;
+  }
+
+  .heatmap-header.row-label { text-align: right; padding-right: 1rem; }
+
+  .heatmap-cell {
+    border-radius: 8px;
+    padding: 0.8rem 0.4rem;
+    text-align: center;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1rem;
+    color: var(--text-primary);
+    transition: transform 0.15s ease;
+    position: relative;
+  }
+
+  .heatmap-cell:hover { transform: scale(1.08); z-index: 1; }
+
+  .heatmap-cell .cell-sub {
+    font-size: 0.7rem;
+    font-weight: 400;
+    color: rgba(255,255,255,0.7);
+    display: block;
+    margin-top: 2px;
+  }
+
+  .heatmap-legend {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 0.8rem;
+  }
+
+  .heatmap-legend-bar {
+    height: 12px;
+    width: 180px;
+    border-radius: 6px;
+    background: linear-gradient(90deg, #1a1a2e, #e74c3c, #f39c12, #2ecc71);
+  }
+
+  /* Player Card */
+  .player-card-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 100;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  }
+
+  .player-card-overlay.open { display: flex; }
+
+  .player-card {
+    background: var(--bg-dark);
+    border: 2px solid var(--gold);
+    border-radius: 18px;
+    padding: 2rem;
+    max-width: 500px;
+    width: 100%;
+    position: relative;
+    animation: fadeUp 0.3s ease;
+  }
+
+  .player-card-close {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    font-size: 1.5rem;
+    cursor: pointer;
+  }
+
+  .player-card-close:hover { color: var(--text-primary); }
+
+  .pc-name {
+    font-family: 'Bangers', cursive;
+    font-size: 2rem;
+    color: var(--gold);
+  }
+
+  .pc-team {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+  }
+
+  .pc-stats-row {
+    display: flex;
+    gap: 1rem;
+    margin-bottom: 1.2rem;
+    flex-wrap: wrap;
+  }
+
+  .pc-stat-box {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    text-align: center;
+    flex: 1;
+    min-width: 80px;
+  }
+
+  .pc-stat-val {
+    font-family: 'Bangers', cursive;
+    font-size: 1.6rem;
+    color: var(--gold);
+  }
+
+  .pc-stat-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+  }
+
+  .pc-bar-row {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-bottom: 0.5rem;
+  }
+
+  .pc-bar-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.9rem;
+    width: 40px;
+    text-align: right;
+    color: var(--text-secondary);
+  }
+
+  .pc-bar-track {
+    flex: 1;
+    height: 22px;
+    background: rgba(255,255,255,0.06);
+    border-radius: 11px;
+    overflow: hidden;
+    position: relative;
+  }
+
+  .pc-bar-fill {
+    height: 100%;
+    border-radius: 11px;
+    transition: width 0.6s ease;
+  }
+
+  .pc-bar-val {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 0.85rem;
+    min-width: 55px;
+    color: var(--text-primary);
+  }
+
+  .pc-vs-avg {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    text-align: center;
+    margin-top: 1rem;
+    padding-top: 0.8rem;
+    border-top: 1px solid var(--card-border);
+  }
+
+  .pc-vs-avg .above { color: var(--neon-green); }
+  .pc-vs-avg .below { color: var(--fire-red); }
+
+  /* What-If Simulator */
+  .sim-wrapper {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.5rem;
+  }
+
+  @media (max-width: 768px) {
+    .sim-wrapper { grid-template-columns: 1fr; }
+    .heatmap-grid { grid-template-columns: 80px repeat(5, 1fr); }
+    .heatmap-header { font-size: 0.7rem; }
+    .heatmap-cell { font-size: 0.85rem; padding: 0.5rem 0.2rem; }
+  }
+
+  .sim-controls {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .sim-result {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 14px;
+    padding: 1.5rem;
+  }
+
+  .sim-select {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: 1rem;
+    padding: 0.6rem 0.8rem;
+    border-radius: 8px;
+    border: 1px solid var(--card-border);
+    background: var(--bg-dark);
+    color: var(--text-primary);
+    margin-bottom: 1rem;
+  }
+
+  .sim-row {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-bottom: 0.8rem;
+  }
+
+  .sim-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    min-width: 45px;
+    color: var(--text-secondary);
+  }
+
+  .sim-slider {
+    flex: 1;
+    accent-color: var(--gold);
+    height: 6px;
+  }
+
+  .sim-val {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    color: var(--gold);
+    min-width: 30px;
+    text-align: center;
+  }
+
+  .sim-btn {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    letter-spacing: 0.04em;
+    width: 100%;
+    padding: 0.8rem;
+    border: none;
+    border-radius: 10px;
+    background: linear-gradient(135deg, var(--gold), #FFA500);
+    color: var(--navy);
+    cursor: pointer;
+    transition: transform 0.15s;
+    margin-top: 0.5rem;
+  }
+
+  .sim-btn:hover { transform: scale(1.02); }
+
+  .sim-current, .sim-projected {
+    padding: 1rem;
+    border-radius: 10px;
+    margin-bottom: 1rem;
+  }
+
+  .sim-current {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--card-border);
+  }
+
+  .sim-projected {
+    background: rgba(255, 215, 0, 0.06);
+    border: 1px solid rgba(255, 215, 0, 0.2);
+  }
+
+  .sim-big-num {
+    font-family: 'Bangers', cursive;
+    font-size: 2.5rem;
+    color: var(--gold);
+  }
+
+  .sim-rank-change {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.1rem;
+    margin-top: 0.5rem;
+  }
+
+  .sim-rank-change .up { color: var(--neon-green); }
+  .sim-rank-change .same { color: var(--text-muted); }
+
+  /* Player select list for cards */
+  .player-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    gap: 0.6rem;
+  }
+
+  .player-grid-item {
+    background: var(--card-bg);
+    border: 1px solid var(--card-border);
+    border-radius: 10px;
+    padding: 0.8rem 1rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+
+  .player-grid-item:hover {
+    border-color: var(--gold);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(255,215,0,0.1);
+  }
+
+  .player-grid-item .pgi-name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+
+  .player-grid-item .pgi-score {
+    font-family: 'Bangers', cursive;
+    font-size: 1.2rem;
+    color: var(--gold);
+  }
+
+  .player-grid-item .pgi-team {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+  }
 </style>
 </head>
 <body>
@@ -588,6 +1020,7 @@
   <button class="tab-btn active" data-tab="individuals">🏆 Top Scorers</button>
   <button class="tab-btn" data-tab="teams">👥 Teams</button>
   <button class="tab-btn" data-tab="awards">🎖️ Awards</button>
+  <button class="tab-btn" data-tab="datalab">🔬 Data Lab</button>
   <button class="refresh-btn" id="refreshBtn" title="Refresh data">
     <span class="refresh-icon" style="display:inline-block">↻</span> Refresh
   </button>
@@ -645,7 +1078,108 @@
     </div>
   </section>
 
+  <!-- ──────────── DATA LAB ──────────── -->
+  <section id="datalab" class="panel">
+    <h2 class="section-title"><span class="emoji">🔬</span> Data Lab</h2>
+
+    <nav class="lab-subnav">
+      <button class="lab-subnav-btn active" data-lab="heatmap">🔥 Heat Map</button>
+      <button class="lab-subnav-btn" data-lab="histogram">📊 Histogram</button>
+      <button class="lab-subnav-btn" data-lab="distribution">📈 Score Distribution</button>
+      <button class="lab-subnav-btn" data-lab="scatter">🎯 Accuracy Scatter</button>
+      <button class="lab-subnav-btn" data-lab="stacked">📊 Shot Breakdown</button>
+      <button class="lab-subnav-btn" data-lab="playercard">🃏 Player Cards</button>
+      <button class="lab-subnav-btn" data-lab="whatif">🧪 What-If Simulator</button>
+    </nav>
+
+    <!-- Heat Map -->
+    <div id="lab-heatmap" class="lab-panel active">
+      <div class="lab-description">
+        <strong>Shot Chart Heat Map:</strong> Color intensity shows shooting success rate. Red = cold, green = hot.
+        Toggle between the whole class, or compare teams side by side.
+      </div>
+      <div class="chart-controls" id="heatmapControls"></div>
+      <div id="heatmapContent"></div>
+    </div>
+
+    <!-- Histogram -->
+    <div id="lab-histogram" class="lab-panel">
+      <div class="lab-description">
+        <strong>Distance Histogram:</strong> How many total makes happened at each distance? Toggle between raw counts and shooting percentage to see the pattern.
+      </div>
+      <div class="chart-controls">
+        <button class="chart-toggle active" data-hist="counts">Raw Counts</button>
+        <button class="chart-toggle" data-hist="pct">Shooting %</button>
+      </div>
+      <div class="chart-container"><canvas id="histogramChart"></canvas></div>
+    </div>
+
+    <!-- Score Distribution -->
+    <div id="lab-distribution" class="lab-panel">
+      <div class="lab-description">
+        <strong>Score Distribution:</strong> Every dot is a player. Where do you fall? Look for clusters, gaps, and outliers.
+        Team averages shown as colored lines.
+      </div>
+      <div class="chart-container"><canvas id="distributionChart"></canvas></div>
+    </div>
+
+    <!-- Scatter Plot -->
+    <div id="lab-scatter" class="lab-panel">
+      <div class="lab-description">
+        <strong>Distance vs. Accuracy:</strong> Each dot is one player at one distance.
+        Do you see a trend as distance increases? That's <strong>correlation</strong>.
+      </div>
+      <div class="chart-container"><canvas id="scatterChart"></canvas></div>
+    </div>
+
+    <!-- Stacked Bars -->
+    <div id="lab-stacked" class="lab-panel">
+      <div class="lab-description">
+        <strong>Shot Breakdown:</strong> See where each player's points come from. Long bars from 10 ft = distance specialist. Thick bars at 2 ft = close-range grinder.
+      </div>
+      <div class="chart-controls">
+        <button class="chart-toggle active" data-stacked="top10">Top 10</button>
+        <button class="chart-toggle" data-stacked="all">All Players</button>
+      </div>
+      <div class="chart-container"><canvas id="stackedChart"></canvas></div>
+    </div>
+
+    <!-- Player Cards -->
+    <div id="lab-playercard" class="lab-panel">
+      <div class="lab-description">
+        <strong>Player Deep Dive:</strong> Click any player to see their full stats card — how they compare to the class average at every distance.
+      </div>
+      <div id="playerGridContent" class="player-grid"></div>
+    </div>
+
+    <!-- What-If Simulator -->
+    <div id="lab-whatif" class="lab-panel">
+      <div class="lab-description">
+        <strong>"What If" Simulator:</strong> Pick a player and plan a strategy.
+        How many more rounds from each distance? See where they'd land on the leaderboard!
+      </div>
+      <div class="sim-wrapper">
+        <div class="sim-controls">
+          <select class="sim-select" id="simPlayerSelect"><option value="">— Select a player —</option></select>
+          <div id="simSliders"></div>
+          <button class="sim-btn" id="simRunBtn">🚀 Run Simulation</button>
+        </div>
+        <div class="sim-result" id="simResult">
+          <div style="text-align:center;color:var(--text-muted);padding:2rem">
+            Select a player and set your shots to see the projection!
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </section>
+
 </main>
+
+<!-- Player Card Overlay -->
+<div class="player-card-overlay" id="playerCardOverlay">
+  <div class="player-card" id="playerCardContent"></div>
+</div>
 
 <div class="last-updated" id="lastUpdated"></div>
 
@@ -832,6 +1366,7 @@ function renderAll() {
   renderIndividuals();
   renderTeams();
   renderAwards();
+  renderDataLab();
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1163,6 +1698,572 @@ function renderAwards() {
 }
 
 // ══════════════════════════════════════════════════════════════
+// DATA LAB
+// ══════════════════════════════════════════════════════════════
+const chartInstances = {};
+const DIST_COLORS = {
+  2: '#39FF14', 4: '#00D4FF', 6: '#FFD700', 8: '#FF8C00', 10: '#FF4136'
+};
+
+function destroyChart(key) {
+  if (chartInstances[key]) { chartInstances[key].destroy(); delete chartInstances[key]; }
+}
+
+function chartDefaults() {
+  return {
+    color: '#9AA5B4',
+    borderColor: 'rgba(255,255,255,0.08)',
+    font: { family: "'Barlow Condensed', sans-serif" }
+  };
+}
+
+function renderDataLab() {
+  if (aggregatedPlayers.length === 0) return;
+  renderHeatmap();
+  renderHistogram('counts');
+  renderDistribution();
+  renderScatter();
+  renderStacked('top10');
+  renderPlayerGrid();
+  populateSimulator();
+}
+
+// ── 1. HEAT MAP ──
+function renderHeatmap(filter) {
+  filter = filter || 'all';
+  const container = document.getElementById('heatmapContent');
+  const controls = document.getElementById('heatmapControls');
+
+  // Build team list for controls
+  const teams = [...new Set(aggregatedPlayers.map(p => p.team))].sort();
+  let ctrlHtml = `<button class="chart-toggle ${filter === 'all' ? 'active' : ''}" data-hm="all">Everyone</button>`;
+  teams.forEach(t => {
+    ctrlHtml += `<button class="chart-toggle ${filter === t ? 'active' : ''}" data-hm="${escapeHtml(t)}">Hoop ${escapeHtml(t)}</button>`;
+  });
+  controls.innerHTML = ctrlHtml;
+
+  // Wire controls
+  controls.querySelectorAll('.chart-toggle').forEach(btn => {
+    btn.addEventListener('click', () => renderHeatmap(btn.dataset.hm));
+  });
+
+  // Filter players
+  const players = filter === 'all' ? aggregatedPlayers : aggregatedPlayers.filter(p => p.team === filter);
+
+  // Aggregate per distance
+  const distData = DISTANCES.map(d => {
+    let made = 0, attempts = 0;
+    players.forEach(p => {
+      if (p.distStats[d]) { made += p.distStats[d].made; attempts += p.distStats[d].attempts; }
+    });
+    return { distance: d, made, attempts, pct: attempts > 0 ? made / attempts : 0 };
+  });
+
+  // Also per team for comparison
+  const teamAgg = {};
+  teams.forEach(t => {
+    teamAgg[t] = DISTANCES.map(d => {
+      let made = 0, attempts = 0;
+      aggregatedPlayers.filter(p => p.team === t).forEach(p => {
+        if (p.distStats[d]) { made += p.distStats[d].made; attempts += p.distStats[d].attempts; }
+      });
+      return { pct: attempts > 0 ? made / attempts : 0, made, attempts };
+    });
+  });
+
+  function heatColor(pct) {
+    if (pct === 0) return 'rgba(255,255,255,0.04)';
+    const r = pct < 0.5 ? 231 : Math.round(231 - (pct - 0.5) * 2 * 185);
+    const g = pct < 0.5 ? Math.round(76 + pct * 2 * 180) : 204;
+    const b = pct < 0.5 ? 60 : Math.round(60 - (pct - 0.5) * 2 * 17);
+    return `rgb(${r},${g},${b})`;
+  }
+
+  let html = '<div class="heatmap-grid">';
+  // Header row
+  html += '<div class="heatmap-header row-label"></div>';
+  DISTANCES.forEach(d => html += `<div class="heatmap-header">${d} ft</div>`);
+
+  if (filter === 'all') {
+    // Show each team as a row
+    teams.forEach(t => {
+      html += `<div class="heatmap-header row-label">Hoop ${escapeHtml(t)}</div>`;
+      teamAgg[t].forEach((dd, i) => {
+        html += `<div class="heatmap-cell" style="background:${heatColor(dd.pct)}">
+          ${Math.round(dd.pct * 100)}%
+          <span class="cell-sub">${dd.made}/${dd.attempts}</span>
+        </div>`;
+      });
+    });
+    // Total row
+    html += `<div class="heatmap-header row-label" style="color:var(--gold)">Overall</div>`;
+    distData.forEach(dd => {
+      html += `<div class="heatmap-cell" style="background:${heatColor(dd.pct)};border:1px solid var(--gold)">
+        ${Math.round(dd.pct * 100)}%
+        <span class="cell-sub">${dd.made}/${dd.attempts}</span>
+      </div>`;
+    });
+  } else {
+    // Single team: show each player
+    players.forEach(p => {
+      html += `<div class="heatmap-header row-label">${escapeHtml(p.nickname)}</div>`;
+      DISTANCES.forEach(d => {
+        const s = p.distStats[d];
+        if (s) {
+          const pct = s.made / s.attempts;
+          html += `<div class="heatmap-cell" style="background:${heatColor(pct)}">
+            ${Math.round(pct * 100)}%
+            <span class="cell-sub">${s.made}/${s.attempts}</span>
+          </div>`;
+        } else {
+          html += `<div class="heatmap-cell" style="background:rgba(255,255,255,0.02)">
+            <span class="cell-sub">—</span>
+          </div>`;
+        }
+      });
+    });
+  }
+
+  html += '</div>';
+  html += `<div class="heatmap-legend"><span>Cold</span><div class="heatmap-legend-bar"></div><span>Hot</span></div>`;
+  container.innerHTML = html;
+}
+
+// ── 2. HISTOGRAM ──
+function renderHistogram(mode) {
+  destroyChart('histogram');
+  const ctx = document.getElementById('histogramChart').getContext('2d');
+
+  const distAgg = DISTANCES.map(d => {
+    let made = 0, attempts = 0;
+    aggregatedPlayers.forEach(p => {
+      if (p.distStats[d]) { made += p.distStats[d].made; attempts += p.distStats[d].attempts; }
+    });
+    return { d, made, attempts, pct: attempts > 0 ? (made / attempts * 100) : 0 };
+  });
+
+  const isCount = mode === 'counts';
+
+  chartInstances['histogram'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: DISTANCES.map(d => d + ' ft'),
+      datasets: [{
+        label: isCount ? 'Total Makes' : 'Shooting %',
+        data: distAgg.map(a => isCount ? a.made : Math.round(a.pct * 10) / 10),
+        backgroundColor: DISTANCES.map(d => DIST_COLORS[d] + 'CC'),
+        borderColor: DISTANCES.map(d => DIST_COLORS[d]),
+        borderWidth: 2,
+        borderRadius: 6,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const a = distAgg[ctx.dataIndex];
+              return isCount
+                ? `${a.made} makes out of ${a.attempts} attempts (${Math.round(a.pct)}%)`
+                : `${Math.round(a.pct)}% — ${a.made}/${a.attempts}`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: isCount ? 'Total Makes' : 'Shooting %', color: '#9AA5B4' },
+          ticks: { color: '#9AA5B4' },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        x: {
+          ticks: { color: '#9AA5B4', font: { weight: 'bold' } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
+
+// ── 3. SCORE DISTRIBUTION ──
+function renderDistribution() {
+  destroyChart('distribution');
+  const ctx = document.getElementById('distributionChart').getContext('2d');
+
+  const sorted = [...aggregatedPlayers].sort((a, b) => a.weightedScore - b.weightedScore);
+  const teams = [...new Set(aggregatedPlayers.map(p => p.team))].sort();
+  const teamColors = {};
+  const palette = ['#39FF14','#00D4FF','#FFD700','#FF8C00','#BF5AF2','#FF4136','#00C853','#E91E63'];
+  teams.forEach((t, i) => teamColors[t] = palette[i % palette.length]);
+
+  // Player dots
+  const datasets = teams.map(t => ({
+    label: 'Hoop ' + t,
+    data: sorted.filter(p => p.team === t).map((p, i) => ({
+      x: sorted.indexOf(p) + 1,
+      y: p.weightedScore,
+      nickname: p.nickname
+    })),
+    backgroundColor: teamColors[t] + 'BB',
+    borderColor: teamColors[t],
+    borderWidth: 1,
+    pointRadius: 7,
+    pointHoverRadius: 10,
+  }));
+
+  // Team average lines via annotation plugin isn't available, so we use mixed chart
+  const mean = aggregatedPlayers.reduce((s, p) => s + p.weightedScore, 0) / aggregatedPlayers.length;
+
+  chartInstances['distribution'] = new Chart(ctx, {
+    type: 'scatter',
+    data: { datasets },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { labels: { color: '#9AA5B4', usePointStyle: true, pointStyle: 'circle' } },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const pt = ctx.raw;
+              return `${pt.nickname}: ${pt.y} pts`;
+            }
+          }
+        }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          title: { display: true, text: 'Weighted Score', color: '#9AA5B4' },
+          ticks: { color: '#9AA5B4' },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        x: {
+          title: { display: true, text: 'Player (ranked)', color: '#9AA5B4' },
+          ticks: { color: '#9AA5B4' },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
+
+// ── 4. SCATTER PLOT ──
+function renderScatter() {
+  destroyChart('scatter');
+  const ctx = document.getElementById('scatterChart').getContext('2d');
+
+  const points = [];
+  aggregatedPlayers.forEach(p => {
+    DISTANCES.forEach(d => {
+      if (p.distStats[d]) {
+        const s = p.distStats[d];
+        points.push({
+          x: d + (Math.random() - 0.5) * 0.6, // jitter
+          y: Math.round((s.made / s.attempts) * 100),
+          nickname: p.nickname,
+          made: s.made,
+          attempts: s.attempts,
+          dist: d
+        });
+      }
+    });
+  });
+
+  chartInstances['scatter'] = new Chart(ctx, {
+    type: 'scatter',
+    data: {
+      datasets: [{
+        label: 'Player at Distance',
+        data: points,
+        backgroundColor: points.map(p => DIST_COLORS[p.dist] + '99'),
+        borderColor: points.map(p => DIST_COLORS[p.dist]),
+        borderWidth: 1,
+        pointRadius: 6,
+        pointHoverRadius: 9,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          callbacks: {
+            label: (ctx) => {
+              const p = ctx.raw;
+              return `${p.nickname} @ ${p.dist}ft: ${p.y}% (${p.made}/${p.attempts})`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          title: { display: true, text: 'Distance (ft)', color: '#9AA5B4' },
+          ticks: { color: '#9AA5B4', stepSize: 2 },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          min: 0, max: 12
+        },
+        y: {
+          title: { display: true, text: 'Shooting %', color: '#9AA5B4' },
+          ticks: { color: '#9AA5B4', callback: v => v + '%' },
+          grid: { color: 'rgba(255,255,255,0.05)' },
+          min: 0, max: 105
+        }
+      }
+    }
+  });
+}
+
+// ── 5. STACKED BARS ──
+function renderStacked(mode) {
+  destroyChart('stacked');
+  const ctx = document.getElementById('stackedChart').getContext('2d');
+
+  let players = [...aggregatedPlayers].sort((a, b) => b.weightedScore - a.weightedScore);
+  if (mode === 'top10') players = players.slice(0, 10);
+
+  const datasets = DISTANCES.map(d => ({
+    label: d + ' ft',
+    data: players.map(p => {
+      const s = p.distStats[d];
+      return s ? s.made * WEIGHTS[d] : 0;
+    }),
+    backgroundColor: DIST_COLORS[d] + 'CC',
+    borderColor: DIST_COLORS[d],
+    borderWidth: 1,
+    borderRadius: 3,
+  }));
+
+  chartInstances['stacked'] = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: players.map(p => p.nickname),
+      datasets
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: true,
+      indexAxis: 'y',
+      plugins: {
+        legend: { labels: { color: '#9AA5B4', usePointStyle: true, pointStyle: 'rect' } },
+        tooltip: {
+          callbacks: {
+            afterBody: (items) => {
+              const idx = items[0].dataIndex;
+              return `Total: ${players[idx].weightedScore} pts`;
+            }
+          }
+        }
+      },
+      scales: {
+        x: {
+          stacked: true,
+          title: { display: true, text: 'Weighted Points', color: '#9AA5B4' },
+          ticks: { color: '#9AA5B4' },
+          grid: { color: 'rgba(255,255,255,0.05)' }
+        },
+        y: {
+          stacked: true,
+          ticks: { color: '#F0F0F0', font: { family: "'Barlow Condensed', sans-serif", weight: 'bold' } },
+          grid: { display: false }
+        }
+      }
+    }
+  });
+}
+
+// ── 6. PLAYER CARDS ──
+function renderPlayerGrid() {
+  const container = document.getElementById('playerGridContent');
+  const sorted = [...aggregatedPlayers].sort((a, b) => b.weightedScore - a.weightedScore);
+
+  container.innerHTML = sorted.map(p => `
+    <div class="player-grid-item" data-player="${escapeHtml(p.nickname.toLowerCase())}">
+      <div class="pgi-name">${escapeHtml(p.nickname)}</div>
+      <div class="pgi-score">${p.weightedScore} pts</div>
+      <div class="pgi-team">Hoop ${escapeHtml(p.team)}</div>
+    </div>
+  `).join('');
+
+  container.querySelectorAll('.player-grid-item').forEach(item => {
+    item.addEventListener('click', () => openPlayerCard(item.dataset.player));
+  });
+}
+
+function openPlayerCard(key) {
+  const p = aggregatedPlayers.find(pl => pl.nickname.toLowerCase() === key);
+  if (!p) return;
+
+  // Class averages
+  const classAvg = {};
+  DISTANCES.forEach(d => {
+    let made = 0, attempts = 0;
+    aggregatedPlayers.forEach(pl => {
+      if (pl.distStats[d]) { made += pl.distStats[d].made; attempts += pl.distStats[d].attempts; }
+    });
+    classAvg[d] = attempts > 0 ? made / attempts : 0;
+  });
+
+  const totalAttempts = DISTANCES.reduce((s, d) => s + (p.distStats[d] ? p.distStats[d].attempts : 0), 0);
+  const overallPct = totalAttempts > 0 ? Math.round((p.totalMade / totalAttempts) * 100) : 0;
+  const rank = [...aggregatedPlayers].sort((a, b) => b.weightedScore - a.weightedScore)
+    .findIndex(pl => pl.nickname.toLowerCase() === key) + 1;
+
+  let barsHtml = '';
+  DISTANCES.forEach(d => {
+    const s = p.distStats[d];
+    const pct = s ? Math.round((s.made / s.attempts) * 100) : 0;
+    const avg = Math.round(classAvg[d] * 100);
+    const diff = pct - avg;
+    const diffStr = diff > 0 ? `<span class="above">+${diff}%</span>` : diff < 0 ? `<span class="below">${diff}%</span>` : `<span style="color:var(--text-muted)">avg</span>`;
+    const width = Math.max(2, pct);
+
+    barsHtml += `
+      <div class="pc-bar-row">
+        <div class="pc-bar-label">${d} ft</div>
+        <div class="pc-bar-track">
+          <div class="pc-bar-fill" style="width:${width}%;background:${DIST_COLORS[d]}"></div>
+        </div>
+        <div class="pc-bar-val">${s ? s.made + '/' + s.attempts : '—'} ${diffStr}</div>
+      </div>`;
+  });
+
+  const classAvgScore = Math.round(aggregatedPlayers.reduce((s, pl) => s + pl.weightedScore, 0) / aggregatedPlayers.length);
+  const scoreDiff = p.weightedScore - classAvgScore;
+  const scoreDiffStr = scoreDiff > 0
+    ? `<span class="above">+${scoreDiff} above class average (${classAvgScore})</span>`
+    : scoreDiff < 0
+    ? `<span class="below">${scoreDiff} below class average (${classAvgScore})</span>`
+    : `Right at the class average`;
+
+  document.getElementById('playerCardContent').innerHTML = `
+    <button class="player-card-close" id="pcClose">✕</button>
+    <div class="pc-name">${escapeHtml(p.nickname)}</div>
+    <div class="pc-team">Hoop ${escapeHtml(p.team)} · Rank #${rank} of ${aggregatedPlayers.length}</div>
+    <div class="pc-stats-row">
+      <div class="pc-stat-box"><div class="pc-stat-val">${p.weightedScore}</div><div class="pc-stat-label">Score</div></div>
+      <div class="pc-stat-box"><div class="pc-stat-val">${p.totalMade}</div><div class="pc-stat-label">Makes</div></div>
+      <div class="pc-stat-box"><div class="pc-stat-val">${overallPct}%</div><div class="pc-stat-label">Accuracy</div></div>
+      <div class="pc-stat-box"><div class="pc-stat-val">${p.totalSubmissions}</div><div class="pc-stat-label">Submissions</div></div>
+    </div>
+    ${barsHtml}
+    <div class="pc-vs-avg">${scoreDiffStr}</div>
+  `;
+
+  const overlay = document.getElementById('playerCardOverlay');
+  overlay.classList.add('open');
+  document.getElementById('pcClose').addEventListener('click', () => overlay.classList.remove('open'));
+  overlay.addEventListener('click', (e) => { if (e.target === overlay) overlay.classList.remove('open'); });
+}
+
+// ── 7. WHAT-IF SIMULATOR ──
+function populateSimulator() {
+  const select = document.getElementById('simPlayerSelect');
+  const sorted = [...aggregatedPlayers].sort((a, b) => b.weightedScore - a.weightedScore);
+
+  select.innerHTML = '<option value="">— Select a player —</option>' +
+    sorted.map(p => `<option value="${escapeHtml(p.nickname.toLowerCase())}">${escapeHtml(p.nickname)} (${p.weightedScore} pts)</option>`).join('');
+
+  const slidersDiv = document.getElementById('simSliders');
+  slidersDiv.innerHTML = DISTANCES.map(d => `
+    <div class="sim-row">
+      <div class="sim-label">${d} ft</div>
+      <input type="range" class="sim-slider" id="simRounds${d}" min="0" max="10" value="0" data-dist="${d}">
+      <div class="sim-val" id="simVal${d}">0</div>
+      <div style="font-size:0.75rem;color:var(--text-muted);width:80px">rounds × <input type="number" min="0" max="3" value="2" style="width:30px;background:var(--bg-dark);color:var(--gold);border:1px solid var(--card-border);border-radius:4px;text-align:center;font-family:'Bangers',cursive;font-size:1rem" id="simMakes${d}"> makes</div>
+    </div>
+  `).join('');
+
+  // Wire slider labels
+  DISTANCES.forEach(d => {
+    const slider = document.getElementById('simRounds' + d);
+    const val = document.getElementById('simVal' + d);
+    slider.addEventListener('input', () => val.textContent = slider.value);
+  });
+}
+
+function runSimulation() {
+  const key = document.getElementById('simPlayerSelect').value;
+  const resultDiv = document.getElementById('simResult');
+  if (!key) {
+    resultDiv.innerHTML = '<div style="text-align:center;color:var(--text-muted);padding:2rem">Pick a player first!</div>';
+    return;
+  }
+
+  const p = aggregatedPlayers.find(pl => pl.nickname.toLowerCase() === key);
+  if (!p) return;
+
+  // Current rank
+  const currentSorted = [...aggregatedPlayers].sort((a, b) => b.weightedScore - a.weightedScore);
+  const currentRank = currentSorted.findIndex(pl => pl.nickname.toLowerCase() === key) + 1;
+
+  // Calculate projected new score
+  let addedMade = 0;
+  let addedWeighted = 0;
+  let simDetails = [];
+
+  DISTANCES.forEach(d => {
+    const rounds = parseInt(document.getElementById('simRounds' + d).value) || 0;
+    const makesPerRound = Math.min(3, Math.max(0, parseInt(document.getElementById('simMakes' + d).value) || 0));
+    const newMakes = rounds * makesPerRound;
+    const newPts = newMakes * WEIGHTS[d];
+    addedMade += newMakes;
+    addedWeighted += newPts;
+    if (rounds > 0) simDetails.push(`${d}ft: +${newMakes} makes = +${newPts} pts`);
+  });
+
+  const projectedScore = p.weightedScore + addedWeighted;
+  const projectedMade = p.totalMade + addedMade;
+
+  // Project new rank
+  const projectedSorted = currentSorted.map(pl => ({
+    ...pl,
+    projScore: pl.nickname.toLowerCase() === key ? projectedScore : pl.weightedScore
+  })).sort((a, b) => b.projScore - a.projScore);
+  const projectedRank = projectedSorted.findIndex(pl => pl.nickname.toLowerCase() === key) + 1;
+
+  const rankDiff = currentRank - projectedRank;
+  const rankStr = rankDiff > 0 ? `<span class="up">📈 Moves up ${rankDiff} spot${rankDiff !== 1 ? 's' : ''} to #${projectedRank}!</span>`
+    : rankDiff < 0 ? `<span>Drops to #${projectedRank}</span>`
+    : `<span class="same">Stays at #${projectedRank}</span>`;
+
+  // Who they'd pass
+  const passedPlayers = currentSorted
+    .filter((pl, i) => i < currentRank - 1 && pl.weightedScore < projectedScore)
+    .map(pl => pl.nickname);
+
+  let passedStr = '';
+  if (passedPlayers.length > 0) {
+    passedStr = `<div style="margin-top:0.5rem;font-size:0.85rem;color:var(--neon-green)">Would pass: ${passedPlayers.join(', ')}</div>`;
+  }
+
+  resultDiv.innerHTML = `
+    <div class="sim-current">
+      <div style="font-size:0.85rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem">Current</div>
+      <div style="display:flex;gap:1.5rem">
+        <div><span style="font-family:'Bangers',cursive;font-size:1.8rem;color:var(--text-secondary)">${p.weightedScore}</span> <span style="color:var(--text-muted)">pts</span></div>
+        <div><span style="font-family:'Bangers',cursive;font-size:1.8rem;color:var(--text-secondary)">#${currentRank}</span> <span style="color:var(--text-muted)">rank</span></div>
+      </div>
+    </div>
+    <div class="sim-projected">
+      <div style="font-size:0.85rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:0.3rem">Projected</div>
+      <div class="sim-big-num">${projectedScore} pts</div>
+      <div style="font-size:0.9rem;color:var(--text-secondary);margin-top:0.3rem">+${addedWeighted} points from ${addedMade} new makes</div>
+      <div class="sim-rank-change">${rankStr}</div>
+      ${passedStr}
+    </div>
+    <div style="font-size:0.8rem;color:var(--text-muted);margin-top:0.5rem">
+      ${simDetails.length > 0 ? simDetails.join('<br>') : 'No shots added — adjust the sliders!'}
+    </div>
+  `;
+}
+
+// ══════════════════════════════════════════════════════════════
 // TAB SWITCHING & REFRESH
 // ══════════════════════════════════════════════════════════════
 document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -1191,6 +2292,37 @@ document.getElementById('refreshBtn').addEventListener('click', () => {
     setTimeout(() => btn.classList.remove('spinning'), 600);
   });
 });
+
+// ── Data Lab sub-navigation ──
+document.querySelectorAll('.lab-subnav-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.lab-subnav-btn').forEach(b => b.classList.remove('active'));
+    document.querySelectorAll('.lab-panel').forEach(p => p.classList.remove('active'));
+    btn.classList.add('active');
+    document.getElementById('lab-' + btn.dataset.lab).classList.add('active');
+  });
+});
+
+// ── Histogram toggle ──
+document.querySelectorAll('[data-hist]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-hist]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderHistogram(btn.dataset.hist);
+  });
+});
+
+// ── Stacked bars toggle ──
+document.querySelectorAll('[data-stacked]').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('[data-stacked]').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    renderStacked(btn.dataset.stacked);
+  });
+});
+
+// ── Simulator ──
+document.getElementById('simRunBtn').addEventListener('click', runSimulation);
 
 // ── Init ──
 fetchSheetData();
