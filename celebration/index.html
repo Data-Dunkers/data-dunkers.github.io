@@ -124,6 +124,30 @@
     box-shadow: 0 6px 25px rgba(255, 165, 0, 0.45);
   }
 
+  .qr-wrap {
+    margin-top: 0.8rem;
+    display: inline-block;
+  }
+
+  .qr-code {
+    width: 120px;
+    height: 120px;
+    border-radius: 10px;
+    border: 3px solid var(--gold);
+    background: white;
+    padding: 4px;
+  }
+
+  .qr-label {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-top: 0.3rem;
+  }
+
   .controls {
     display: flex;
     justify-content: center;
@@ -1014,6 +1038,10 @@
 
 <div class="form-link-bar">
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeu3ThYYhTuJCGAM3YMSrccUXiaU_H83DRMq25VmjhTHE5_lQ/viewform?usp=header" target="_blank" rel="noopener" class="form-link-btn">📝 Submit Your Shots!</a>
+  <div class="qr-wrap">
+    <img src="qr-DD-celebration.png" alt="Scan to submit your shots" class="qr-code">
+    <div class="qr-label">Scan to submit</div>
+  </div>
 </div>
 
 <nav class="controls">
