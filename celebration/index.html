@@ -125,13 +125,17 @@
   }
 
   .qr-wrap {
-    margin-top: 0.8rem;
-    display: inline-block;
+    position: absolute;
+    right: 1.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+    text-align: center;
+    z-index: 2;
   }
 
   .qr-code {
-    width: 120px;
-    height: 120px;
+    width: 90px;
+    height: 90px;
     border-radius: 10px;
     border: 3px solid var(--gold);
     background: white;
@@ -140,12 +144,17 @@
 
   .qr-label {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     font-weight: 600;
     color: var(--text-muted);
     letter-spacing: 0.08em;
     text-transform: uppercase;
-    margin-top: 0.3rem;
+    margin-top: 0.2rem;
+  }
+
+  @media (max-width: 600px) {
+    .qr-wrap { position: static; transform: none; margin-top: 0.8rem; }
+    .qr-code { width: 70px; height: 70px; }
   }
 
   .controls {
@@ -1031,6 +1040,10 @@
 <body>
 
 <header class="header">
+  <div class="qr-wrap">
+    <img src="qr_DD-celebration.png" alt="Scan for leaderboard" class="qr-code">
+    <div class="qr-label">Scan me</div>
+  </div>
   <div class="header-ball">🏀</div>
   <h1>Data Dunkers Leaderboard</h1>
   <div class="subtitle">Who's got the hot hand?</div>
@@ -1038,10 +1051,6 @@
 
 <div class="form-link-bar">
   <a href="https://docs.google.com/forms/d/e/1FAIpQLSeu3ThYYhTuJCGAM3YMSrccUXiaU_H83DRMq25VmjhTHE5_lQ/viewform?usp=header" target="_blank" rel="noopener" class="form-link-btn">📝 Submit Your Shots!</a>
-  <div class="qr-wrap">
-    <img src="qr-DD-celebration.png" alt="Scan to submit your shots" class="qr-code">
-    <div class="qr-label">Scan to submit</div>
-  </div>
 </div>
 
 <nav class="controls">
