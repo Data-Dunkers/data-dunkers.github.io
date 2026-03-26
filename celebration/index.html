@@ -693,19 +693,49 @@ async function fetchSheetData() {
 
     const data = JSON.parse(jsonStr[1]);
     const rows = data.table.rows;
+    const cols = data.table.cols;
 
     // Data loaded successfully
+
+    // ── Detect columns by header label (handles Timestamp column from Google Forms) ──
+    let colNickname = -1, colTeam = -1, colDistance = -1, colMade = -1;
+
+    cols.forEach((col, i) => {
+      const label = (col.label || '').toLowerCase().trim();
+      if (label.includes('nickname') || label.includes('name')) colNickname = i;
+      else if (label.includes('team') || label.includes('hoop')) colTeam = i;
+      else if (label.includes('distance') || label.includes('dist')) colDistance = i;
+      else if (label.includes('shot') || label.includes('made') || label.includes('score')) colMade = i;
+    });
+
+    // Fallback: if headers weren't detected, assume Form layout (Timestamp + 4 cols)
+    if (colNickname === -1) {
+      const offset = cols.length > 4 ? 1 : 0; // skip Timestamp if present
+      colNickname = offset;
+      colTeam = offset + 1;
+      colDistance = offset + 2;
+      colMade = offset + 3;
+    }
+
+    console.log('Column mapping:', { colNickname, colTeam, colDistance, colMade, totalCols: cols.length });
 
     // ── Step 1: Collect raw submissions ──
     const rawEntries = [];
     for (const row of rows) {
       const cells = row.c;
-      if (!cells || !cells[0] || !cells[0].v) continue;
+      if (!cells) continue;
 
-      const nickname = String(cells[0].v).trim();
-      const team = cells[1] ? String(cells[1].v).trim() : '—';
-      const distance = cells[2] ? Number(cells[2].v) : 0;
-      const shotsMade = cells[3] ? Number(cells[3].v) : 0;
+      const nickCell = cells[colNickname];
+      if (!nickCell || !nickCell.v) continue;
+
+      const nickname = String(nickCell.v).trim();
+      const team = cells[colTeam] ? String(cells[colTeam].v).trim() : '—';
+
+      // Distance might come as "2", "2 feet", "2 ft", or just the number
+      let distRaw = cells[colDistance] ? cells[colDistance].v : 0;
+      let distance = typeof distRaw === 'number' ? distRaw : parseInt(String(distRaw).replace(/[^0-9]/g, ''), 10) || 0;
+
+      const shotsMade = cells[colMade] ? Number(cells[colMade].v) || 0 : 0;
 
       if (!DISTANCES.includes(distance)) continue;
 
@@ -715,6 +745,13 @@ async function fetchSheetData() {
         distance,
         shotsMade: Math.max(0, Math.min(3, shotsMade))
       });
+    }
+
+    console.log(`Parsed ${rawEntries.length} valid entries from ${rows.length} rows`);
+
+    if (rawEntries.length === 0 && rows.length > 0) {
+      console.warn('Rows found but no valid entries. First row sample:', JSON.stringify(rows[0]?.c?.map(c => c?.v)));
+      console.warn('Cols:', JSON.stringify(cols.map(c => c.label)));
     }
 
     // ── Step 2: Aggregate by player (case-insensitive key) ──
@@ -782,7 +819,10 @@ async function fetchSheetData() {
   } catch (err) {
     console.error('Sheet fetch error:', err);
     document.getElementById('individualContent').innerHTML =
-      `<div class="empty-state"><span class="big-emoji">📡</span>Could not load data.<br>Make sure your sheet is published and the ID is correct.</div>`;
+      `<div class="empty-state"><span class="big-emoji">📡</span>Could not load data.<br><br>
+       <strong>Make sure the sheet is Published to the web:</strong><br>
+       In Google Sheets → File → Share → Publish to web → Publish<br>
+       <span style="font-size:0.85rem;color:var(--text-muted)">(This is different from the regular Share link!)</span></div>`;
     document.getElementById('teamContent').innerHTML = '';
     document.getElementById('awardsContent').innerHTML = '';
   }
@@ -1161,4 +1201,3 @@ if (AUTO_REFRESH_SECONDS > 0) {
 
 </body>
 </html>
-
