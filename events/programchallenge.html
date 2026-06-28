@@ -258,15 +258,15 @@ footer b{color:#cfe3f5;font-family:var(--display)}
     <button class="drawer-x" id="closebp" aria-label="Close">&times;</button>
     <div class="eyebrow">The destination</div>
     <h3>Your one-page Blueprint</h3>
-    <p>Fill it as you build. Copy any field on its own, or copy the whole thing into a Google Doc or the submission form.</p>
+    <p>Fill it as you build. Copy any field on its own, or copy the whole thing into a Google Doc, then upload it to the pilot-pool folder.</p>
   </div>
   <div class="drawer-body" id="bpbody"></div>
   <div class="drawer-foot">
     <button class="copyall" id="copyall">Copy the whole Blueprint</button>
     <div class="row2">
-      <a class="submit" id="submit" href="#" data-dell-link target="_blank" rel="noopener">Open the submission form</a>
+      <a class="submit" id="submit" href="https://drive.google.com/drive/folders/1IEsV4pJ2TByfDua3PwfwVqcl3diGOIxL?usp=sharing" target="_blank" rel="noopener">Open the pilot-pool folder</a>
     </div>
-    <div class="formnote" id="formnote">Submission form link to be added.</div>
+    <div class="formnote" id="formnote">Upload your Blueprint and any prototype files to the shared folder.</div>
     <button class="reset" id="reset">Clear all fields</button>
   </div>
 </aside>
@@ -309,7 +309,7 @@ function show(i){
     ${p.body}
     <div class="pager">
       ${i>0?`<button class="prev" onclick="show(${i-1})"><span class="lab">Previous</span>${PHASES[i-1].tab}</button>`:`<button disabled><span class="lab">Start</span>&nbsp;</button>`}
-      ${i<PHASES.length-1?`<button class="next" onclick="show(${i+1})"><span class="lab">Next</span>${PHASES[i+1].tab} &rarr;</button>`:`<button class="next" onclick="openDrawer()"><span class="lab">Finish</span>Submit your Blueprint &rarr;</button>`}
+      ${i<PHASES.length-1?`<button class="next" onclick="show(${i+1})"><span class="lab">Next</span>${PHASES[i+1].tab} &rarr;</button>`:`<button class="next" onclick="openDrawer()"><span class="lab">Finish</span>Upload your Blueprint &rarr;</button>`}
     </div>`;
   [...nav.children].forEach((b,bi)=>{
     b.classList.toggle('active', bi===i);
@@ -412,4 +412,3 @@ buildBp(); updateBpBadge();
 </script>
 </body>
 </html>
-
