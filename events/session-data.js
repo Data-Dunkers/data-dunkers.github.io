@@ -326,8 +326,45 @@ window.SESSION_DATA = {
         ]},
 
         { type: "accordion", title: "Example library: designs that make thinking visible", blocks: [
-          { type: "pending",
-            note: "Your full, grouped example set drops in here, organized as you have it (teachers and districts \u00b7 ISTE \u00b7 organizations \u00b7 transparency and trust \u00b7 differentiation), each group collapsible. This is the next build step, once the Hack pattern above checks out. It uses the exact same inline-resource pattern you are reviewing in Hack." }
+          { type: "accordion", title: "Teachers and districts", blocks: [
+            { type: "list", items: [
+              "<a href=\"https://docs.google.com/document/d/1XjjhUePS4YGoZtgkN8dOum7OnBb94KmOjzAZsfADeD0/edit\" target=\"_blank\" rel=\"noopener\">Socratic chatbot and self-annotation activity (directions)</a>",
+              "<a href=\"https://aipedagogy.org/assignments/page/4/\" target=\"_blank\" rel=\"noopener\">AI Pedagogy Project: assignment experiments</a>",
+              "<a href=\"https://c21canada.org/wp-content/uploads/2025/06/AB-EIPS-PDF-ProjectExamples-2025.pdf\" target=\"_blank\" rel=\"noopener\">Teachers changing assignments within an AI context (project examples)</a>",
+              "<a href=\"https://docs.google.com/document/d/1SFOnDN_uxM_0KkIZudDvOZGLcYkpHGzBn3hBsLcVgfs/edit\" target=\"_blank\" rel=\"noopener\">Multiple examples from one project</a> (scroll for detailed explanations with links)",
+              "<a href=\"https://www.canva.com/design/DAGVFWh4RV4/DWvzHSkVUlMkKRUMCX0oFg/view\" target=\"_blank\" rel=\"noopener\">One district's series of examples</a> (each item links to a teacher video)",
+              "<a href=\"https://c21canada.org/wp-content/uploads/2024/11/ALB-PSD-Resource-ExampleAIUseCases.pdf\" target=\"_blank\" rel=\"noopener\">Multiple teachers' AI use cases (with links)</a>"
+            ]}
+          ]},
+          { type: "accordion", title: "From ISTE", blocks: [
+            { type: "list", items: [
+              "<a href=\"https://iste-ascd.org/ai-innovator\" target=\"_blank\" rel=\"noopener\">AI Innovator's Studio</a>: using AI in a design-thinking approach (download your own copy)",
+              "<a href=\"https://iste.org/ai-lessons\" target=\"_blank\" rel=\"noopener\">ISTE AI Lessons</a>: introducing the understanding of AI (download your own copy)"
+            ]}
+          ]},
+          { type: "accordion", title: "Ideas created by organizations", blocks: [
+            { type: "list", items: [
+              "<a href=\"https://csforall.org/en-US/activities/hour-of-ai\" target=\"_blank\" rel=\"noopener\">Hour of AI activities</a>",
+              "<a href=\"https://ai.tamu.edu/teach-with-ai/assignment-ideas.html\" target=\"_blank\" rel=\"noopener\">Assignment ideas for teaching with AI</a> (Texas A&amp;M)",
+              "<a href=\"https://www.educatorstechnology.com/wp-content/uploads/2025/08/Blooms-Taxonomy-and-AI-Guide.pdf\" target=\"_blank\" rel=\"noopener\">AI supporting a revised Bloom's taxonomy</a>"
+            ]}
+          ]},
+          { type: "accordion", title: "Transparency and trust", blocks: [
+            { type: "list", items: [
+              "<a href=\"https://docs.google.com/presentation/d/120B6dgjdqlgVAW6qgGrq1QTQzF8NpexGueLqwlcy0go/edit\" target=\"_blank\" rel=\"noopener\">Examples of creating transparency</a>",
+              "<a href=\"https://www.lbusd.org/departments/technology/ai-trust-you\" target=\"_blank\" rel=\"noopener\">One district's approach to developing trust</a>"
+            ]}
+          ]},
+          { type: "accordion", title: "Differentiation", blocks: [
+            { type: "list", items: [
+              "<a href=\"https://truthforteachers.com/truth-for-teachers-podcast/ai-for-scaffolds-supports-and-differentiated-tasks/\" target=\"_blank\" rel=\"noopener\">Using AI for scaffolds, supports, and differentiated tasks</a> (Truth for Teachers)",
+              "<a href=\"https://www.ascd.org/el/articles/how-ai-makes-differentiation-possible\" target=\"_blank\" rel=\"noopener\">How AI makes differentiation possible</a> (ASCD)",
+              "<a href=\"https://schoolai.com/blog/strategies-using-ai-tutors-improve-differentiated-instruction\" target=\"_blank\" rel=\"noopener\">Strategies for differentiated instruction using AI tutors</a> (SchoolAI)",
+              "<a href=\"https://catlintucker.com/2025/10/differentiation-ai-making-it-manageable/\" target=\"_blank\" rel=\"noopener\">Differentiation and AI: making it manageable</a> (Catlin Tucker)",
+              "<a href=\"https://www.youtube.com/watch?v=tK931UoArUU\" target=\"_blank\" rel=\"noopener\">Using AI to differentiate lessons for ELLs</a> (video)",
+              "<a href=\"http://mindfulaiedu.substack.com/p/4-simple-and-easy-ways-to-use-ai\" target=\"_blank\" rel=\"noopener\">4 easy ways to use AI to differentiate instruction</a>"
+            ]}
+          ]}
         ]}
       ]
     },
@@ -391,32 +428,213 @@ window.SESSION_DATA = {
     }
   ],
 
-  /* ---- THE SHELF: durable carry-onward, not needed to run the activities ----
-     Structure scaffolded now; full contents are the build step after Hack. ---- */
+  /* ---- THE SHELF: durable carry-onward, not needed to run the activities ---- */
   shelf: [
     { id: "student-partner", title: "AI as a partner for student thinking",
-      summary: "Content-area tables of where students could use AI to think, and what they must still own.",
-      blocks: [ { type: "pending", note: "Building next: the full content-area example tables." } ] },
+      summary: "Where students could use AI to think, and what they must still own.",
+      blocks: [
+        { type: "prose", html: "AI can support students as they think, question, reflect, and revise. The goal is not for AI to do the work. It is to help students think more deeply and independently. Focusing question: how can students use AI to deepen their thinking without handing the thinking over to the tool?" },
+        { type: "prose", html: "<strong>Try this.</strong> Choose one upcoming lesson or task and design a simple way students could use AI to support thinking. Capture the learning goal, where AI supports thinking, what students must still do themselves, and one sample prompt or routine." },
+        { type: "table",
+          head: ["Task", "Where AI could support thinking", "What students still do themselves"],
+          rows: [
+            ["Argumentative paragraph", "Pose counterarguments, point out weak reasoning, suggest questions that strengthen the claim", "Develop the claim, choose evidence, write in their own words"],
+            ["Prepare for a discussion", "Generate possible questions, surface different interpretations, challenge a first reaction", "Read the text, form their own ideas, participate"],
+            ["Revise a science explanation", "Identify unclear parts, ask about the reasoning, flag where precision is needed", "Explain the science accurately and revise from their own understanding"],
+            ["Plan a presentation", "Suggest angles, audience questions, ways to organize", "Select content, verify accuracy, build the presentation"],
+            ["Brainstorm a narrative", "Explore possible themes, conflicts, descriptive details", "Choose the story, voice, meaning, and final writing"],
+            ["Multi-step math problem", "Restate in simpler language, point out what matters, ask guiding questions", "Do the reasoning, show work, reach the solution"],
+            ["Design or innovation task", "Suggest directions, identify needs, raise feasibility questions", "Pick the problem, make design decisions, build the solution"],
+            ["Reflect after a task", "Pose reflection questions, summarize themes from their notes", "Reflect honestly, cite real evidence, set goals"]
+          ]},
+        { type: "accordion", title: "By subject", blocks: [
+          { type: "accordion", title: "English Language Arts", blocks: [
+            { type: "table", head: ["Task", "Where AI supports thinking", "What students own"], rows: [
+              ["Analyze a character's motivations", "Suggest alternate interpretations or questions to consider", "Return to the text, choose evidence, explain the interpretation"],
+              ["Revise a thesis statement", "Challenge whether it is arguable, specific, or clear", "Decide what the thesis really is and revise it"]
+            ]}
+          ]},
+          { type: "accordion", title: "Social Studies", blocks: [
+            { type: "table", head: ["Task", "Where AI supports thinking", "What students own"], rows: [
+              ["Compare perspectives on an issue", "Suggest additional viewpoints or tensions between groups", "Analyze the perspectives and explain the significance"],
+              ["Prepare for a debate", "Identify stronger evidence needs or possible rebuttals", "Build the argument, verify facts, speak from their own prep"]
+            ]}
+          ]},
+          { type: "accordion", title: "Science", blocks: [
+            { type: "table", head: ["Task", "Where AI supports thinking", "What students own"], rows: [
+              ["Form a hypothesis", "Ask about variables, clarity, or testability", "Develop the hypothesis and connect it to the concept"],
+              ["Interpret results", "Suggest patterns to look for or questions about anomalies", "Analyze the data and explain the results"]
+            ]}
+          ]},
+          { type: "accordion", title: "Math", blocks: [
+            { type: "table", head: ["Task", "Where AI supports thinking", "What students own"], rows: [
+              ["Check understanding after solving", "Ask \u201cwhy does this step work?\u201d or \u201cwhat would happen if\u2026?\u201d", "Explain reasoning and justify the process"],
+              ["Prepare to teach a strategy", "Identify where an explanation might be unclear or where misconceptions arise", "Understand the strategy and explain it clearly"]
+            ]}
+          ]},
+          { type: "accordion", title: "Cross-curricular routine", blocks: [
+            { type: "table", head: ["When", "Where AI supports thinking", "What students own"], rows: [
+              ["Before starting", "Unpack the directions or turn the task into a checklist", "Make sense of the assignment and do the work"],
+              ["During drafting", "Question a weak point, suggest a missing perspective, flag where clarity is needed", "Create, revise, make final decisions"],
+              ["After a draft", "Give feedback against criteria or ask reflection questions", "Decide what feedback matters and improve the work"]
+            ]}
+          ]}
+        ]},
+        { type: "accordion", title: "Prompt to generate a routine", blocks: [
+          { type: "prompt", label: "Routine generator",
+            text: "I am a teacher designing a student-facing routine for using AI as a partner for thinking. Help me create a routine for this task: [insert task or learning goal]. Generate: (1) a brief description of how AI could support student thinking, (2) 3 student-friendly prompts that help students clarify, challenge, or extend their thinking, (3) a short note on what students should still do themselves, (4) one teacher modeling idea for introducing the routine, (5) one guardrail to keep the use learning-focused and not shortcut-driven. Keep it practical and classroom-friendly." }
+        ]}
+      ]},
+
     { id: "things-to-consider", title: "Things to consider: AI and assessment",
-      summary: "Reflection questions for design, student use, and the implications of AI.",
-      blocks: [ { type: "pending", note: "Building next: the reflection question set." } ] },
+      summary: "Questions to ask when using AI to develop or provide assessment.",
+      blocks: [
+        { type: "accordion", title: "Using AI in assessment design", blocks: [
+          { type: "list", items: [
+            "Does it measure the knowledge and skills I intend to assess?",
+            "Is it appropriately challenging for my students' developmental level?",
+            "Is it culturally responsive, inclusive, and relevant to their experiences?",
+            "Does it fit within a balanced approach, using multiple types of evidence over time?",
+            "Have I checked AI-generated material for bias, accuracy, and appropriateness?"
+          ]}
+        ]},
+        { type: "accordion", title: "Using AI with students", blocks: [
+          { type: "list", items: [
+            "Have I set clear expectations for when and how students can use AI?",
+            "Have I discussed ethical use, including citation and originality?",
+            "Do my tasks require reasoning and personal connection beyond what AI can generate?",
+            "How am I verifying understanding through discussion, process, or explanation?",
+            "Am I reviewing AI-generated feedback before it reaches students?"
+          ]}
+        ]},
+        { type: "accordion", title: "Considering the implications", blocks: [
+          { type: "list", items: [
+            "Am I using tools that protect student data and privacy?",
+            "Have I reviewed my institution's policies on AI use in assessment?",
+            "How might aspects of my assessment unintentionally encourage misuse?",
+            "Can I clearly explain to students, families, and administrators why and how I use AI?",
+            "Am I gathering student feedback and staying current on best practices?"
+          ]}
+        ]}
+      ]},
+
     { id: "design-critic", title: "AI as a design critic",
-      summary: "A prompt bank to pressure-test a task: evidence audit, product-to-process shift, AI-use statement.",
-      blocks: [ { type: "pending", note: "Building next: the design-critic prompt bank." } ] },
+      summary: "Pressure-test a task. AI inspects and redesigns; it does not decide what matters.",
+      blocks: [
+        { type: "callout", variant: "frame", html: "AI gives us back the quality of the thinking we put into it." },
+        { type: "prose", html: "Broad questions get generic principles. AI becomes useful when you give it a real task, rubric, context, and goal, then ask it to critique the evidence. It can inspect, pressure-test, and redesign. It does not decide what matters. That stays the educator's work." },
+        { type: "prompt", label: "Evidence audit",
+          text: "Here is my task and rubric: [paste]. What evidence of learning does this task capture well? What is weak, missing, or easy for AI to fake? Recommend 3 improvements that strengthen the evidence." },
+        { type: "prompt", label: "Product-to-process shift",
+          text: "Where does this task reward the finished product more than reasoning, decision-making, or transfer? Suggest 3 small design shifts that make student thinking more visible without changing the learning goals." },
+        { type: "prompt", label: "AI-use statement",
+          text: "Draft a short, student-facing AI-use statement for this task, with three parts: Allowed, Not Allowed, and Must Disclose. Keep it age-appropriate for [grade]." }
+      ]},
+
     { id: "bigger-picture", title: "The bigger picture: a systems view",
-      summary: "A condensed three-layer frame: purpose and trust, design and practice, capacity and guardrails.",
-      blocks: [ { type: "pending", note: "Building next: the three-layer systems frame." } ] },
+      summary: "The task is where the system becomes real.",
+      blocks: [
+        { type: "prose", html: "Today's work is at the task level, but the task is where the system becomes real. If our system says we value reasoning, reflection, transfer, and responsible AI use, those values have to show up in the evidence we ask students to produce." },
+        { type: "table",
+          head: ["Layer", "Core question"],
+          rows: [
+            ["Purpose and trust", "What do we believe assessment is for, and what counts as authentic evidence when AI is available?"],
+            ["Design and practice", "How do tasks, rubrics, feedback, and AI expectations make student thinking visible?"],
+            ["Capacity and guardrails", "What do educators, students, and leaders need so AI supports learning without replacing judgment?"]
+          ]}
+      ]},
+
     { id: "foundations", title: "Foundations",
-      summary: "What makes a good assessment, multiple measures, and AI-generated feedback recommendations.",
-      blocks: [ { type: "pending", note: "Building next: the curated foundations set." } ] },
+      summary: "What good assessment asks of us, with or without AI.",
+      blocks: [
+        { type: "accordion", title: "What makes a good assessment", blocks: [
+          { type: "list", items: [
+            { lead: "Clear purpose and alignment", text: "aligned to goals and standards; focused on understanding and transfer, not just recall" },
+            { lead: "Formative and ongoing", text: "part of a learning cycle with checks for understanding and feedback" },
+            { lead: "Student-centered", text: "students understand the goals, self-assess, and reflect on growth" },
+            { lead: "Equitable and inclusive", text: "multiple ways to demonstrate learning; responsive to diverse needs" },
+            { lead: "Actionable feedback", text: "precise, growth-oriented, and timely, not just a score" },
+            { lead: "Valid and reliable", text: "measures what it intends to and produces consistent results" },
+            { lead: "Growth mindset", text: "frames errors as learning, not judgment" }
+          ]}
+        ]},
+        { type: "accordion", title: "Multiple measures (the Swiss-cheese idea)", blocks: [
+          { type: "list", items: [
+            "Design a multi-layered ecosystem: no single method is perfect, but together they are robust",
+            "Use formative checks throughout instruction to catch misunderstanding early",
+            "Use AI as a complement, not a replacement; the teacher stays central to design and interpretation",
+            "Balance traditional and performance-based methods, portfolios, and through-year evidence",
+            "Build in self-assessment to grow metacognition and ownership",
+            "Keep everything aligned to learning goals; adapt based on results"
+          ]}
+        ]},
+        { type: "accordion", title: "AI-generated feedback: recommendations", blocks: [
+          { type: "list", items: [
+            "Use AI for formative feedback, not summative scoring; keep a teacher in the loop",
+            "Make feedback timely and specific, with concrete next steps",
+            "Treat AI as a complement to human feedback, not a replacement",
+            "Use a constructive, positive, nonjudgmental format with examples",
+            "Write transparent instructions so students know why and how to engage with feedback",
+            "Recognize limitations: AI can be generic or miss tone for struggling students"
+          ]}
+        ]}
+      ]},
+
     { id: "prompting", title: "Prompting library and tips",
-      summary: "Prompt collections and a few habits for getting more useful output.",
-      blocks: [ { type: "pending", note: "Building next: the prompting library." } ] },
+      summary: "Collections and a few habits for getting more useful output.",
+      blocks: [
+        { type: "accordion", title: "Prompt libraries", blocks: [
+          { type: "list", items: [
+            "<a href=\"https://www.aiforeducation.io/prompt-library\" target=\"_blank\" rel=\"noopener\">AI for Education prompt library</a>",
+            "<a href=\"https://www.moreusefulthings.com/prompts\" target=\"_blank\" rel=\"noopener\">More Useful Things prompt library</a>"
+          ]}
+        ]},
+        { type: "accordion", title: "A few prompting habits", blocks: [
+          { type: "list", items: [
+            { lead: "Ask AI to help write the prompt", text: "describe what you want in your own words, then ask it to turn that into a clear, effective prompt" },
+            { lead: "Let AI guide your thinking", text: "ask \u201cwhat else do you need to know to help me get the best result?\u201d" },
+            { lead: "Give AI a role", text: "\u201cAct as a middle school science teacher planning a hands-on lab\u2026\u201d" },
+            { lead: "Use frameworks", text: "reference UDL, GRASPS, or Triple E to shape the output" },
+            { lead: "Keep it conversational", text: "ask follow-ups, request alternatives, push for student-friendly versions" },
+            { lead: "Ask AI to critique your prompt", text: "\u201chow could I improve this prompt to get more useful responses?\u201d" }
+          ]}
+        ]}
+      ]},
+
     { id: "anchors", title: "Competency anchors",
-      summary: "ISTE Standards, the Transformational Learning Principles, and Portrait of a Graduate.",
-      blocks: [ { type: "pending", note: "Building next: the competency anchors detail." } ] },
+      summary: "How we keep \u201ccompetency\u201d future-facing.",
+      blocks: [
+        { type: "prose", html: "We anchor the competencies worth assessing in the ISTE Standards and the ISTE+ASCD Transformational Learning Principles, and we keep them future-facing through a Portrait of a Graduate lens: the capabilities a student carries beyond school, not just through the task." },
+        { type: "table",
+          head: ["Future-facing competency", "How we anchor it"],
+          rows: [
+            ["Reasoning and judgment", "ISTE Knowledge Constructor; TLP Guide"],
+            ["Synthesis and decision-making", "ISTE Innovative Designer; TLP Empower"],
+            ["Voice, evidence, and revision", "ISTE Creative Communicator; TLP Empower"],
+            ["Transfer to new contexts", "ISTE Knowledge Constructor; TLP Guide"],
+            ["Metacognition and reflection", "ISTE Empowered Learner; TLP reflection"],
+            ["Responsible AI use", "ISTE Digital Citizen; TLP Nurture"]
+          ]},
+        { type: "list", items: [
+          "<a href=\"https://iste.org/standards\" target=\"_blank\" rel=\"noopener\">ISTE Standards</a>",
+          "Transformational Learning Principles (ISTE+ASCD): Nurture, Guide, Empower, with agency, authenticity, collaboration, and reflection",
+          "Portrait of a Graduate: your district's profile of the durable competencies students carry beyond school"
+        ]}
+      ]},
+
     { id: "sources", title: "Sources",
-      summary: "The research and articles behind the frames in this session.",
-      blocks: [ { type: "pending", note: "Building next: the source list." } ] }
+      summary: "Some of the research and articles behind the frames in this session.",
+      blocks: [
+        { type: "list", items: [
+          "<a href=\"https://www.ascd.org/el/articles/assessment-as-an-act-of-love\" target=\"_blank\" rel=\"noopener\">Assessment as an Act of Love</a> (Torres)",
+          "<a href=\"https://www.ascd.org/el/articles/developing-assessment-capable-learners\" target=\"_blank\" rel=\"noopener\">Developing Assessment-Capable Learners</a> (Frey)",
+          "<a href=\"https://www.ascd.org/el/articles/assessment-for-equity\" target=\"_blank\" rel=\"noopener\">Confronting Inequity / Assessment for Equity</a> (Milner)",
+          "<a href=\"https://www.ascd.org/blogs/how-to-create-assessments-that-drive-learning\" target=\"_blank\" rel=\"noopener\">How to Create Assessments that Drive Learning</a> (Hess)",
+          "<a href=\"https://www.ascd.org/el/articles/three-key-questions-on-measuring-learning\" target=\"_blank\" rel=\"noopener\">Three Key Questions on Measuring Learning</a> (McTighe)",
+          "<a href=\"https://www.ascd.org/el/articles/three-moves-for-assessment-system-success\" target=\"_blank\" rel=\"noopener\">Three Moves for Assessment-System Success</a> (Borgioli)",
+          "<a href=\"https://www.ascd.org/el/articles/7-approaches-to-alternative-assessments\" target=\"_blank\" rel=\"noopener\">7 Approaches to Alternative Assessments</a> (Pope)",
+          "<a href=\"https://www.ascd.org/el/articles/breaking-up-the-grade\" target=\"_blank\" rel=\"noopener\">Breaking Up the Grade</a> (Guskey)"
+        ]}
+      ]}
   ]
 };
