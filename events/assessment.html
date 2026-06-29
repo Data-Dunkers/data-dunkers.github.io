@@ -306,7 +306,7 @@
     var color = BADGE[(s.number-1)%BADGE.length];
     sec.appendChild(node('<div class="marker" style="background:'+color+'">'+s.number+'</div>'));
     var card = node('<div class="stop-card"></div>');
-    card.appendChild(node('<div class="stop-head"><h2>'+esc(s.title)+'</h2><span class="time">'+esc(s.time)+'</span></div>'));
+    card.appendChild(node('<div class="stop-head"><h2>'+esc(s.title)+'</h2></div>'));
     if(s.purpose) card.appendChild(node('<p class="purpose">'+s.purpose+'</p>'));
     (s.blocks||[]).forEach(function(b){ card.appendChild(renderBlock(b)); });
     sec.appendChild(card);
