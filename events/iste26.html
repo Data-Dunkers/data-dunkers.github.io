@@ -1,1 +1,363 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI PL Design Session</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --petrol:#123a44; --petrol-2:#0d2b32; --teal:#1d8a9a; --teal-deep:#11707e;
+  --clay:#b0602a; --clay-bg:#f6ece2; --clay-line:#e0c3a6;
+  --ink:#1b2a31; --ink-soft:#516068; --paper:#f4f6f5; --surface:#ffffff;
+  --line:#dde3e2; --line-soft:#e8edec; --rail-ink:#d6e6e6; --rail-dim:#7ba1a6;
+  --shadow:0 1px 2px rgba(18,58,68,.06),0 8px 24px rgba(18,58,68,.06);
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:'Inter',system-ui,sans-serif; color:var(--ink);
+  background:var(--paper); line-height:1.6; -webkit-font-smoothing:antialiased;
+}
+a{color:var(--teal-deep); text-underline-offset:2px; text-decoration-thickness:1px}
+a:hover{color:var(--teal)}
 
+/* ---------- layout ---------- */
+.app{display:grid; grid-template-columns:288px 1fr; min-height:100vh}
+
+/* ---------- rail ---------- */
+.rail{
+  background:linear-gradient(168deg,var(--petrol),var(--petrol-2));
+  color:var(--rail-ink); position:sticky; top:0; height:100vh; overflow-y:auto;
+  display:flex; flex-direction:column; border-right:1px solid rgba(0,0,0,.2);
+}
+.rail-head{padding:30px 26px 22px}
+.rail-eyebrow{
+  font-family:'JetBrains Mono',monospace; font-size:10.5px; letter-spacing:.22em;
+  text-transform:uppercase; color:var(--teal); margin:0 0 10px
+}
+.rail-title{font-family:'Fraunces',serif; font-weight:600; font-size:23px; line-height:1.15; margin:0; color:#fff}
+.rail-sub{font-size:12.5px; color:var(--rail-dim); margin:9px 0 0; line-height:1.45}
+.rail-nav{padding:8px 14px 26px; flex:1}
+.spine{position:relative}
+.spine::before{content:""; position:absolute; left:31px; top:18px; bottom:18px; width:1px; background:rgba(255,255,255,.12)}
+.nav-item{
+  display:grid; grid-template-columns:34px 1fr; align-items:center; gap:11px;
+  width:100%; text-align:left; background:none; border:0; cursor:pointer;
+  color:var(--rail-ink); padding:11px 12px; border-radius:9px; position:relative;
+  font:inherit; transition:background .15s,color .15s;
+}
+.nav-num{
+  font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--rail-dim);
+  width:24px; height:24px; display:grid; place-items:center; border-radius:50%;
+  background:rgba(255,255,255,.05); border:1px solid rgba(255,255,255,.1);
+  position:relative; z-index:1; transition:all .15s;
+}
+.nav-label{font-size:13.5px; font-weight:500; line-height:1.3}
+.nav-item:hover{background:rgba(255,255,255,.06)}
+.nav-item:hover .nav-num{color:#fff; border-color:var(--teal)}
+.nav-item.active{background:rgba(29,138,154,.16)}
+.nav-item.active .nav-num{background:var(--teal); border-color:var(--teal); color:#fff}
+.nav-item.active .nav-label{color:#fff}
+.nav-item.active::before{content:""; position:absolute; left:-14px; top:8px; bottom:8px; width:3px; background:var(--teal); border-radius:0 3px 3px 0}
+.nav-item:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
+
+/* ---------- main ---------- */
+.main{min-width:0}
+.main-inner{max-width:920px; margin:0 auto; padding:46px 52px 90px}
+.kicker{
+  font-family:'JetBrains Mono',monospace; font-size:11px; letter-spacing:.2em;
+  text-transform:uppercase; color:var(--teal-deep); margin:0 0 12px;
+  display:flex; align-items:center; gap:10px
+}
+.kicker .k-num{color:var(--ink-soft)}
+.page-title{
+  font-family:'Fraunces',serif; font-weight:600; font-size:38px; line-height:1.1;
+  color:var(--petrol); margin:0 0 30px; letter-spacing:-.01em
+}
+.rule{height:1px; background:var(--line); border:0; margin:0 0 30px}
+
+/* ---------- prose ---------- */
+.prose{color:var(--ink)}
+.prose p{margin:0 0 15px}
+.prose h2{font-family:'Fraunces',serif; font-weight:600; font-size:25px; color:var(--petrol); margin:34px 0 14px; line-height:1.2}
+.prose h3{font-family:'Fraunces',serif; font-weight:600; font-size:20px; color:var(--petrol); margin:26px 0 11px}
+.prose h4{font-weight:700; font-size:16px; color:var(--ink); margin:20px 0 8px}
+.prose h5{font-weight:600; font-size:14px; color:var(--ink-soft); margin:16px 0 6px; text-transform:uppercase; letter-spacing:.04em}
+.prose ul{margin:0 0 16px; padding-left:22px}
+.prose li{margin:0 0 7px}
+.prose li::marker{color:var(--teal)}
+.prose strong{font-weight:700; color:var(--ink)}
+.prose a{font-weight:500}
+
+/* tables */
+.tbl-wrap{overflow-x:auto; margin:18px 0 24px; border:1px solid var(--line); border-radius:12px; box-shadow:var(--shadow)}
+table{border-collapse:collapse; width:100%; min-width:560px; font-size:13.5px; background:var(--surface)}
+thead th{
+  background:var(--petrol); color:#eaf4f4; font-weight:600; text-align:left;
+  padding:12px 14px; vertical-align:top; position:sticky; top:0; font-size:12.5px;
+  letter-spacing:.02em; border-right:1px solid rgba(255,255,255,.08)
+}
+tbody td{padding:11px 14px; vertical-align:top; border-top:1px solid var(--line-soft); border-right:1px solid var(--line-soft)}
+tbody tr:nth-child(even){background:#fafbfb}
+tbody td:first-child{font-weight:600; color:var(--petrol)}
+table ul{margin:4px 0 0; padding-left:18px}
+table li{margin:0 0 4px}
+table strong{color:var(--petrol)}
+thead th, thead th strong{color:#eef6f6}
+
+/* ---------- accordion ---------- */
+.intro{margin-bottom:8px}
+.acc{
+  border:1px solid var(--line); border-radius:12px; background:var(--surface);
+  margin:0 0 12px; overflow:hidden; box-shadow:var(--shadow)
+}
+.acc>summary{
+  cursor:pointer; list-style:none; padding:17px 22px; display:flex; align-items:center;
+  gap:14px; font-weight:600; font-size:16px; color:var(--petrol);
+  font-family:'Fraunces',serif; transition:background .15s
+}
+.acc>summary::-webkit-details-marker{display:none}
+.acc>summary:hover{background:#f6f9f9}
+.acc>summary:focus-visible{outline:2px solid var(--teal); outline-offset:-2px}
+.chev{width:18px; height:18px; flex:none; color:var(--teal); transition:transform .2s; margin-left:auto}
+.acc[open] .chev{transform:rotate(90deg)}
+.acc>summary .s-label{flex:1}
+.acc-body{padding:4px 22px 20px; border-top:1px solid var(--line-soft)}
+.acc-body>*:first-child{margin-top:14px}
+
+/* ---------- index cards ---------- */
+.idx-lede{font-size:16px; color:var(--ink-soft); max-width:680px; margin:0 0 8px}
+.idx-legend{display:flex; gap:18px; flex-wrap:wrap; margin:18px 0 26px; font-size:12.5px; color:var(--ink-soft)}
+.idx-legend span{display:inline-flex; align-items:center; gap:7px}
+.dot{width:9px; height:9px; border-radius:50%}
+.dot.live{background:var(--teal)}
+.dot.todo{background:var(--clay)}
+.idx-grid{display:grid; grid-template-columns:repeat(auto-fill,minmax(248px,1fr)); gap:14px}
+.card{
+  border:1px solid var(--line); border-radius:13px; background:var(--surface);
+  padding:18px 18px 16px; text-align:left; position:relative; display:flex;
+  flex-direction:column; gap:7px; min-height:138px; font:inherit; color:inherit;
+}
+button.card{cursor:pointer; transition:transform .14s,box-shadow .14s,border-color .14s}
+button.card:hover{transform:translateY(-2px); box-shadow:var(--shadow); border-color:var(--teal)}
+button.card:focus-visible{outline:2px solid var(--teal); outline-offset:2px}
+.card-num{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--teal-deep)}
+.card-title{font-family:'Fraunces',serif; font-weight:600; font-size:17px; color:var(--petrol); line-height:1.2}
+.card-desc{font-size:13px; color:var(--ink-soft); line-height:1.45; flex:1}
+.card-go{font-size:12.5px; font-weight:600; color:var(--teal-deep); display:flex; align-items:center; gap:5px; margin-top:2px}
+button.card:hover .card-go{color:var(--teal)}
+/* placeholder */
+.card.todo{background:var(--clay-bg); border:1px dashed var(--clay-line); cursor:default}
+.card.todo .card-num{color:var(--clay)}
+.card.todo .card-title{color:var(--clay)}
+.card.todo .card-desc{color:#8a6a4f}
+.todo-tag{
+  font-family:'JetBrains Mono',monospace; font-size:10px; letter-spacing:.06em;
+  text-transform:uppercase; color:#fff; background:var(--clay); padding:4px 9px;
+  border-radius:20px; align-self:flex-start; margin-top:2px; font-weight:600
+}
+
+/* ---------- article library ---------- */
+.lib-tools{display:flex; align-items:center; gap:14px; flex-wrap:wrap; margin:6px 0 16px}
+.lib-search{
+  flex:1; min-width:220px; padding:11px 15px; border:1px solid var(--line);
+  border-radius:10px; font:inherit; font-size:14px; background:var(--surface); color:var(--ink)
+}
+.lib-search:focus{outline:none; border-color:var(--teal); box-shadow:0 0 0 3px rgba(29,138,154,.14)}
+.lib-count{font-family:'JetBrains Mono',monospace; font-size:12px; color:var(--ink-soft); white-space:nowrap}
+.linklist{list-style:none; margin:0; padding:0; display:grid; gap:2px}
+.linklist li{margin:0}
+.linklist a{
+  display:block; padding:10px 14px; border-radius:9px; color:var(--ink);
+  text-decoration:none; font-size:14px; font-weight:500; border:1px solid transparent;
+  transition:background .12s,border-color .12s
+}
+.linklist a:hover{background:#eef6f6; border-color:var(--line); color:var(--teal-deep)}
+.lib-empty{color:var(--ink-soft); font-size:14px; padding:14px 4px}
+
+/* ---------- mobile bar ---------- */
+.topbar{display:none}
+.scrim{display:none}
+
+@media (max-width:860px){
+  .app{grid-template-columns:1fr}
+  .rail{
+    position:fixed; left:0; top:0; bottom:0; width:300px; z-index:40;
+    transform:translateX(-100%); transition:transform .25s ease; height:100%;
+  }
+  body.nav-open .rail{transform:translateX(0)}
+  .scrim{display:block; position:fixed; inset:0; background:rgba(13,43,50,.42); z-index:30; opacity:0; pointer-events:none; transition:opacity .25s}
+  body.nav-open .scrim{opacity:1; pointer-events:auto}
+  .topbar{
+    display:flex; align-items:center; gap:14px; position:sticky; top:0; z-index:20;
+    background:rgba(244,246,245,.92); backdrop-filter:blur(8px);
+    padding:13px 18px; border-bottom:1px solid var(--line)
+  }
+  .burger{background:var(--petrol); border:0; width:40px; height:40px; border-radius:10px; cursor:pointer; display:grid; place-items:center; flex:none}
+  .burger span,.burger span::before,.burger span::after{content:""; display:block; width:17px; height:2px; background:#fff; border-radius:2px; position:relative}
+  .burger span::before{position:absolute; top:-5px}
+  .burger span::after{position:absolute; top:5px}
+  .topbar-title{font-family:'Fraunces',serif; font-weight:600; font-size:16px; color:var(--petrol)}
+  .topbar-eyebrow{font-family:'JetBrains Mono',monospace; font-size:9.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--teal-deep)}
+  .main-inner{padding:26px 22px 70px}
+  .page-title{font-size:29px}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important; animation:none!important}}
+.fade{animation:fade .28s ease}
+@keyframes fade{from{opacity:0; transform:translateY(6px)}to{opacity:1; transform:none}}
+</style>
+</head>
+<body>
+<div class="app">
+  <aside class="rail" id="rail">
+    <div class="rail-head">
+      <p class="rail-eyebrow">District ITC · Field Guide</p>
+      <h1 class="rail-title">AI PL Design Session</h1>
+      <p class="rail-sub">Designing AI professional learning that meets teachers where they are.</p>
+    </div>
+    <nav class="rail-nav"><div class="spine" id="navlist"></div></nav>
+  </aside>
+
+  <main class="main">
+    <div class="topbar">
+      <button class="burger" id="burger" aria-label="Open navigation"><span></span></button>
+      <div>
+        <div class="topbar-eyebrow" id="tb-eyebrow">Index</div>
+        <div class="topbar-title" id="tb-title">What’s in this Document</div>
+      </div>
+    </div>
+    <div class="main-inner" id="content"></div>
+  </main>
+</div>
+<div class="scrim" id="scrim"></div>
+
+<script src="data.js"></script>
+<script>
+const D = window.SESSION_DATA;
+const $ = (s,r=document)=>r.querySelector(s);
+const chev = '<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>';
+const arrow = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>';
+
+/* build rail */
+const navlist = $('#navlist');
+D.tabs.forEach((t,i)=>{
+  const b=document.createElement('button');
+  b.className='nav-item'; b.dataset.id=t.id;
+  b.innerHTML=`<span class="nav-num">${String(i+1).padStart(2,'0')}</span><span class="nav-label">${t.nav}</span>`;
+  b.onclick=()=>go(t.id);
+  navlist.appendChild(b);
+});
+
+function accordion(sec, open){
+  const d=document.createElement('details'); d.className='acc'; if(open) d.open=true;
+  d.innerHTML=`<summary><span class="s-label">${sec.title}</span>${chev}</summary><div class="acc-body">${sec.body}</div>`;
+  return d;
+}
+
+function renderIndex(host){
+  const wrap=document.createElement('div');
+  const live=D.index.filter(i=>i.target).length;
+  wrap.innerHTML=`
+    <p class="idx-lede">Every section of the design session lives here. Open a live section to jump straight to it.</p>
+    <div class="idx-legend">
+      <span><span class="dot live"></span> ${live} sections ready to open</span>
+      <span><span class="dot todo"></span> ${D.index.length-live} to be built together in session</span>
+    </div>`;
+  const grid=document.createElement('div'); grid.className='idx-grid';
+  D.index.forEach(it=>{
+    if(it.target){
+      const c=document.createElement('button'); c.className='card';
+      c.innerHTML=`<span class="card-num">${String(it.n).padStart(2,'0')}</span>
+        <span class="card-title">${it.title}</span>
+        <span class="card-desc">${it.desc}</span>
+        <span class="card-go">Open section ${arrow}</span>`;
+      c.onclick=()=>go(it.target);
+      grid.appendChild(c);
+    }else{
+      const c=document.createElement('div'); c.className='card todo';
+      c.innerHTML=`<span class="card-num">${String(it.n).padStart(2,'0')}</span>
+        <span class="card-title">${it.title}</span>
+        <span class="card-desc">${it.desc}</span>
+        <span class="todo-tag">To be built together in session</span>`;
+      grid.appendChild(c);
+    }
+  });
+  wrap.appendChild(grid); host.appendChild(wrap);
+}
+
+function renderArticles(t, host){
+  const wrap=document.createElement('div'); wrap.className='prose';
+  wrap.innerHTML=t.curated;
+  const lib=document.createElement('div');
+  lib.innerHTML=`<h3 style="font-family:'Fraunces',serif;font-weight:600;font-size:20px;color:var(--petrol);margin:30px 0 4px">Article library</h3>`;
+  const tools=document.createElement('div'); tools.className='lib-tools';
+  tools.innerHTML=`<input class="lib-search" type="search" placeholder="Filter ${t.library.length} links by keyword…" aria-label="Filter links">
+    <span class="lib-count" id="libcount">${t.library.length} links</span>`;
+  const ul=document.createElement('ul'); ul.className='linklist';
+  t.library.forEach(l=>{
+    const li=document.createElement('li');
+    li.innerHTML=`<a href="${l.h}" target="_blank" rel="noopener">${escapeHtml(l.s)}</a>`;
+    ul.appendChild(li);
+  });
+  const empty=document.createElement('div'); empty.className='lib-empty'; empty.style.display='none';
+  empty.textContent='No links match that filter.';
+  lib.appendChild(tools); lib.appendChild(ul); lib.appendChild(empty);
+  wrap.appendChild(lib); host.appendChild(wrap);
+  const inp=tools.querySelector('.lib-search'); const cnt=tools.querySelector('#libcount');
+  inp.addEventListener('input',()=>{
+    const q=inp.value.trim().toLowerCase(); let n=0;
+    ul.querySelectorAll('li').forEach(li=>{
+      const m=li.textContent.toLowerCase().includes(q);
+      li.style.display=m?'':'none'; if(m)n++;
+    });
+    cnt.textContent=`${n} link${n===1?'':'s'}`; empty.style.display=n?'none':'block';
+  });
+}
+function escapeHtml(s){return s.replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]))}
+
+function render(t){
+  const host=$('#content'); host.innerHTML='';
+  const head=document.createElement('div'); head.className='fade';
+  const num=D.tabs.findIndex(x=>x.id===t.id)+1;
+  head.innerHTML=`<p class="kicker"><span class="k-num">${String(num).padStart(2,'0')}</span> ${t.kicker}</p>
+    <h2 class="page-title">${t.title}</h2><hr class="rule">`;
+  host.appendChild(head);
+  const bodyWrap=document.createElement('div'); bodyWrap.className='fade';
+  if(t.mode==='index') renderIndex(bodyWrap);
+  else if(t.mode==='articles') renderArticles(t,bodyWrap);
+  else if(t.mode==='accordion'){
+    if(t.intro && t.intro.trim()){const intro=document.createElement('div'); intro.className='prose intro'; intro.innerHTML=t.intro; bodyWrap.appendChild(intro);}
+    t.sections.forEach((s,i)=>bodyWrap.appendChild(accordion(s, t.open_first && i===0)));
+  }else{
+    const p=document.createElement('div'); p.className='prose'; p.innerHTML=t.html; bodyWrap.appendChild(p);
+  }
+  host.appendChild(bodyWrap);
+  // sync chrome
+  document.querySelectorAll('.nav-item').forEach(n=>{
+    const on=n.dataset.id===t.id; n.classList.toggle('active',on); if(on)n.setAttribute('aria-current','page'); else n.removeAttribute('aria-current');
+  });
+  $('#tb-eyebrow').textContent=t.kicker; $('#tb-title').textContent=t.title;
+  $('.main').scrollTop=0; window.scrollTo(0,0);
+}
+
+function go(id){
+  const t=D.tabs.find(x=>x.id===id)||D.tabs[0];
+  if(history.replaceState) history.replaceState(null,'',location.pathname+'#'+t.id);
+  document.body.classList.remove('nav-open');
+  render(t);
+}
+
+/* mobile */
+$('#burger').onclick=()=>document.body.classList.toggle('nav-open');
+$('#scrim').onclick=()=>document.body.classList.remove('nav-open');
+
+/* boot */
+const start=(location.hash||'').replace('#','');
+go(D.tabs.some(t=>t.id===start)?start:'index');
+window.addEventListener('hashchange',()=>{const h=location.hash.replace('#',''); if(D.tabs.some(t=>t.id===h)) render(D.tabs.find(t=>t.id===h));});
+</script>
+</body>
+</html>
