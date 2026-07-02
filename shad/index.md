@@ -5,17 +5,21 @@
 * [Five Shotes Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLScRM1wOA4kuG9igwCUYk6mIoqpVB72ZI7DmyOeo5V2KffNSnA/viewform)
 * [Five Shots Data Analysis Notebook](https://datadunkers.ca/jupyterlite/notebooks/index.html?path=notebooks%2FData_Dunkers_Simple_Form_Analysis_-_Shad_Shots.ipynb)
 
+### How to play Bump (Knock-Out)
+
+* Form a single line at the free-throw line.
+* The first two players get a basketball each.
+* The first player shoots. If they miss, they quickly grab the ball and shoot again.
+* You can start shooting as soon as the player in front takes their first shot.
+* If you make a basket, pass the ball to the next player and go to the back of the line.
+* If you score before the player in front of you, they are out.
+* Keep playing until only one player remains.
 
 ## Data Labyrinths
 
-[Beginner Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/)
-  * key = 'WNBA'
-
-Optional: [Intermediate Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fbasketball%2Fbasketball.ipynb)
-  * key = 'dunk'
-
-Optional: [Advanced Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fadvanced-basketball%2Fadvanced-basketball.ipynb)
-  * key = 'learning'
+* [Beginner Data Labyrinth](https://labyrinth.datadunkers.ca/mini-basketball/): key = 'WNBA'
+* Optional: [Intermediate Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fbasketball%2Fbasketball.ipynb): key = 'dunk'
+* Optional: [Advanced Data Labyrinth](https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fadvanced-basketball%2Fadvanced-basketball.ipynb): key = 'learning'
 
 ## Player Attributes
 
