@@ -3,12 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Data & AI Interactive Mindmap</title>
+    <title>Data & AI Career Explorer</title>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --blue: #0072CE;
+            --blue-dark: #005A9C;
+            --blue-bright: #00A9E0;
+            --navy: #002D62;
+            --coral: #F4633A;
+            --coral-dark: #D94F28;
+            --gold: #FFB81C;
+            --ink: #333;
         }
 
         body {
@@ -21,166 +28,138 @@
             padding: 20px;
         }
 
-        .header {
-            width: 100%;
-            max-width: 1400px;
-            text-align: center;
-            margin-bottom: 30px;
-        }
+        .header { width: 100%; max-width: 1400px; text-align: center; margin-bottom: 18px; }
 
         .center-title {
             background: linear-gradient(135deg, #0072CE 0%, #005A9C 100%);
             color: white;
-            font-size: 2.5em;
-            padding: 25px 60px;
+            font-size: 2.1em;
+            padding: 16px 50px;
             border-radius: 20px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
             border: 4px solid white;
             display: inline-block;
             font-weight: 700;
             text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
+        .center-title:hover, .center-title:focus-visible { transform: translateY(-2px); box-shadow: 0 12px 34px rgba(0,0,0,0.35); }
+        .center-title:focus-visible { outline: 3px solid var(--gold); outline-offset: 3px; }
 
-        .instructions {
-            color: white;
-            margin-top: 15px;
-            font-size: 1.1em;
-            opacity: 0.95;
-        }
+        .instructions { color: white; margin-top: 10px; font-size: 1em; opacity: 0.95; }
 
-        .main-container {
+        .top-nav {
             width: 100%;
             max-width: 1400px;
             display: flex;
-            gap: 20px;
-            align-items: stretch;
-            min-height: 600px;
-        }
-
-        .side-panel {
-            flex: 0 0 200px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            gap: 14px;
             justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
         }
 
         .main-branch-btn {
             background: linear-gradient(135deg, #00A9E0 0%, #0072CE 100%);
             color: white;
-            padding: 30px 20px;
-            border-radius: 15px;
+            padding: 13px 22px;
+            border-radius: 14px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-            border: none;
-            font-size: 1.2em;
+            border: 3px solid transparent;
+            font-size: 1.05em;
             font-weight: 600;
-            text-align: center;
-            user-select: none;
             display: flex;
-            flex-direction: column;
             align-items: center;
             gap: 10px;
+            font-family: inherit;
         }
-
-        .main-branch-btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        .main-branch-btn.active {
-            background: linear-gradient(135deg, #00B5E2 0%, #00A9E0 100%);
-            border: 3px solid white;
-        }
-
-        .emoji {
-            font-size: 2em;
-        }
+        .main-branch-btn:hover, .main-branch-btn:focus-visible { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .main-branch-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+        .main-branch-btn.active { border-color: white; }
+        .main-branch-btn.coral { background: linear-gradient(135deg, #F4763A 0%, #D94F28 100%); }
+        .main-branch-btn.gold { background: linear-gradient(135deg, #FFB81C 0%, #E89B00 100%); color: var(--navy); }
+        .main-branch-btn .emoji { font-size: 1.4em; }
 
         .center-display {
-            flex: 1;
+            width: 100%;
+            max-width: 1400px;
             background: white;
             border-radius: 20px;
             box-shadow: 0 10px 40px rgba(0,0,0,0.3);
-            padding: 40px;
-            position: relative;
-            overflow-y: auto;
-            max-height: 700px;
+            padding: 35px;
         }
 
-        .welcome-message {
-            text-align: center;
-            color: #666;
-            font-size: 1.3em;
-            padding: 100px 20px;
-            line-height: 1.8;
-        }
+        .welcome-message { text-align: center; color: #555; font-size: 1.1em; padding: 15px 10px; line-height: 1.7; }
+        .welcome-message h2 { color: var(--blue); font-size: 1.9em; margin-bottom: 14px; }
+        .welcome-message .lede { max-width: 640px; margin: 0 auto 10px; }
 
-        .welcome-message h2 {
-            color: #0072CE;
-            font-size: 2em;
-            margin-bottom: 20px;
+        .interest-block { margin-top: 26px; }
+        .interest-block h3 { color: var(--navy); font-size: 1.25em; margin-bottom: 6px; }
+        .interest-block p { color: #777; font-size: 0.95em; margin-bottom: 16px; }
+
+        .chip-row { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
+        .chip {
+            background: #f0f7ff;
+            border: 2px solid var(--blue-bright);
+            color: var(--blue-dark);
+            padding: 10px 18px;
+            border-radius: 999px;
+            font-size: 1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
+        .chip:hover, .chip:focus-visible { background: var(--blue-bright); color: white; transform: translateY(-2px); }
+        .chip:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
         .category-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 18px;
+            margin-top: 18px;
         }
 
         .category-card {
             background: linear-gradient(135deg, #00B5E2 0%, #00A9CE 100%);
             color: white;
-            padding: 25px;
+            padding: 24px;
             border-radius: 15px;
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.25s ease;
             box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            border: none;
+            text-align: left;
+            font-family: inherit;
+            width: 100%;
         }
+        .category-card.coral { background: linear-gradient(135deg, #F4763A 0%, #E05A2D 100%); }
+        .category-card:hover, .category-card:focus-visible { transform: translateY(-5px); box-shadow: 0 6px 20px rgba(0,0,0,0.3); }
+        .category-card:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+        .category-card h3 { font-size: 1.25em; display: flex; align-items: center; gap: 10px; }
+        .category-card .emoji { font-size: 1.5em; }
 
-        .category-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .category-card h3 {
-            font-size: 1.3em;
-            margin-bottom: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-
-        .category-card .emoji {
-            font-size: 1.5em;
-        }
-
-        .detail-view {
-            animation: fadeIn 0.4s ease;
-        }
+        .detail-view { animation: fadeIn 0.4s ease; }
 
         .detail-header {
             display: flex;
             align-items: center;
-            gap: 15px;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
-            border-bottom: 3px solid #0072CE;
+            gap: 14px;
+            margin-bottom: 22px;
+            padding-bottom: 16px;
+            border-bottom: 3px solid var(--blue);
+            flex-wrap: wrap;
         }
-
-        .detail-header h2 {
-            color: #0072CE;
-            font-size: 2em;
-        }
-
-        .detail-header .emoji {
-            font-size: 2.5em;
-        }
+        .detail-header.coral { border-bottom-color: var(--coral); }
+        .detail-header h2 { color: var(--blue); font-size: 1.7em; flex: 1; min-width: 200px; }
+        .detail-header.coral h2 { color: var(--coral-dark); }
+        .detail-header .emoji { font-size: 2.2em; }
 
         .back-btn {
-            background: #0072CE;
+            background: var(--blue);
             color: white;
             border: none;
             padding: 10px 20px;
@@ -188,300 +167,760 @@
             cursor: pointer;
             font-size: 1em;
             margin-left: auto;
-            transition: all 0.3s ease;
+            transition: all 0.2s ease;
+            font-family: inherit;
         }
+        .back-btn:hover, .back-btn:focus-visible { background: var(--blue-dark); transform: scale(1.05); }
+        .back-btn:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
 
-        .back-btn:hover {
-            background: #005A9C;
-            transform: scale(1.05);
-        }
-
-        .detail-list {
-            list-style: none;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
+        .detail-list { list-style: none; display: flex; flex-direction: column; gap: 16px; }
 
         .detail-item {
             background: #f8f9fa;
-            padding: 20px;
+            padding: 18px;
             border-radius: 10px;
-            border-left: 4px solid #0072CE;
+            border-left: 4px solid var(--blue);
             line-height: 1.6;
-            font-size: 1.05em;
-            color: #333;
+            font-size: 1.02em;
+            color: var(--ink);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            transition: all 0.3s ease;
         }
 
-        .detail-item:hover {
-            transform: translateX(5px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+        /* Career cards (accordion) */
+        .career-card {
+            background: #f8f9fa;
+            border-radius: 12px;
+            border-left: 5px solid var(--blue);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .career-card.coral { border-left-color: var(--coral); }
+
+        .career-toggle {
+            width: 100%;
+            background: none;
+            border: none;
+            font-family: inherit;
+            text-align: left;
+            padding: 16px 18px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.05em;
+            color: var(--ink);
+        }
+        .career-toggle:hover { background: #eef4fb; }
+        .career-toggle:focus-visible { outline: 3px solid var(--gold); outline-offset: -3px; }
+        .career-toggle .c-emoji { font-size: 1.5em; }
+        .career-toggle .c-name { font-weight: 700; color: var(--navy); }
+        .career-toggle .c-tag { color: #666; font-size: 0.92em; }
+        .career-toggle .c-arrow { margin-left: auto; color: var(--blue); font-weight: 700; transition: transform 0.2s ease; }
+        .career-card.open .c-arrow { transform: rotate(90deg); }
+
+        .career-body { display: none; padding: 0 18px 18px; animation: fadeIn 0.3s ease; }
+        .career-card.open .career-body { display: block; }
+
+        .glimpse {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-bottom: 12px;
+            line-height: 1.6;
+            font-size: 0.98em;
+        }
+        .glimpse .g-label { font-weight: 700; color: var(--blue-dark); font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; display: block; margin-bottom: 4px; }
+
+        .ai-split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 12px; }
+        .ai-box { border-radius: 10px; padding: 12px 14px; font-size: 0.95em; line-height: 1.55; }
+        .ai-box .g-label { display: block; font-weight: 700; font-size: 0.82em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+        .ai-changes { background: #fff3ec; border: 1px solid #f8c9b4; color: #7a3416; }
+        .ai-changes .g-label { color: var(--coral-dark); }
+        .ai-human { background: #edf7ee; border: 1px solid #bfe3c2; color: #22532a; }
+        .ai-human .g-label { color: #2e7d32; }
+
+        .talk-box {
+            background: #fff8e6;
+            border: 2px dashed var(--gold);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 12px;
+            font-size: 1em;
+            line-height: 1.55;
+            color: #5c4600;
+        }
+        .talk-box .g-label { display: block; font-weight: 700; color: #9a7500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+        .watch-link {
+            display: inline-block;
+            background: var(--blue);
+            color: white;
+            text-decoration: none;
+            padding: 9px 16px;
+            border-radius: 8px;
+            font-size: 0.95em;
+            font-weight: 600;
+            transition: all 0.2s ease;
+        }
+        .watch-link:hover, .watch-link:focus-visible { background: var(--blue-dark); transform: translateY(-2px); }
+        .watch-link:focus-visible { outline: 3px solid var(--gold); outline-offset: 2px; }
+
+        .section-title { color: var(--blue); font-size: 1.7em; margin-bottom: 6px; text-align: center; }
+        .section-title.coral { color: var(--coral-dark); }
+        .section-sub { text-align: center; color: #777; margin-bottom: 10px; font-size: 1em; }
+
+        .cat-talk {
+            background: #fff8e6;
+            border: 2px dashed var(--gold);
+            border-radius: 10px;
+            padding: 14px 16px;
+            margin-top: 18px;
+            color: #5c4600;
+            line-height: 1.55;
+        }
+        .cat-talk .g-label { display: block; font-weight: 700; color: #9a7500; font-size: 0.85em; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        @media (prefers-reduced-motion: reduce) {
+            * { animation: none !important; transition: none !important; }
         }
 
-        .section-title {
-            color: #0072CE;
-            font-size: 1.8em;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-                transform: translateY(10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        @media (max-width: 768px) {
-            .main-container {
-                flex-direction: column;
-            }
-
-            .side-panel {
-                flex-direction: row;
-                flex: none;
-                width: 100%;
-            }
-
-            .center-title {
-                font-size: 1.8em;
-                padding: 20px 40px;
-            }
-
-            .category-grid {
-                grid-template-columns: 1fr;
-            }
+        @media (max-width: 850px) {
+            .center-title { font-size: 1.5em; padding: 14px 26px; }
+            .top-nav { gap: 10px; }
+            .main-branch-btn { flex: 1 1 45%; justify-content: center; padding: 12px 10px; font-size: 0.95em; }
+            .category-grid { grid-template-columns: 1fr; }
+            .ai-split { grid-template-columns: 1fr; }
+            .center-display { padding: 22px; }
         }
     </style>
 </head>
 <body>
     <div class="header">
-        <div class="center-title">🧠 Data & AI</div>
-        <p class="instructions">💡 Click on "Careers" or "How Data & AI Are Used" to explore!</p>
+        <button class="center-title" onclick="showWelcome()" title="Back to home">🧠 Data & AI Career Explorer</button>
+        <p class="instructions">💡 Pick a branch below, tap an interest, or hit Surprise Me. Tap the title anytime to come back home.</p>
     </div>
 
-    <div class="main-container">
-        <!-- Left Side Panel -->
-        <div class="side-panel">
-            <button class="main-branch-btn" id="careers-btn" onclick="showBranch('careers')">
-                <span class="emoji">💼</span>
-                <span>Careers</span>
-            </button>
-        </div>
+    <nav class="top-nav">
+        <button class="main-branch-btn" id="dataCareers-btn" onclick="showBranch('dataCareers')">
+            <span class="emoji">💼</span><span>Data & AI Careers</span>
+        </button>
+        <button class="main-branch-btn coral" id="everyday-btn" onclick="showBranch('everyday')">
+            <span class="emoji">🔍</span><span>Careers You Might Not Expect</span>
+        </button>
+        <button class="main-branch-btn" id="uses-btn" onclick="showBranch('uses')">
+            <span class="emoji">🧩</span><span>How Data & AI Are Used</span>
+        </button>
+        <button class="main-branch-btn gold" id="surprise-btn" onclick="surpriseMe()">
+            <span class="emoji">🎲</span><span>Surprise Me!</span>
+        </button>
+    </nav>
 
-        <!-- Center Display Area -->
-        <div class="center-display" id="center-display">
-            <div class="welcome-message">
-                <h2>Welcome to the Data & AI Explorer!</h2>
-                <p>Select <strong>Careers</strong> to discover exciting career paths that use data and AI.</p>
-                <p>Or choose <strong>How Data & AI Are Used</strong> to learn about the ways professionals apply these tools across industries.</p>
-                <p style="margin-top: 30px; color: #0072CE; font-weight: 600;">Click a button on either side to begin your journey! 🚀</p>
-            </div>
-        </div>
+    <div class="center-display" id="center-display"></div>
 
-        <!-- Right Side Panel -->
-        <div class="side-panel">
-            <button class="main-branch-btn" id="uses-btn" onclick="showBranch('uses')">
-                <span class="emoji">🧩</span>
-                <span>How Data & AI Are Used</span>
-            </button>
+<script>
+// ---------- CONTENT ----------
+const INTERESTS = {
+  help:     { emoji: "🤝", label: "Helping people" },
+  make:     { emoji: "🔧", label: "Making & fixing things" },
+  sport:    { emoji: "🏀", label: "Sports & fitness" },
+  art:      { emoji: "🎨", label: "Art & creativity" },
+  food:     { emoji: "🍕", label: "Food & cooking" },
+  nature:   { emoji: "🌿", label: "Nature & animals" },
+  puzzle:   { emoji: "🧩", label: "Solving puzzles" },
+  business: { emoji: "💼", label: "Business & money" },
+  tech:     { emoji: "🎮", label: "Games & tech" },
+  perform:  { emoji: "🎤", label: "Performing & storytelling" }
+};
+
+const content = {
+  dataCareers: {
+    title: "Careers Where Data Science Plays a Part",
+    sub: "Jobs where working with data IS the job. Tap any career for a glimpse inside.",
+    color: "blue",
+    categories: {
+      sports: { emoji: "🏀", title: "Sports & Performance", careers: [
+        { n: "Sports Analyst / Data Scientist", e: "📈", t: "Turns game data into winning strategy",
+          s: "The morning after a game, she pulls the tracking data: every sprint, pass, and shot. She spots that the team scores 12% more when they push the pace in the first quarter, and that insight goes straight into the coach's game plan.",
+          c: "AI now auto-tags game film and finds patterns in seconds instead of days.",
+          h: "Deciding which patterns actually matter, and convincing a coach to change.",
+          q: "If the data says bench the star player, should the coach actually do it?",
+          y: "sports analytics day in the life", i: ["sport","puzzle"] },
+        { n: "Performance Coach", e: "⏱️", t: "Uses body data to train athletes smarter",
+          s: "Wearables on every athlete stream heart rate, speed, and jump height to his tablet. When one player's numbers dip three days in a row, he schedules rest, catching fatigue before it becomes an injury.",
+          c: "AI predicts injury risk from workload data before anyone feels pain.",
+          h: "Reading the athlete as a person: stress, sleep, confidence, motivation.",
+          q: "Would you want your coach tracking your body 24/7? Where's the line?",
+          y: "sports science wearable technology athletes", i: ["sport","help"] },
+        { n: "Recruiting Analyst / Scout", e: "🔎", t: "Finds hidden talent in the numbers",
+          s: "Thousands of players, one roster spot. He filters stats from leagues around the world and flags a point guard nobody's talking about, because her efficiency numbers look like a future star's.",
+          c: "AI screens millions of player stats and video clips automatically.",
+          h: "Judging character, coachability, and heart. None of it shows up in a spreadsheet.",
+          q: "Can a stat sheet spot a great teammate? What can't the numbers see?",
+          y: "moneyball how analytics changed scouting", i: ["sport","business"] },
+        { n: "Sports Equipment Engineer", e: "🛠️", t: "Designs better gear using sensor data",
+          s: "She straps sensors to a prototype basketball shoe and records 500 jumps. The data shows where force spikes on landing, so the next version gets extra cushioning exactly there.",
+          c: "AI simulates thousands of design variations before anything is built.",
+          h: "Knowing how gear actually feels to an athlete. Comfort can't be simulated.",
+          q: "Should tech-enhanced gear be allowed in competition, or is it unfair?",
+          y: "sports equipment engineering testing lab", i: ["sport","make"] },
+        { n: "Esports / Gaming Analyst", e: "🎮", t: "Competitive gaming runs on stats",
+          s: "Before a tournament, she breaks down 200 hours of opponent replays. The data shows their star player overextends in the first three minutes of a match, so her team builds an early trap around that habit.",
+          c: "AI reviews match replays and flags opponent habits automatically.",
+          h: "Game sense, team chemistry, and reading momentum in a live match.",
+          q: "Some esports analysts get hired straight out of high school gaming scenes. Is that a real career path?",
+          y: "esports analyst career", i: ["sport","tech"] }
+      ]},
+      tech: { emoji: "💻", title: "Technology & AI", careers: [
+        { n: "AI Developer / ML Engineer", e: "🤖", t: "Builds the algorithms that learn from data",
+          s: "His team's model keeps mistaking huskies for wolves. He digs into the training data and finds the problem: almost every wolf photo has snow in it. The model learned that snow means wolf. Time to fix the data.",
+          c: "AI now helps write and debug its own code, speeding everything up.",
+          h: "Deciding what to build, spotting when the model is confidently wrong, and asking 'should we?'",
+          q: "An AI model works great but no one can explain WHY. Would you ship it?",
+          y: "machine learning engineer day in the life", i: ["tech","puzzle","make"] },
+        { n: "Data Engineer", e: "🏗️", t: "Builds the pipelines that move and store data",
+          s: "A million app users generate data every second. She builds the invisible plumbing that collects it, cleans it, and delivers it, so when an analyst asks a question the answer is ready in seconds instead of weeks.",
+          c: "AI helps detect bad data and repair broken pipelines automatically.",
+          h: "Designing systems that stay fast, safe, and private as they grow.",
+          q: "Companies store huge amounts of data 'just in case.' Smart or risky?",
+          y: "what does a data engineer do", i: ["tech","make"] },
+        { n: "Data Visualization Specialist", e: "📊", t: "Makes numbers tell a story people can see",
+          s: "The report says emissions rose 4.7% year over year. Nobody reacts. She turns the same data into an animated map of the city glowing hotter over time, and suddenly the whole room is paying attention.",
+          c: "AI can auto-generate charts and dashboards from a plain-English request.",
+          h: "Choosing the story, the honesty, and the design that makes people care.",
+          q: "Can a chart lie without using fake numbers? How?",
+          y: "data visualization designer portfolio", i: ["tech","art"] },
+        { n: "Cybersecurity Analyst", e: "🛡️", t: "Hunts threats hiding in network data",
+          s: "At 2am, the monitoring system flags a login from a country where no employee lives. The AI thinks it looks suspicious. She confirms it in minutes, locks the account, and shuts the attack down before any data leaves.",
+          c: "AI watches millions of network events and flags the strange ones.",
+          h: "Thinking like an attacker and making the judgment call under pressure.",
+          q: "Hackers use AI too. Does that make cybersecurity a losing battle or a growing career?",
+          y: "cybersecurity analyst day in the life", i: ["tech","puzzle"] },
+        { n: "Robotics Engineer", e: "🦾", t: "Teaches machines to sense, learn, and move",
+          s: "The warehouse robot keeps hesitating at one corner. He pulls its sensor logs and finds a reflective floor panel confusing its camera. One small software patch later, 200 robots stop hesitating overnight.",
+          c: "AI gives robots vision and the ability to learn tasks from demonstration.",
+          h: "Designing machines that work safely around real people.",
+          q: "A robot and a person work side by side. Who should adjust to whom?",
+          y: "robotics engineer day in the life", i: ["tech","make"] },
+        { n: "Ethical AI Researcher", e: "⚖️", t: "Keeps AI fair, safe, and accountable",
+          s: "A hiring AI keeps rejecting qualified applicants from certain postal codes. She traces it back and finds the model learned bias from decades of old hiring decisions. Her job is to prove it, fix it, and stop it happening again.",
+          c: "AI tools now help audit other AI systems for bias and errors.",
+          h: "Deciding what 'fair' even means. That's a human question, not a math one.",
+          q: "Who should be responsible when an AI makes an unfair decision?",
+          y: "AI ethics researcher algorithmic bias", i: ["tech","help","puzzle"] }
+      ]},
+      business: { emoji: "🌍", title: "Business & Industry", careers: [
+        { n: "Marketing Analyst", e: "📣", t: "Decodes what customers really want",
+          s: "Two versions of an ad go live. Within hours, the data shows version B gets triple the clicks, but mostly from people who never buy. She digs deeper and finds version A quietly wins where it counts.",
+          c: "AI predicts what customers will want before they search for it.",
+          h: "Understanding why people feel the way they do about a brand.",
+          q: "Ads that know exactly what you like: helpful, creepy, or both?",
+          y: "marketing analytics day in the life", i: ["business","puzzle"] },
+        { n: "Financial Analyst", e: "💹", t: "Reads market data to guide big money decisions",
+          s: "Before recommending an investment, he models three futures: best case, worst case, most likely. The data can't promise anything, but it turns a wild guess into an informed bet.",
+          c: "AI scans news, earnings, and markets in real time, flagging risks instantly.",
+          h: "Judgment under pressure, and knowing when the model's assumptions are wrong.",
+          q: "Would you trust an AI to invest your savings? What if it beat most humans?",
+          y: "financial analyst day in the life", i: ["business","puzzle"] },
+        { n: "Operations Manager", e: "🔄", t: "Uses data to make everything run smoother",
+          s: "Deliveries keep arriving late. She maps every step of the process with timestamps and finds the bottleneck at one warehouse scanning station. One fix, and delivery times drop 20%.",
+          c: "AI forecasts demand and reroutes supply chains around problems automatically.",
+          h: "Leading the people who do the work. Systems don't fix themselves.",
+          q: "If data shows one worker is slower, what should a fair manager do with that?",
+          y: "supply chain operations analytics", i: ["business","make"] },
+        { n: "Supply Chain Analyst", e: "🚢", t: "Keeps global shipments moving with data",
+          s: "A storm closes a major port with 40 shipments in the balance. Her dashboard ranks rerouting options in real time by cost and delay. She picks the plan that keeps store shelves stocked for the holidays.",
+          c: "AI forecasts demand and reroutes global shipping around disruptions.",
+          h: "Negotiating with suppliers and making trade-offs when every option costs something.",
+          q: "One late ship can empty shelves across a country. Should critical goods be made closer to home even if they cost more?",
+          y: "supply chain analyst logistics", i: ["business","puzzle"] },
+        { n: "Entrepreneur / Startup Founder", e: "🚀", t: "Tests business ideas with data instead of guesses",
+          s: "Before building the full app, she launches a one-page test site. 3,000 visitors and 400 signups later, the data says people want this. Now she builds for real, watching what users actually do, not what they say.",
+          c: "AI lets a two-person startup do the work of twenty across design, code, and support.",
+          h: "The vision, the risk-taking, and earning people's trust.",
+          q: "If AI makes starting a business this easy, what will set founders apart?",
+          y: "startup founder using AI tools", i: ["business","tech"] }
+      ]},
+      health: { emoji: "🏥", title: "Health & Science", careers: [
+        { n: "Biomedical Data Scientist", e: "🧬", t: "Finds treatments hidden in patient data",
+          s: "Across 50,000 anonymous patient records, she notices that patients on two common medications together recover faster. That pattern becomes a clinical trial, and maybe a new standard treatment.",
+          c: "AI spots disease markers in scans and genetic data that humans miss.",
+          h: "Protecting patient privacy and knowing correlation isn't cause.",
+          q: "Would you share your health data anonymously if it could save lives?",
+          y: "biomedical data science AI medicine", i: ["help","puzzle","tech"] },
+        { n: "Medical Imaging AI Specialist", e: "🩻", t: "Pairs AI vision with doctors' judgment",
+          s: "The AI flags 30 scans overnight as possible tumours. By morning rounds, she has reviewed them with the radiologist. Twenty-eight are fine, but two are early cancers that might have waited weeks in the old queue.",
+          c: "AI reads X-rays and MRIs, catching details human eyes can miss.",
+          h: "Confirming the call and delivering the news with care.",
+          q: "An AI catches cancers doctors miss, but sometimes flags healthy people. How many false alarms are acceptable?",
+          y: "AI medical imaging radiology", i: ["help","tech"] },
+        { n: "Public Health Analyst", e: "🌡️", t: "Tracks disease and keeps communities safe",
+          s: "Flu cases are ticking up in one neighbourhood, two weeks before hospitals feel it. His early-warning dashboard, built from clinic visits and even search trends, gives the city time to act.",
+          c: "AI models predict outbreaks and simulate how policies will play out.",
+          h: "Earning public trust and turning data into action people accept.",
+          q: "During an outbreak, how much location data should the government see?",
+          y: "public health epidemiologist data", i: ["help","puzzle"] },
+        { n: "Environmental Data Scientist", e: "🌱", t: "Uses sensor data to fight climate change",
+          s: "Ocean buoys, satellites, and forest sensors feed her models. This month's finding: a coastal wetland absorbs triple the carbon anyone estimated. That evidence could protect it from development.",
+          c: "AI processes satellite images of the whole planet daily.",
+          h: "Turning findings into policy and convincing people to change.",
+          q: "If data proves a factory is polluting, what should happen next, and who decides?",
+          y: "environmental data science climate", i: ["nature","puzzle"] }
+      ]},
+      education: { emoji: "🧑‍🏫", title: "Education & Social Impact", careers: [
+        { n: "Learning Analyst", e: "📚", t: "Personalizes education with classroom data",
+          s: "The data shows a strange pattern: students ace the practice quizzes but bomb the unit test. She digs in and finds the quizzes repeat questions, so students memorized answers instead of learning. The quizzes get a redesign.",
+          c: "AI tutors adapt to each student's pace and style in real time.",
+          h: "Knowing when a struggling student needs encouragement, not another worksheet.",
+          q: "Should your school track how long you spend on homework? Why or why not?",
+          y: "learning analytics education technology", i: ["help","puzzle"] },
+        { n: "Policy Analyst", e: "🏛️", t: "Uses community data to shape better decisions",
+          s: "The city wants to add bike lanes but can't agree where. He layers collision data, traffic counts, and commute surveys into one map, and three obvious corridors emerge that everyone can finally agree on.",
+          c: "AI simulates how a policy would affect thousands of households before it launches.",
+          h: "Balancing what the data says with what communities actually value.",
+          q: "Should cities make decisions mostly by data, mostly by votes, or some mix?",
+          y: "policy analyst urban data", i: ["help","business"] },
+        { n: "Accessibility Technology Specialist", e: "♿", t: "Makes technology work for every kind of user",
+          s: "A student who can't use a mouse needs to code for class. He sets up eye-tracking input and AI voice control, then tunes it with the student's own usage data until it feels natural. The tech now fits the person, not the other way around.",
+          c: "AI powers live captions, screen readers, and voice control that adapt to each user.",
+          h: "Listening to what each person actually needs instead of assuming.",
+          q: "AI captioning and voice tools help millions. Who gets left out when they only work well in English?",
+          y: "assistive technology specialist accessibility", i: ["help","tech"] },
+        { n: "Digital Ethicist / Researcher", e: "🧭", t: "Makes sure technology treats people right",
+          s: "A social app wants to add an infinite scroll feature. Her research shows it boosts screen time, mostly by making it harder to stop. Her report asks the hard question: good for the company, but good for users?",
+          c: "AI systems now shape billions of daily choices, raising the stakes.",
+          h: "Asking 'just because we can, should we?' Machines don't ask that.",
+          q: "Should apps be designed to be LESS addictive, even if they make less money?",
+          y: "tech ethics researcher digital wellbeing", i: ["help","tech"] }
+      ]}
+    }
+  },
+  everyday: {
+    title: "Careers You Might Not Expect",
+    sub: "Not planning to be a data scientist? Data and AI are showing up in these jobs too.",
+    color: "coral",
+    categories: {
+      trades: { emoji: "🔧", title: "Trades & Making Things", careers: [
+        { n: "Electrician", e: "⚡", t: "Smart buildings run on data now",
+          s: "A smart office building pings him: circuit 14 is drawing unusual power. The diagnostic data points to a failing component, so he replaces it before anything sparks. Half his troubleshooting now starts on a screen.",
+          c: "Sensors and AI diagnostics flag electrical problems before failures happen.",
+          h: "The hands-on skill. No AI can rewire a panel or crawl through a ceiling.",
+          q: "Trades can't be done remotely or automated easily. Does that make them MORE future-proof than office jobs?",
+          y: "smart building electrician technology", i: ["make"] },
+        { n: "Auto Mechanic / Technician", e: "🚗", t: "Modern cars are computers on wheels",
+          s: "A car rolls in with a mystery rattle. Before touching a wrench, she plugs into the onboard computer where 40+ sensors report in. The data narrows it from somewhere in the engine to one failing pulley. Twenty minutes, fixed.",
+          c: "Cars self-report problems and AI predicts part failures before they happen.",
+          h: "Diagnosing what sensors can't feel, and earning customers' trust.",
+          q: "Electric and self-driving cars need fewer repairs but more software skills. How should mechanics prepare?",
+          y: "modern auto technician diagnostics", i: ["make","tech"] },
+        { n: "HVAC Technician", e: "🌡️", t: "Heating and cooling systems that call for help",
+          s: "A grocery store's smart system texts him: the rooftop unit's compressor is vibrating outside its normal range. He arrives with the right part already on the truck and fixes it before a single freezer warms up.",
+          c: "Smart buildings report their own problems and predict breakdowns early.",
+          h: "The install, the repair, and the crawlspace. Machines can't do the wrench work.",
+          q: "Predictive maintenance means fixing things before they break. How would that change a repair business?",
+          y: "HVAC technician smart building technology", i: ["make"] },
+        { n: "Construction Manager", e: "🏗️", t: "Builds projects with drones and dashboards",
+          s: "Every morning, a drone flies the site and compares photos against the 3D building plan. Today it flags a wall that is 4 cm off spec. Caught now, it's a quick fix. Caught next month, it's a $50,000 problem.",
+          c: "AI tracks progress, predicts delays, and spots safety hazards from camera feeds.",
+          h: "Leading crews, solving surprises, and making judgment calls on the ground.",
+          q: "AI cameras can catch workers not wearing hard hats. Safety win or surveillance problem?",
+          y: "construction technology drones AI", i: ["make","business"] },
+        { n: "Welder", e: "🔥", t: "Precision work, now with robot teammates",
+          s: "He programs the robotic welder for the repetitive seams, then handles the tricky custom joints himself. The robot logs data on every weld, and his trained eye catches the flaws the sensors miss.",
+          c: "Robots handle repetitive welds and AI checks weld quality with cameras.",
+          h: "Complex, one-of-a-kind work, and knowing when the robot got it wrong.",
+          q: "If a robot does the repetitive welds, does the human welder's job get better or worse?",
+          y: "robotic welding technician", i: ["make"] }
+      ]},
+      health: { emoji: "🩺", title: "Health & Helping People", careers: [
+        { n: "Nurse", e: "💉", t: "Patient monitors and AI alerts change the shift",
+          s: "Her station screen ranks patients by risk, updated live from vital-sign monitors. An AI early-warning score flags Room 12 hours before trouble is visible. She checks, the score is right, and the patient gets help early.",
+          c: "AI monitors vitals 24/7 and drafts routine charting notes.",
+          h: "Comfort, judgment, and noticing what monitors can't, like fear in a patient's eyes.",
+          q: "An AI alert says a patient is fine, but the nurse's gut says otherwise. Who should win?",
+          y: "nursing technology AI hospital", i: ["help"] },
+        { n: "Physiotherapist", e: "🦵", t: "Recovery guided by motion-sensor data",
+          s: "Her patient's knee brace records every step at home. The data shows he's favouring the leg on stairs, something he didn't even notice. She adjusts the exercise plan before the next visit instead of weeks later.",
+          c: "Wearables and motion-capture apps track recovery between appointments.",
+          h: "Motivating patients through painful months. Data doesn't do encouragement.",
+          q: "Does knowing your therapist can see your home exercise data make you more likely to do it?",
+          y: "physiotherapy wearable technology rehab", i: ["help","sport"] },
+        { n: "Pharmacist", e: "💊", t: "The last safety check before medication goes home",
+          s: "A new prescription comes in and the system instantly flags a risky interaction with a medication the patient already takes. The AI caught it, but she makes the call, phones the doctor, and gets it switched before pickup.",
+          c: "AI screens for drug interactions and automates counting and inventory.",
+          h: "The final safety judgment and the counter conversation that catches what software can't.",
+          q: "If AI checks every prescription, does the pharmacist become more important or less?",
+          y: "pharmacist technology day in the life", i: ["help","puzzle"] },
+        { n: "Veterinarian", e: "🐾", t: "Patients who can't talk, but their data can",
+          s: "A dog comes in 'just not himself.' The owner's pet collar data shows his activity dropped 40% over two weeks and his sleep is restless. For a patient who can't describe symptoms, that data is a voice.",
+          c: "AI reads X-rays and pet wearables track health at home.",
+          h: "Gentle hands, hard conversations with owners, and reading an animal's behaviour.",
+          q: "Pets can't consent to being tracked. Does that matter?",
+          y: "veterinary technology AI diagnostics", i: ["help","nature"] },
+        { n: "Paramedic", e: "🚑", t: "Data starts saving the patient before arrival",
+          s: "En route, the ambulance streams the patient's ECG to the hospital, where an AI flags a likely heart attack. The cath lab team is scrubbed in and waiting when they roll through the doors. Minutes saved, muscle saved.",
+          c: "AI helps triage 911 calls and routes ambulances around traffic in real time.",
+          h: "Calm under chaos, and treatment decisions made in seconds on scene.",
+          q: "Should an AI help decide which 911 call gets the ambulance first?",
+          y: "paramedic technology emergency medicine", i: ["help"] }
+      ]},
+      creative: { emoji: "🎨", title: "Creative & Entertainment", careers: [
+        { n: "Game Designer", e: "🎮", t: "Player data shapes every level",
+          s: "The data shows 60% of players quit at level 7. Watching the heatmaps, she finds a jump that looks impossible (it isn't). One visual tweak later, players sail through and keep playing.",
+          c: "AI generates art, levels, and smarter characters, while analytics reveal how players really play.",
+          h: "Knowing what's FUN. No dataset has ever laughed at a good surprise.",
+          q: "Games use data to keep you playing longer. Where's the line between fun and manipulation?",
+          y: "game designer player analytics", i: ["tech","art","perform"] },
+        { n: "Musician / Producer", e: "🎵", t: "Streaming data meets studio creativity",
+          s: "Her streaming dashboard shows listeners drop off 45 seconds into her new single, right before the chorus. Next track, she rethinks the intro. The data doesn't write the song. It tells her how it lands.",
+          c: "AI can generate beats, master tracks, and predict what might trend.",
+          h: "The lived experience a song comes from. AI has never had a heartbreak.",
+          q: "If an AI writes a hit song, who's the artist? Is it still art?",
+          y: "music producer streaming analytics AI", i: ["art","perform"] },
+        { n: "Filmmaker / Video Creator", e: "🎬", t: "Every view, skip, and rewatch is a signal",
+          s: "His latest video's retention graph shows thousands of viewers rewatching one 10-second moment. That's the kind of moment his audience loves, so he builds his next video around it.",
+          c: "AI edits rough cuts, generates effects, and captions in every language.",
+          h: "Taste, storytelling, and having something worth saying.",
+          q: "Should creators chase what the data says people watch, or make what they believe in?",
+          y: "video creator youtube analytics AI editing", i: ["art","perform","tech"] },
+        { n: "Author / Writer", e: "✍️", t: "AI can draft, but readers want a human voice",
+          s: "Her publisher's dashboard shows readers most often quit at chapter two. She uses AI to brainstorm ten faster openings, throws out nine, and writes the tenth her own way. The tools moved fast, but the voice is hers.",
+          c: "AI drafts, edits, brainstorms, and can imitate almost any style.",
+          h: "A point of view. Readers show up for a human with something to say.",
+          q: "Should books written mostly by AI have to say so on the cover?",
+          y: "authors using AI writing debate", i: ["art","perform"] },
+        { n: "Graphic Designer", e: "🖌️", t: "AI drafts, the designer directs",
+          s: "The client needs 30 logo concepts by Friday. She uses AI to generate rough directions in an hour, then does what AI can't. She picks the two with real potential and crafts them into something the brand can own.",
+          c: "AI generates drafts, variations, and mockups in seconds.",
+          h: "Taste, brand judgment, and the idea behind the image.",
+          q: "If AI can generate images from a sentence, what should design students learn?",
+          y: "graphic designer using AI tools workflow", i: ["art"] }
+      ]},
+      food: { emoji: "🍳", title: "Food & Hospitality", careers: [
+        { n: "Chef / Restaurant Owner", e: "👨‍🍳", t: "The menu is a dataset",
+          s: "Sunday's data is in. The salmon special sold out by 7pm, the pasta barely moved, and food costs crept to 34%. He rebalances the menu, adjusts Saturday's order, and cuts waste before the kitchen even opens.",
+          c: "AI forecasts busy nights, optimizes orders, and cuts food waste.",
+          h: "Flavour, creativity, and the feel of a great night of service.",
+          q: "Would you trust an AI-designed recipe? What if it was delicious?",
+          y: "restaurant technology food waste data", i: ["food","business"] },
+        { n: "Hotel & Event Manager", e: "🏨", t: "Data predicts the crowd before it arrives",
+          s: "The concert downtown means a full house Friday. Her system saw it weeks ago in the booking data, so rates adjusted, extra staff got scheduled, and breakfast supplies doubled. Guests just see a hotel that runs smoothly.",
+          c: "AI sets prices dynamically and predicts demand from events and trends.",
+          h: "Hospitality itself. Making people feel welcome is human work.",
+          q: "Hotels charge more when data says demand is high. Fair or unfair?",
+          y: "hotel revenue management technology", i: ["business","help"] },
+        { n: "Farmer", e: "🚜", t: "Fields monitored by drones and satellites",
+          s: "Her drone maps the cornfield and the AI flags a stressed patch in the northwest corner, invisible from the road. Soil sensors confirm it's dry. She irrigates just that zone, saving water and the crop.",
+          c: "Drones, sensors, and AI target water and treatment to the square metre.",
+          h: "Weather calls, hard seasons, and knowing the land like family.",
+          q: "High-tech farming saves resources but costs a lot to start. Who gets left behind?",
+          y: "precision agriculture drone farming", i: ["nature","food","make"] },
+        { n: "Barista / Café Owner", e: "☕", t: "Small business, smart data",
+          s: "Her point-of-sale data shows a Tuesday 3pm slump every week. She tests a students-only afternoon deal, posts it once, and watches Tuesday sales climb 30%. Small data, real money.",
+          c: "AI predicts inventory needs and handles scheduling and bookkeeping.",
+          h: "The regulars' orders, the vibe, the community. That's the actual product.",
+          q: "What data does your favourite café probably collect about you?",
+          y: "small business coffee shop data", i: ["food","business"] }
+      ]},
+      sportsrec: { emoji: "🏋️", title: "Sports & Fitness Careers", careers: [
+        { n: "Professional Athlete", e: "🏅", t: "Your body becomes the dataset",
+          s: "After practice, she reviews her own dashboard: sprint speed, shot arc, sleep quality, recovery score. Her shooting dips when her sleep drops below 7 hours, so now sleep is part of training.",
+          c: "Every movement is tracked, and AI tailors training and predicts injury risk.",
+          h: "Competing, performing under pressure, and the will to keep going.",
+          q: "Teams can see athletes' sleep and recovery data. Should players be able to keep it private?",
+          y: "pro athlete training data technology", i: ["sport","perform"] },
+        { n: "Coach", e: "📋", t: "Gut instinct now comes with evidence",
+          s: "His assistant's laptop says the opposing team allows the most points off pick-and-rolls on the left side. He builds three plays around it. His gut still makes the final call, but now it's an informed gut.",
+          c: "AI scouts opponents and suggests strategy from thousands of past games.",
+          h: "Motivating teenagers, building a team culture, and halftime speeches.",
+          q: "Two coaches: one all instinct, one all analytics. Who wins and why?",
+          y: "basketball coach analytics strategy", i: ["sport","help"] },
+        { n: "Referee / Official", e: "🟨", t: "Working alongside instant-replay AI",
+          s: "The striker celebrates, but the semi-automated offside system, tracking 29 points on every player's body, says her shoulder was 3 cm past the line. He announces the call. The crowd boos the algorithm instead of him.",
+          c: "AI tracking makes line calls and reviews faster and more accurate.",
+          h: "Judgment calls on intent and fairness, and managing the game's emotions.",
+          q: "Should every call in sports be made by AI if it's more accurate? What would we lose?",
+          y: "VAR technology sports officiating", i: ["sport"] },
+        { n: "Personal Trainer", e: "💪", t: "Coaching with every client's fitness data",
+          s: "Her client's smartwatch data tells the real story. Crushed workouts, but 5 hours of sleep and a stressful week. The plan changes, and this month is about recovery, not more reps.",
+          c: "Fitness apps and AI generate workout plans from anyone's data.",
+          h: "Accountability and motivation. An app can't notice you're having a rough week.",
+          q: "AI workout apps cost $10/month and trainers cost $80/hour. What is the human worth?",
+          y: "personal trainer fitness technology", i: ["sport","help","business"] }
+      ]},
+      transport: { emoji: "🚛", title: "Transportation & Travel", careers: [
+        { n: "Commercial Pilot", e: "✈️", t: "Flying a plane full of data",
+          s: "Before takeoff, the flight computer has already crunched weather, winds, and weight to suggest the smoothest, most fuel-efficient route. He reviews it, adjusts around a storm cell he doesn't like, and files the plan.",
+          c: "Autopilot and AI handle routing, monitoring, and most of the cruising.",
+          h: "The takeoff, the landing, and thousand-hour judgment when something unexpected happens.",
+          q: "Planes can nearly fly themselves. Would you board a flight with no pilot on board?",
+          y: "airline pilot cockpit technology", i: ["tech","puzzle"] },
+        { n: "Truck Driver", e: "🚛", t: "The rig tracks everything, and so does the route AI",
+          s: "His truck's telematics track fuel, braking, and hours behind the wheel. The routing AI slots him around a traffic jam and books his mandatory rest stop at a lot with open parking. Fewer surprises, better miles.",
+          c: "AI plans routes and monitors driving, and self-driving trucks are in testing.",
+          h: "City streets, loading docks, bad weather, and problem-solving alone on the road.",
+          q: "Self-driving trucks could replace millions of jobs. What do we owe the drivers?",
+          y: "trucking technology self driving debate", i: ["make","business"] },
+        { n: "Delivery Driver / Courier", e: "📦", t: "When your dispatcher is an algorithm",
+          s: "Her app assigns the route, times every stop, and reshuffles the order when a customer changes their delivery window. On a good day the algorithm feels like a teammate. On a bad day it feels like a boss that never blinks.",
+          c: "Algorithms assign routes, set pay, and rate performance automatically.",
+          h: "The doorstep judgment calls: the locked gate, the dog, the neighbour who can sign.",
+          q: "When your boss is an algorithm, who do you argue with about an unfair decision?",
+          y: "delivery driver gig economy algorithm", i: ["business"] }
+      ]},
+      community: { emoji: "⚖️", title: "Community, Law & Safety", careers: [
+        { n: "Firefighter", e: "🚒", t: "Data arrives before the truck does",
+          s: "En route to a warehouse fire, the tablet shows the building's floor plan, hazardous materials on file, and a wind-driven spread prediction. They know where NOT to send crews before they even arrive.",
+          c: "AI predicts wildfire spread and maps building risks in advance.",
+          h: "Courage and split-second decisions in smoke no sensor can see through.",
+          q: "If AI predicts which neighbourhoods are at high fire risk, what should the city do with that?",
+          y: "firefighting technology wildfire prediction", i: ["help"] },
+        { n: "Police Officer", e: "🚓", t: "Powerful data tools, and hard questions",
+          s: "A string of break-ins across the district. The analysis maps them by time and location and finds a pattern pointing to next Thursday, two blocks east. Extra patrols wait there, and the pattern holds.",
+          c: "AI analyzes crime patterns, footage, and evidence at massive speed.",
+          h: "De-escalation, discretion, and community trust. No algorithm patrols a street fairly.",
+          q: "Predictive policing can reduce crime but can also unfairly target neighbourhoods. Should it be used?",
+          y: "police data analysis debate", i: ["help"] },
+        { n: "Lawyer", e: "⚖️", t: "AI reads the documents and humans argue the case",
+          s: "The case involves 80,000 emails. AI review software surfaces the 200 that matter in a single day, work that once took junior lawyers months. She spends her time where it counts: building the argument.",
+          c: "AI drafts contracts, searches case law, and reviews documents in hours.",
+          h: "Persuasion, ethics, and standing up in court for a client.",
+          q: "AI could make legal help affordable for everyone. What could go wrong?",
+          y: "legal technology AI law firm", i: ["puzzle","business","help"] },
+        { n: "Teacher", e: "🍎", t: "AI handles the paperwork and humans do the teaching",
+          s: "Sunday night, she uses AI to draft three versions of Tuesday's lesson: one standard, one advanced, one with extra support. The dashboard shows exactly which students are stuck on fractions, so on Monday she knows who needs her most.",
+          c: "AI drafts lessons, gives instant feedback, and tracks who's falling behind.",
+          h: "Inspiration, patience, and believing in a kid before they believe in themselves.",
+          q: "What has a great teacher done for you that an AI never could?",
+          y: "teachers using AI classroom", i: ["help","perform"] }
+      ]}
+    }
+  },
+  uses: {
+    title: "How People Use Data and AI Across Careers",
+    sub: "The everyday ways professionals in almost any field put data and AI to work.",
+    color: "blue",
+    categories: {
+      analyzing: { emoji: "🧠", title: "Analyzing and Making Sense of Information",
+        items: [
+          "Collecting, cleaning, and organizing large sets of information (sales data, sensor data, survey results)",
+          "Using AI to detect patterns or trends that humans might miss",
+          "Running simulations or models to predict outcomes (e.g., demand forecasting, game results, patient recovery rates)",
+          "Comparing multiple data sources to verify accuracy or find insights",
+          "Using AI to transcribe and pull key points from interviews, calls, and open-ended survey answers",
+          "Summarizing complex data into short reports or dashboards"
+        ],
+        talk: "Think about your own week. What's one pattern in your life that data could reveal, and would you want to know it?" },
+      visualizing: { emoji: "📊", title: "Visualizing and Communicating Data",
+        items: [
+          "Turning raw data into charts, infographics, or interactive dashboards",
+          "Using AI tools to automatically generate visual summaries or presentations",
+          "Creating short videos or narratives that 'tell the story' behind the numbers",
+          "Building live dashboards that update in real time as new data arrives",
+          "Adjusting visuals for different audiences (e.g., executives, customers, students)"
+        ],
+        talk: "Can a chart mislead you without using any fake numbers? How would you spot it?" },
+      automating: { emoji: "⚙️", title: "Automating and Streamlining Work",
+        items: [
+          "Using AI assistants to summarize meetings, draft emails, or create documentation",
+          "Automating repetitive tasks like scheduling, tracking, or sorting data",
+          "Setting up alerts that notify when data changes or when certain conditions are met",
+          "Using AI agents that complete multi-step tasks like research, ordering, or booking",
+          "Building chatbots or recommendation systems that learn from user data"
+        ],
+        talk: "Which of your weekly chores or school tasks would you automate first, and what could go wrong if you did?" },
+      deciding: { emoji: "💬", title: "Making Better Decisions",
+        items: [
+          "Using predictive analytics to guide decisions (e.g., when to rest an athlete, order supplies, or launch a product)",
+          "Asking AI 'what-if' questions to test possible scenarios",
+          "Balancing data-driven insights with human judgment and ethics",
+          "Running A/B tests to compare strategies or marketing campaigns"
+        ],
+        talk: "When should a human overrule the data? Come up with one example where following the numbers would be the wrong call." },
+      personalizing: { emoji: "🧍‍♂️", title: "Personalizing Experiences",
+        items: [
+          "Using data to tailor learning plans, customer recommendations, or medical treatments",
+          "Applying AI to suggest products, playlists, or reading materials based on past behavior",
+          "Adjusting systems to match user preferences (accessibility settings, adaptive learning platforms)"
+        ],
+        talk: "Is it cool or creepy when an app knows exactly what you want next? Where's your personal line?" },
+      solving: { emoji: "🌍", title: "Solving Real-World Problems",
+        items: [
+          "Tracking environmental data to reduce waste or carbon emissions",
+          "Using AI to analyze public data and improve city planning or safety",
+          "Studying social media data to understand public sentiment",
+          "Analyzing performance data to increase fairness in sports or hiring"
+        ],
+        talk: "Pick one problem in your community. What data would you need to start solving it, and how would you get it?" },
+      learning: { emoji: "🧑‍🏫", title: "Learning and Creating",
+        items: [
+          "Using AI to brainstorm ideas, generate outlines, or summarize readings",
+          "Learning new skills faster by having AI tutors or assistants",
+          "Practicing interviews, presentations, or new languages with an AI partner",
+          "Testing hypotheses or projects with virtual simulations before real-world trials",
+          "Collaborating with AI to co-create art, music, stories, or code"
+        ],
+        talk: "If AI can write the essay, what's the point of learning to write? Trick question, or is it?" },
+      responsible: { emoji: "🛡️", title: "Using AI Responsibly",
+        items: [
+          "Fact-checking AI outputs before relying on them, since AI can produce confident but wrong answers",
+          "Protecting private, personal, and customer information when using AI tools",
+          "Watching for bias in AI recommendations and asking who might be unfairly affected",
+          "Being transparent about when and how AI was used in your work",
+          "Knowing when a task calls for human judgment instead of automation"
+        ],
+        talk: "You catch an AI tool inventing a fake fact in a report at work. If the report goes out anyway, whose fault is it, and what should you have done?" }
+    }
+  }
+};
+
+// ---------- FLAT INDEX (for Surprise Me + interest matching) ----------
+const ALL_CAREERS = [];
+["dataCareers", "everyday"].forEach(branch => {
+  Object.entries(content[branch].categories).forEach(([catKey, cat]) => {
+    cat.careers.forEach((c, idx) => {
+      ALL_CAREERS.push({ branch, catKey, idx, career: c, catTitle: cat.title });
+    });
+  });
+});
+
+const esc = s => s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+const ytLink = q => "https://www.youtube.com/results?search_query=" + encodeURIComponent(q);
+
+// ---------- RENDER HELPERS ----------
+function renderCareerCard(entry) {
+  const c = entry.career;
+  const coral = entry.branch === "everyday" ? " coral" : "";
+  return `
+    <div class="career-card${coral}">
+      <button class="career-toggle" onclick="toggleCareer(this)" aria-expanded="false">
+        <span class="c-emoji">${c.e}</span>
+        <span><span class="c-name">${esc(c.n)}</span><br><span class="c-tag">${esc(c.t)}</span></span>
+        <span class="c-arrow">▸</span>
+      </button>
+      <div class="career-body">
+        <div class="glimpse"><span class="g-label">👀 A day with data</span>${esc(c.s)}</div>
+        <div class="ai-split">
+          <div class="ai-box ai-changes"><span class="g-label">🤖 What AI changes</span>${esc(c.c)}</div>
+          <div class="ai-box ai-human"><span class="g-label">🧑 What stays human</span>${esc(c.h)}</div>
         </div>
+        <div class="talk-box"><span class="g-label">💬 Talk about it</span>${esc(c.q)}</div>
+        <a class="watch-link" href="${ytLink(c.y)}" target="_blank" rel="noopener">▶ See it in action (video search)</a>
+      </div>
+    </div>`;
+}
+
+function toggleCareer(btn) {
+  const card = btn.closest(".career-card");
+  const open = card.classList.toggle("open");
+  btn.setAttribute("aria-expanded", open ? "true" : "false");
+}
+
+function setActive(branch) {
+  ["dataCareers", "everyday", "uses"].forEach(b =>
+    document.getElementById(b + "-btn").classList.toggle("active", b === branch));
+}
+
+// ---------- VIEWS ----------
+function showWelcome() {
+  setActive(null);
+  let chips = Object.entries(INTERESTS).map(([key, it]) =>
+    `<button class="chip" onclick="showInterest('${key}')">${it.emoji} ${it.label}</button>`).join("");
+  document.getElementById("center-display").innerHTML = `
+    <div class="welcome-message">
+      <h2>Where will data & AI show up in YOUR future?</h2>
+      <p class="lede">Whether you're headed for a lab, a kitchen, a stage, a job site, or a courtroom,
+      data and AI are already part of the job. Explore the branches above, or start with what you love:</p>
+      <div class="interest-block">
+        <h3>🎯 What are you into?</h3>
+        <p>Tap an interest to see careers that match it.</p>
+        <div class="chip-row">${chips}</div>
+      </div>
+    </div>`;
+}
+
+function showBranch(branch) {
+  setActive(branch);
+  const data = content[branch];
+  const coral = data.color === "coral";
+  let html = `<div class="detail-view">
+    <h2 class="section-title${coral ? " coral" : ""}">${data.title}</h2>
+    <p class="section-sub">${data.sub}</p>
+    <div class="category-grid">`;
+  for (const [key, cat] of Object.entries(data.categories)) {
+    html += `<button class="category-card${coral ? " coral" : ""}" onclick="showCategory('${branch}','${key}')">
+      <h3><span class="emoji">${cat.emoji}</span><span>${cat.title}</span></h3></button>`;
+  }
+  html += `</div></div>`;
+  document.getElementById("center-display").innerHTML = html;
+}
+
+function showCategory(branch, catKey) {
+  const data = content[branch];
+  const cat = data.categories[catKey];
+  const coral = data.color === "coral" ? " coral" : "";
+  let html = `<div class="detail-view">
+    <div class="detail-header${coral}">
+      <span class="emoji">${cat.emoji}</span>
+      <h2>${cat.title}</h2>
+      <button class="back-btn" onclick="showBranch('${branch}')">← Back</button>
+    </div>`;
+
+  if (branch === "uses") {
+    html += `<ul class="detail-list">` +
+      cat.items.map(i => `<li class="detail-item">${i}</li>`).join("") + `</ul>`;
+    html += `<div class="cat-talk"><span class="g-label">💬 Talk about it</span>${cat.talk}</div>`;
+  } else {
+    html += `<p class="section-sub" style="text-align:left; margin-bottom:14px;">Tap a career to peek inside it. 👇</p>`;
+    html += `<div class="detail-list">` +
+      cat.careers.map((c, idx) => renderCareerCard({ branch, catKey, idx, career: c })).join("") + `</div>`;
+  }
+  html += `</div>`;
+  document.getElementById("center-display").innerHTML = html;
+}
+
+function showInterest(tag) {
+  setActive(null);
+  const it = INTERESTS[tag];
+  const matches = ALL_CAREERS.filter(e => e.career.i.includes(tag));
+  let html = `<div class="detail-view">
+    <div class="detail-header">
+      <span class="emoji">${it.emoji}</span>
+      <h2>Careers for people into ${it.label.toLowerCase()}</h2>
+      <button class="back-btn" onclick="showWelcome()">← Home</button>
     </div>
+    <p class="section-sub" style="text-align:left; margin-bottom:14px;">
+      ${matches.length} careers match this interest, and every one of them uses data or AI. Tap to explore. 👇</p>
+    <div class="detail-list">` +
+    matches.map(renderCareerCard).join("") + `</div></div>`;
+  document.getElementById("center-display").innerHTML = html;
+}
 
-    <script>
-        const content = {
-            careers: {
-                title: "Careers Where Data Science Plays a Part",
-                categories: {
-                    sports: {
-                        emoji: "🏀",
-                        title: "Sports & Performance",
-                        items: [
-                            "Sports Analyst / Data Scientist – Evaluates players, predicts outcomes, improves strategy",
-                            "Performance Coach – Tracks speed, accuracy, reaction time data",
-                            "Recruiting Analyst / Scout – Analyzes player stats to identify talent",
-                            "Sports Equipment Engineer – Uses sensor data to design better gear"
-                        ]
-                    },
-                    tech: {
-                        emoji: "💻",
-                        title: "Technology & AI",
-                        items: [
-                            "AI Developer / ML Engineer – Designs algorithms that learn from data",
-                            "Data Engineer – Builds systems to collect and organize data",
-                            "Data Visualization Specialist – Creates dashboards and interactive visuals",
-                            "Ethical AI Researcher – Studies fairness, bias, and societal impact"
-                        ]
-                    },
-                    business: {
-                        emoji: "🌍",
-                        title: "Business & Industry",
-                        items: [
-                            "Marketing Analyst – Uses customer data to understand buying behavior",
-                            "Financial Analyst – Predicts trends and guides investments",
-                            "Operations Manager – Optimizes workflows and reduces costs",
-                            "Entrepreneur / Startup Founder – Tests ideas and reaches audiences with data"
-                        ]
-                    },
-                    health: {
-                        emoji: "🏥",
-                        title: "Health & Science",
-                        items: [
-                            "Biomedical Data Scientist – Analyzes patient data to improve treatments",
-                            "Public Health Analyst – Tracks disease outbreaks and guides policy",
-                            "Environmental Data Scientist – Studies climate change using sensor data"
-                        ]
-                    },
-                    education: {
-                        emoji: "🧑‍🏫",
-                        title: "Education & Social Impact",
-                        items: [
-                            "Learning Analyst – Uses classroom data to personalize instruction",
-                            "Policy Analyst – Evaluates community data for better decisions",
-                            "Digital Ethicist / Researcher – Ensures AI is used responsibly"
-                        ]
-                    }
-                }
-            },
-            uses: {
-                title: "How People Use Data and AI Across Careers",
-                categories: {
-                    analyzing: {
-                        emoji: "🧠",
-                        title: "Analyzing and Making Sense of Information",
-                        items: [
-                            "Collecting, cleaning, and organizing large sets of information (sales data, sensor data, survey results)",
-                            "Using AI to detect patterns or trends that humans might miss",
-                            "Running simulations or models to predict outcomes (e.g., demand forecasting, game results, patient recovery rates)",
-                            "Comparing multiple data sources to verify accuracy or find insights",
-                            "Summarizing complex data into short reports or dashboards"
-                        ]
-                    },
-                    visualizing: {
-                        emoji: "📊",
-                        title: "Visualizing and Communicating Data",
-                        items: [
-                            "Turning raw data into charts, infographics, or interactive dashboards",
-                            "Using AI tools to automatically generate visual summaries or presentations",
-                            "Creating short videos or narratives that 'tell the story' behind the numbers",
-                            "Adjusting visuals for different audiences (e.g., executives, customers, students)"
-                        ]
-                    },
-                    automating: {
-                        emoji: "⚙️",
-                        title: "Automating and Streamlining Work",
-                        items: [
-                            "Using AI assistants to summarize meetings, draft emails, or create documentation",
-                            "Automating repetitive tasks like scheduling, tracking, or sorting data",
-                            "Setting up alerts that notify when data changes or when certain conditions are met",
-                            "Building chatbots or recommendation systems that learn from user data"
-                        ]
-                    },
-                    deciding: {
-                        emoji: "💬",
-                        title: "Making Better Decisions",
-                        items: [
-                            "Using predictive analytics to guide decisions (e.g., when to rest an athlete, order supplies, or launch a product)",
-                            "Asking AI 'what-if' questions to test possible scenarios",
-                            "Balancing data-driven insights with human judgment and ethics",
-                            "Running A/B tests to compare strategies or marketing campaigns"
-                        ]
-                    },
-                    personalizing: {
-                        emoji: "🧍‍♂️",
-                        title: "Personalizing Experiences",
-                        items: [
-                            "Using data to tailor learning plans, customer recommendations, or medical treatments",
-                            "Applying AI to suggest products, playlists, or reading materials based on past behavior",
-                            "Adjusting systems to match user preferences (accessibility settings, adaptive learning platforms)"
-                        ]
-                    },
-                    solving: {
-                        emoji: "🌍",
-                        title: "Solving Real-World Problems",
-                        items: [
-                            "Tracking environmental data to reduce waste or carbon emissions",
-                            "Using AI to analyze public data and improve city planning or safety",
-                            "Studying social media data to understand public sentiment",
-                            "Analyzing performance data to increase fairness in sports or hiring"
-                        ]
-                    },
-                    learning: {
-                        emoji: "🧑‍🏫",
-                        title: "Learning and Creating",
-                        items: [
-                            "Using AI to brainstorm ideas, generate outlines, or summarize readings",
-                            "Learning new skills faster by having AI tutors or assistants",
-                            "Testing hypotheses or projects with virtual simulations before real-world trials",
-                            "Collaborating with AI to co-create art, music, stories, or code"
-                        ]
-                    }
-                }
-            }
-        };
+let lastSurprise = -1;
+function surpriseMe() {
+  setActive(null);
+  let pick;
+  do { pick = Math.floor(Math.random() * ALL_CAREERS.length); } while (pick === lastSurprise && ALL_CAREERS.length > 1);
+  lastSurprise = pick;
+  const entry = ALL_CAREERS[pick];
+  let html = `<div class="detail-view">
+    <div class="detail-header">
+      <span class="emoji">🎲</span>
+      <h2>Random career: how would data show up here?</h2>
+      <button class="back-btn" onclick="showWelcome()">← Home</button>
+    </div>
+    <p class="section-sub" style="text-align:left; margin-bottom:14px;">
+      💡 <strong>Try this first:</strong> before opening the card, guess how data or AI might be part of this job. Then check!</p>
+    <div class="detail-list">${renderCareerCard(entry)}</div>
+    <p style="text-align:center; margin-top:20px;">
+      <button class="back-btn" onclick="surpriseMe()" style="margin-left:0; background:#E89B00;">🎲 Surprise me again</button>
+    </p></div>`;
+  document.getElementById("center-display").innerHTML = html;
+}
 
-        let currentBranch = null;
-        let currentCategory = null;
-
-        function showBranch(branch) {
-            currentBranch = branch;
-            currentCategory = null;
-
-            // Update button states
-            document.getElementById('careers-btn').classList.remove('active');
-            document.getElementById('uses-btn').classList.remove('active');
-            document.getElementById(branch + '-btn').classList.add('active');
-
-            // Display category grid
-            const display = document.getElementById('center-display');
-            const branchData = content[branch];
-            
-            let html = `<h2 class="section-title">${branchData.title}</h2>`;
-            html += '<div class="category-grid">';
-            
-            for (const [key, category] of Object.entries(branchData.categories)) {
-                html += `
-                    <div class="category-card" onclick="showCategory('${branch}', '${key}')">
-                        <h3>
-                            <span class="emoji">${category.emoji}</span>
-                            <span>${category.title}</span>
-                        </h3>
-                    </div>
-                `;
-            }
-            
-            html += '</div>';
-            display.innerHTML = html;
-        }
-
-        function showCategory(branch, categoryKey) {
-            currentCategory = categoryKey;
-            const category = content[branch].categories[categoryKey];
-            
-            const display = document.getElementById('center-display');
-            
-            let html = '<div class="detail-view">';
-            html += '<div class="detail-header">';
-            html += `<span class="emoji">${category.emoji}</span>`;
-            html += `<h2>${category.title}</h2>`;
-            html += '<button class="back-btn" onclick="showBranch(\'' + branch + '\')">← Back</button>';
-            html += '</div>';
-            
-            html += '<ul class="detail-list">';
-            category.items.forEach(item => {
-                html += `<li class="detail-item">${item}</li>`;
-            });
-            html += '</ul>';
-            html += '</div>';
-            
-            display.innerHTML = html;
-        }
-    </script>
+showWelcome();
+</script>
 </body>
 </html>
