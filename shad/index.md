@@ -27,3 +27,10 @@ These will open in Colab and require a Google account.
 * [Training Image Recognition](https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/training-image-recognition.ipynb)
 * [Sentiment Analysis](https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/sentiment-analysis.ipynb)
 * [Basketball Shots](https://colab.research.google.com/github/Data-Dunkers/lessons/blob/main/challenges/basketball-shots-introduction.ipynb)
+
+## Data and AI
+
+Links we may use during the Data and AI portion of our day
+
+* [Data and AI Activities](https://docs.google.com/document/d/1cVgwECTcj5uXPlr5fh9jdnNuq_T_Q39UEnok5kho564/edit?usp=sharing)
+* [Data and AI in Career Explorer](https://datadunkers.ca/students/DD-data-ai-mindmap.html)
