@@ -1,69 +1,270 @@
-
----
----
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Buffalo Public Schools : Student Technology Leaders | Data Dunkers</title>
 <style>
-body { background: #E9F2FB; }
-.markdown-body, main, article { background: #FFFFFF; }
-h1 { color: #0B3A66; text-align: center; border-bottom: 4px solid #0672CB; padding-bottom: 12px; }
-h2 { background: #0672CB; color: #FFFFFF; padding: 8px 14px; border-radius: 6px; border-bottom: none; }
-a { color: #0672CB; font-weight: 600; }
-a:hover { color: #0B3A66; }
-table th { background: #0B3A66; color: #FFFFFF; }
-table tr:nth-child(even) td { background: #E9F2FB; }
-table th, table td { padding: 8px 16px; text-align: center; }
-details summary { background: #0672CB; color: #FFFFFF; padding: 8px 14px; border-radius: 6px; font-size: 1.25em; font-weight: 600; cursor: pointer; }
-details[open] summary { border-radius: 6px 6px 0 0; }
-details { border: 1px solid #C9DFF3; border-radius: 6px; margin-bottom: 16px; }
-details > ul, details > p { padding: 4px 16px; }
-img[alt="Data Dunkers"] { display: block; margin: 0 auto; }
+  :root {
+    --dd-blue: #0672CB;
+    --dd-navy: #0B3A66;
+    --dd-light: #E9F2FB;
+    --dd-border: #C9DFF3;
+    --ink: #1B2733;
+    --white: #FFFFFF;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    background: var(--dd-light);
+    color: var(--ink);
+    line-height: 1.5;
+  }
+
+  .header {
+    background: var(--white);
+    border-bottom: 4px solid var(--dd-blue);
+    text-align: center;
+    padding: 16px 12px 0;
+  }
+
+  .header img {
+    max-width: 100%;
+    height: auto;
+  }
+
+  .event-title {
+    background: var(--dd-navy);
+    color: var(--white);
+    text-align: center;
+    padding: 14px 16px;
+    font-size: 1.35rem;
+    font-weight: 600;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 24px 16px 48px;
+  }
+
+  section {
+    background: var(--white);
+    border: 1px solid var(--dd-border);
+    border-radius: 8px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+
+  section h2 {
+    background: var(--dd-blue);
+    color: var(--white);
+    font-size: 1.1rem;
+    padding: 10px 16px;
+  }
+
+  .section-body {
+    padding: 14px 16px;
+  }
+
+  .section-body p {
+    margin-bottom: 10px;
+  }
+
+  ul {
+    list-style: none;
+  }
+
+  li {
+    margin-bottom: 8px;
+  }
+
+  li:last-child {
+    margin-bottom: 0;
+  }
+
+  a {
+    display: inline-block;
+    color: var(--dd-blue);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 0;
+  }
+
+  a:hover, a:focus {
+    text-decoration: underline;
+    color: var(--dd-navy);
+  }
+
+  a:focus-visible {
+    outline: 3px solid var(--dd-blue);
+    outline-offset: 2px;
+    border-radius: 3px;
+  }
+
+  .note {
+    color: #4A5A6A;
+    font-size: 0.95rem;
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    max-width: 320px;
+    margin: 4px auto;
+    text-align: center;
+    font-size: 1.15rem;
+  }
+
+  th, td {
+    border: 1px solid var(--dd-border);
+    padding: 10px 14px;
+  }
+
+  th {
+    background: var(--dd-navy);
+    color: var(--white);
+  }
+
+  tbody tr:nth-child(even) {
+    background: var(--dd-light);
+  }
+
+  details summary {
+    background: var(--dd-blue);
+    color: var(--white);
+    font-size: 1.1rem;
+    font-weight: 700;
+    padding: 10px 16px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  details summary::-webkit-details-marker {
+    display: none;
+  }
+
+  details summary::after {
+    content: "\25BC";
+    float: right;
+    font-size: 0.8rem;
+    transition: transform 0.15s ease;
+  }
+
+  details[open] summary::after {
+    transform: rotate(180deg);
+  }
+
+  details summary:hover {
+    background: var(--dd-navy);
+  }
+
+  details summary:focus-visible {
+    outline: 3px solid var(--dd-navy);
+    outline-offset: -3px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 16px;
+    color: #4A5A6A;
+    font-size: 0.9rem;
+  }
 </style>
+</head>
+<body>
 
-![Data Dunkers](https://datadunkers.ca/images/data-dunkers-smallheader.png)
+<header class="header">
+  <img src="https://datadunkers.ca/images/data-dunkers-smallheader.png" alt="Data Dunkers">
+</header>
 
-# Buffalo Public Schools : Student Technology Leaders
+<div class="event-title">Buffalo Public Schools : Student Technology Leaders</div>
 
-## Binary Baskets
+<main>
 
-| Feet | Points |
-|:----:|:------:|
-| 2    | 1      |
-| 4    | 2      |
-| 6    | 4      |
-| 8    | 8      |
-| 10   | 16     |
+  <section>
+    <h2>Binary Baskets</h2>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Feet</th>
+            <th scope="col">Points</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>2</td><td>1</td></tr>
+          <tr><td>4</td><td>2</td></tr>
+          <tr><td>6</td><td>4</td></tr>
+          <tr><td>8</td><td>8</td></tr>
+          <tr><td>10</td><td>16</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
 
-## Player Attributes
+  <section>
+    <h2>Player Attributes</h2>
+    <div class="section-body">
+      <ul>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSc9EgEEp97NdbN0oDJQPDMjxealbTdYR1yY33OFxBwv8L0Lug/viewform">Attributes Data Collection Form</a></li>
+        <li><a href="https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&amp;branch=main&amp;subPath=Data_Dunkers_Detailed_Form_Analysis_-_Buffalo_Public_Schools-_July_2026.ipynb&amp;depth=1">Attributes Data Collection Notebook</a></li>
+      </ul>
+    </div>
+  </section>
 
-- [Attributes Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLSc9EgEEp97NdbN0oDJQPDMjxealbTdYR1yY33OFxBwv8L0Lug/viewform)
-- [Attributes Data Collection Notebook](https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&branch=main&subPath=Data_Dunkers_Detailed_Form_Analysis_-_Buffalo_Public_Schools-_July_2026.ipynb&depth=1)
+  <section>
+    <h2>Five Shot Challenge</h2>
+    <div class="section-body">
+      <ul>
+        <li><a href="https://docs.google.com/forms/d/e/1FAIpQLSf3Y9zCJaKQO54XX4fj_LWoy8tx2pYKfwnYCZrdwqhrThZJzw/viewform">Five Shot Data Collection Form</a></li>
+        <li><a href="https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&amp;branch=main&amp;subPath=Data_Dunkers_Simple_Form_Analysis_-_Buffalo_Public_Schools-_Student_Technology_Leaders.ipynb&amp;depth=1">Five Shot Data Collection Notebook</a></li>
+      </ul>
+    </div>
+  </section>
 
-## Five Shot Challenge
+  <section>
+    <h2>Data Labyrinths</h2>
+    <div class="section-body">
+      <ul>
+        <li><a href="https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fbasketball%2Fbasketball.ipynb">Data Labyrinth - Python Coding</a> <span class="note">key = 'dunk'</span></li>
+        <li><a href="https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fadvanced-basketball%2Fadvanced-basketball.ipynb">Data Labyrinth - Machine Learning</a> <span class="note">key = 'learning'</span></li>
+      </ul>
+    </div>
+  </section>
 
-- [Five Shot Data Collection Form](https://docs.google.com/forms/d/e/1FAIpQLSf3Y9zCJaKQO54XX4fj_LWoy8tx2pYKfwnYCZrdwqhrThZJzw/viewform)
-- [Five Shot Data Collection Notebook](https://hub.callysto.ca/jupyter/hub/user-redirect/git-pull?repo=https%3A%2F%2Fgithub.com%2FData-Dunkers%2Fnotebooks&branch=main&subPath=Data_Dunkers_Simple_Form_Analysis_-_Buffalo_Public_Schools-_Student_Technology_Leaders.ipynb&depth=1)
+  <section>
+    <h2>Data and AI</h2>
+    <div class="section-body">
+      <p class="note">Links we may use during the Data and AI portion of our day</p>
+      <ul>
+        <li><a href="https://docs.google.com/document/d/1cVgwECTcj5uXPlr5fh9jdnNuq_T_Q39UEnok5kho564/edit?usp=sharing">Data and AI Activities</a></li>
+        <li><a href="https://datadunkers.ca/students/DD-data-ai-mindmap.html">Data and AI in Career Explorer</a></li>
+      </ul>
+    </div>
+  </section>
 
-## Data Labyrinths
+  <section>
+    <details>
+    <summary>Additional Challenges</summary>
+    <div class="section-body">
+      <p class="note">The notebooks below open in Colab and require a Google account.</p>
+      <ul>
+        <li><a href="https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/predicting-positions.ipynb">Predicting Player Position</a></li>
+        <li><a href="https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/training-image-recognition.ipynb">Training Image Recognition</a></li>
+        <li><a href="https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/sentiment-analysis.ipynb">Sentiment Analysis</a></li>
+        <li><a href="https://colab.research.google.com/github/Data-Dunkers/lessons/blob/main/challenges/basketball-shots-introduction.ipynb">Basketball Shots</a></li>
+        <li><a href="https://datadunkers.ca/student/">Student DataDunkers Course</a></li>
+      </ul>
+    </div>
+    </details>
+  </section>
 
-- [Data Labyrinth - Python Coding](https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fbasketball%2Fbasketball.ipynb): key = 'dunk'
-- [Data Labyrinth - Machine Learning](https://datadunkers.ca/jupyterlite/notebooks/?path=data-labyrith%2Fadvanced-basketball%2Fadvanced-basketball.ipynb): key = 'learning'
+</main>
 
-## Data and AI
+<footer>Data Dunkers | datadunkers.ca</footer>
 
-Links we may use during the Data and AI portion of our day
-
-- [Data and AI Activities](https://docs.google.com/document/d/1cVgwECTcj5uXPlr5fh9jdnNuq_T_Q39UEnok5kho564/edit?usp=sharing)
-- [Data and AI in Career Explorer](https://datadunkers.ca/students/DD-data-ai-mindmap.html)
-
-<details>
-<summary>Additional Challenges</summary>
-
-The notebooks below open in Colab and require a Google account.
-
-- [Predicting Player Position](https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/predicting-positions.ipynb)
-- [Training Image Recognition](https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/training-image-recognition.ipynb)
-- [Sentiment Analysis](https://colab.research.google.com/github/Data-Dunkers/student/blob/main/activities/sentiment-analysis.ipynb)
-- [Basketball Shots](https://colab.research.google.com/github/Data-Dunkers/lessons/blob/main/challenges/basketball-shots-introduction.ipynb)
-- [Student DataDunkers Course](https://datadunkers.ca/student/)
-
-</details>
+</body>
+</html>
