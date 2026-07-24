@@ -1,1 +1,803 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Dunkers Mini-Projects</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700;800&family=Barlow:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #1F2A44;
+    --navy-deep: #16203a;
+    --orange: #E87722;
+    --orange-dark: #c95f10;
+    --orange-tint: #FDEBDC;
+    --navy-tint: #E9EDF5;
+    --line: #d9dde6;
+    --ink: #2B2B2B;
+    --paper: #FCFBF9;
+    --mono-bg: #F5F4EF;
+    --ok: #2e7d46;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Barlow', sans-serif;
+    color: var(--ink);
+    background: var(--paper);
+    line-height: 1.55;
+    font-size: 16.5px;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { transition: none !important; animation: none !important; }
+  }
 
+  /* ---------- header + nav ---------- */
+  header {
+    background: var(--navy);
+    color: #fff;
+    border-bottom: 4px solid var(--orange);
+  }
+  .head-inner {
+    max-width: 960px; margin: 0 auto;
+    padding: 26px 20px 18px;
+  }
+  .head-inner h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800;
+    font-size: clamp(1.9rem, 4.5vw, 2.7rem);
+    letter-spacing: .03em;
+    text-transform: uppercase;
+    line-height: 1.05;
+  }
+  .head-inner h1 .dd { color: var(--orange); }
+  .head-inner p { color: #cfd6e4; margin-top: 4px; font-size: .98rem; }
+
+  nav {
+    position: sticky; top: 0; z-index: 50;
+    background: var(--navy-deep);
+    border-bottom: 1px solid rgba(255,255,255,.12);
+  }
+  .nav-inner {
+    max-width: 960px; margin: 0 auto;
+    display: flex; gap: 2px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 0 12px;
+  }
+  .nav-inner::-webkit-scrollbar { display: none; }
+  .tab {
+    appearance: none; border: none; background: none; cursor: pointer;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.02rem;
+    letter-spacing: .04em; text-transform: uppercase;
+    color: #aeb8cc;
+    padding: 13px 14px 10px;
+    border-bottom: 3px solid transparent;
+    white-space: nowrap;
+    transition: color .15s, border-color .15s;
+  }
+  .tab:hover { color: #fff; }
+  .tab:focus-visible { outline: 2px solid var(--orange); outline-offset: -2px; }
+  .tab.active { color: #fff; border-bottom-color: var(--orange); }
+  .tab .badge {
+    display: inline-block;
+    background: var(--orange); color: #fff;
+    font-size: .78rem; line-height: 1;
+    padding: 3px 6px; border-radius: 3px;
+    margin-right: 6px; transform: translateY(-1px);
+  }
+  .tab.active .badge { background: #fff; color: var(--navy); }
+
+  /* ---------- layout ---------- */
+  main { max-width: 960px; margin: 0 auto; padding: 30px 20px 70px; }
+  section.view { display: none; }
+  section.view.active { display: block; animation: fadein .25s ease; }
+  @keyframes fadein { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+
+  /* ---------- card banner ---------- */
+  .banner {
+    background: var(--navy); color: #fff;
+    border-left: 6px solid var(--orange);
+    padding: 20px 24px;
+    border-radius: 6px;
+    margin-bottom: 22px;
+  }
+  .banner .kicker {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .12em;
+    color: var(--orange); font-size: .95rem;
+  }
+  .banner h2 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; text-transform: uppercase; letter-spacing: .02em;
+    font-size: clamp(1.5rem, 3.5vw, 2.1rem);
+    margin: 2px 0 6px;
+  }
+  .banner .scenario { color: #dbe1ee; font-style: italic; font-size: 1.02rem; }
+
+  .dataset {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--navy-tint);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 6px 16px 6px 12px;
+    font-size: .95rem;
+    margin-bottom: 22px;
+  }
+  .dataset .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--orange); flex: none; }
+  .dataset b { color: var(--navy); }
+
+  h3 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    color: var(--navy);
+    font-size: 1.25rem;
+    margin: 26px 0 10px;
+  }
+  section.view > p, .callout p { margin-bottom: 10px; }
+
+  /* ---------- checklist steps ---------- */
+  .progress {
+    display: flex; align-items: center; justify-content: space-between;
+    margin: 4px 0 12px;
+  }
+  .progress .count {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.3rem; color: var(--navy);
+    background: #fff; border: 2px solid var(--navy);
+    border-radius: 5px; padding: 2px 12px;
+    min-width: 74px; text-align: center;
+  }
+  .progress .count .done-num { color: var(--orange); }
+  .progress .bar { flex: 1; height: 8px; background: var(--navy-tint); border-radius: 999px; margin-left: 14px; overflow: hidden; }
+  .progress .bar span { display: block; height: 100%; width: 0; background: var(--orange); border-radius: 999px; transition: width .25s ease; }
+
+  ol.steps { list-style: none; counter-reset: step; }
+  ol.steps li { counter-increment: step; margin-bottom: 8px; }
+  ol.steps label {
+    display: grid;
+    grid-template-columns: 30px 24px 1fr;
+    gap: 10px;
+    align-items: start;
+    background: #fff;
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color .15s, background .15s;
+  }
+  ol.steps label:hover { border-color: var(--orange); }
+  ol.steps label::before {
+    content: counter(step);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1.15rem;
+    color: var(--orange);
+    line-height: 1.35;
+  }
+  ol.steps input[type="checkbox"] {
+    appearance: none;
+    width: 21px; height: 21px; margin-top: 2px;
+    border: 2px solid var(--navy);
+    border-radius: 4px;
+    cursor: pointer;
+    position: relative;
+    flex: none;
+    background: #fff;
+    transition: background .15s, border-color .15s;
+  }
+  ol.steps input[type="checkbox"]:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  ol.steps input[type="checkbox"]:checked { background: var(--ok); border-color: var(--ok); }
+  ol.steps input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute; left: 5px; top: 1px;
+    width: 6px; height: 11px;
+    border: solid #fff; border-width: 0 3px 3px 0;
+    transform: rotate(42deg);
+  }
+  ol.steps li.checked label { background: #f2f8f3; border-color: #cfe3d4; }
+  ol.steps li.checked .step-text { color: #5c6b60; }
+  .step-text em { color: var(--navy); font-weight: 500; }
+
+  /* ---------- callouts ---------- */
+  .callout {
+    border-left: 5px solid var(--navy);
+    background: var(--navy-tint);
+    border-radius: 0 6px 6px 0;
+    padding: 14px 18px;
+    margin: 20px 0;
+  }
+  .callout.orange { border-left-color: var(--orange); background: var(--orange-tint); }
+  .callout .ctitle {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    font-size: .98rem;
+    color: var(--navy); margin-bottom: 6px;
+  }
+  .callout.orange .ctitle { color: var(--orange-dark); }
+  .callout ul { list-style: none; margin-top: 4px; }
+  .callout ul li { padding-left: 18px; position: relative; margin-bottom: 5px; }
+  .callout ul li::before { content: "\25AA"; color: var(--orange); position: absolute; left: 2px; }
+  .callout p:last-child, .callout ul:last-child { margin-bottom: 0; }
+
+  /* ---------- prompt boxes ---------- */
+  .prompt {
+    background: var(--mono-bg);
+    border: 1.5px solid var(--navy);
+    border-radius: 6px;
+    padding: 14px 16px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: .86rem;
+    line-height: 1.6;
+    margin: 14px 0;
+    position: relative;
+    white-space: pre-wrap;
+  }
+  .copy-btn {
+    position: absolute; top: 8px; right: 8px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .05em;
+    font-size: .85rem;
+    background: var(--navy); color: #fff;
+    border: none; border-radius: 4px;
+    padding: 5px 12px; cursor: pointer;
+    transition: background .15s;
+  }
+  .copy-btn:hover { background: var(--orange); }
+  .copy-btn:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .copy-btn.copied { background: var(--ok); }
+
+  /* ---------- prompt builder ---------- */
+  .builder {
+    background: #fff;
+    border: 1.5px solid var(--navy);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: 16px 0 24px;
+  }
+  .builder-head {
+    background: var(--navy); color: #fff;
+    padding: 10px 18px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; text-transform: uppercase; letter-spacing: .08em;
+    font-size: 1.02rem;
+    display: flex; justify-content: space-between; align-items: center; gap: 10px;
+  }
+  .builder-head .hint { font-family: 'Barlow', sans-serif; font-weight: 400; text-transform: none; letter-spacing: 0; font-size: .85rem; color: #cfd6e4; }
+  .builder-body { padding: 16px 18px; }
+  .builder-row { margin-bottom: 12px; }
+  .builder-row label {
+    display: block;
+    font-weight: 600; color: var(--navy);
+    font-size: .92rem; margin-bottom: 4px;
+  }
+  .builder-row input {
+    width: 100%;
+    font-family: 'Barlow', sans-serif;
+    font-size: .98rem;
+    padding: 9px 12px;
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    background: var(--paper);
+  }
+  .builder-row input:focus { outline: 2px solid var(--orange); border-color: var(--orange); }
+  .builder-row .eg { font-size: .84rem; color: #777; margin-top: 3px; }
+
+  /* ---------- quickstart specifics ---------- */
+  .how-row { margin-bottom: 12px; }
+  .how-row b { color: var(--navy); }
+  .arrowpath {
+    display: inline-block;
+    background: var(--navy-tint);
+    border-radius: 4px;
+    padding: 1px 8px;
+    font-weight: 600; color: var(--navy);
+    font-size: .93rem;
+  }
+
+  /* ---------- scenario picker (card 4) ---------- */
+  .scenarios { display: grid; gap: 10px; margin: 12px 0 4px; }
+  .scenario-opt {
+    text-align: left;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-radius: 6px;
+    padding: 13px 16px;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    font-size: 1rem;
+    transition: border-color .15s, background .15s;
+  }
+  .scenario-opt:hover { border-color: var(--orange); }
+  .scenario-opt:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .scenario-opt.picked { border-color: var(--orange); background: var(--orange-tint); }
+  .scenario-opt .letter {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; color: var(--orange);
+    font-size: 1.15rem; margin-right: 8px;
+  }
+  .scenario-opt b { color: var(--navy); }
+
+  /* ---------- project picker grid on quick start ---------- */
+  .pick-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px; margin-top: 12px;
+  }
+  .pick-card {
+    text-align: left;
+    background: #fff;
+    border: 1.5px solid var(--line);
+    border-top: 4px solid var(--navy);
+    border-radius: 6px;
+    padding: 14px 16px;
+    cursor: pointer;
+    font-family: 'Barlow', sans-serif;
+    transition: transform .15s, border-color .15s, box-shadow .15s;
+  }
+  .pick-card:hover { border-color: var(--orange); border-top-color: var(--orange); transform: translateY(-2px); box-shadow: 0 4px 14px rgba(31,42,68,.10); }
+  .pick-card:focus-visible { outline: 2px solid var(--orange); outline-offset: 2px; }
+  .pick-card .num {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 800; font-size: 1rem; letter-spacing: .08em;
+    text-transform: uppercase; color: var(--orange);
+  }
+  .pick-card .name {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 700; font-size: 1.25rem; text-transform: uppercase;
+    color: var(--navy); line-height: 1.15; margin: 2px 0 6px;
+  }
+  .pick-card .desc { font-size: .9rem; color: #555; }
+
+  footer {
+    text-align: center;
+    color: #8a90a0;
+    font-size: .85rem;
+    padding: 18px;
+    border-top: 1px solid var(--line);
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="head-inner">
+    <h1><span class="dd">Data Dunkers</span> Mini-Projects</h1>
+    <p>Pick a project, follow the game plan, check the AI, make the call.</p>
+  </div>
+</header>
+
+<nav aria-label="Project navigation">
+  <div class="nav-inner">
+    <button class="tab active" data-view="start">Start Here</button>
+    <button class="tab" data-view="p1"><span class="badge">1</span>Build &amp; Balance</button>
+    <button class="tab" data-view="p2"><span class="badge">2</span>Missing Player</button>
+    <button class="tab" data-view="p3"><span class="badge">3</span>Pro Lineup</button>
+    <button class="tab" data-view="p4"><span class="badge">4</span>Coaching Call</button>
+    <button class="tab" data-view="p5"><span class="badge">&#9733;</span>Bonus</button>
+  </div>
+</nav>
+
+<main>
+
+<!-- ================= START HERE ================= -->
+<section class="view active" id="view-start">
+  <div class="banner">
+    <div class="kicker">Read this first</div>
+    <h2>Every project starts the same way</h2>
+    <div class="scenario">Get your data into a CSV, start a fresh chat, and tell the AI exactly what it is looking at.</div>
+  </div>
+
+  <h3>Step 1: Get your dataset as a CSV file</h3>
+  <p>MagicSchool can only read CSV files. Your data probably lives in Google Sheets or Excel, so download it first.</p>
+  <div class="how-row"><b>From Google Sheets:</b> <span class="arrowpath">File &rarr; Download &rarr; Comma Separated Values (.csv)</span> This downloads only the tab you have open, so click the correct tab first.</div>
+  <div class="how-row"><b>From Excel:</b> <span class="arrowpath">File &rarr; Save As &rarr; CSV UTF-8 (Comma delimited) (.csv)</span> This saves only the sheet you have open.</div>
+  <div class="how-row"><b>Check your file:</b> Open the CSV. Row 1 should be column names. Every row below it should be one student or one player. Delete any blank rows or notes at the bottom.</div>
+
+  <h3>Step 2: Start a fresh chat and upload</h3>
+  <ol class="steps" data-track="start">
+    <li><label><input type="checkbox"><span class="step-text">Open the MagicSchool student chatbot.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Start a NEW chat. Do not reuse an old one.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Use the attach or upload button and select your .csv file.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Wait until the chatbot confirms it received the file before typing.</span></label></li>
+  </ol>
+
+  <h3>Step 3: Build your first prompt</h3>
+  <p>The AI only knows what is in the file and what you tell it. Fill in the blanks, then copy your prompt.</p>
+
+  <div class="builder">
+    <div class="builder-head">Prompt Builder <span class="hint">fill in, then copy</span></div>
+    <div class="builder-body">
+      <div class="builder-row">
+        <label for="b-what">What is the data?</label>
+        <input id="b-what" type="text" placeholder="basketball shooting results from our class">
+        <div class="eg">Example: basketball shooting results from our class</div>
+      </div>
+      <div class="builder-row">
+        <label for="b-row">What is each row?</label>
+        <input id="b-row" type="text" placeholder="one student">
+        <div class="eg">Example: one student, or one pro player</div>
+      </div>
+      <div class="builder-row">
+        <label for="b-cols">Which columns will you use?</label>
+        <input id="b-cols" type="text" placeholder="ID, Shots Made, Attempts, Height">
+        <div class="eg">Copy the exact column names from row 1 of your file</div>
+      </div>
+      <div class="builder-row">
+        <label for="b-goal">What are you trying to decide?</label>
+        <input id="b-goal" type="text" placeholder="which students should be on which team">
+      </div>
+      <div class="prompt" id="built-prompt"><button class="copy-btn" data-copy="built-prompt">Copy</button><span id="built-text">I uploaded a CSV dataset about [what the data is].
+Each row is one [student / player].
+The important columns are: [column names].
+My goal is to [what you are trying to decide].
+Use only the data in the file. If something is not in the data, say so.</span></div>
+    </div>
+  </div>
+
+  <div class="callout orange">
+    <div class="ctitle">The Three Rules</div>
+    <p><b>1. Protect the data.</b> Only upload approved files. Anonymous IDs only, never names.</p>
+    <p><b>2. Ask a focused question.</b> One clear question at a time beats a vague one.</p>
+    <p><b>3. Check the result before using it.</b> AI math can be wrong. Recalculate at least one number yourself and find the rows it mentions in your real file.</p>
+  </div>
+
+  <div class="callout">
+    <div class="ctitle">If the chat gets confused</div>
+    <p>Long chats drift. If answers stop making sense, start a new chat, re-upload your CSV, and re-send your first prompt with what you know so far.</p>
+  </div>
+
+  <h3>Pick your project</h3>
+  <div class="pick-grid">
+    <button class="pick-card" data-view="p1">
+      <div class="num">Project 1</div>
+      <div class="name">Build, Balance, and Predict</div>
+      <div class="desc">Build fair teams from class data, then predict a winner.</div>
+    </button>
+    <button class="pick-card" data-view="p2">
+      <div class="num">Project 2</div>
+      <div class="name">Add the Missing Player</div>
+      <div class="desc">Find your team's weakness, then recruit a pro to fix it.</div>
+    </button>
+    <button class="pick-card" data-view="p3">
+      <div class="num">Project 3</div>
+      <div class="name">Build the Best Pro Lineup</div>
+      <div class="desc">Be the GM. Build a five-player lineup for one purpose.</div>
+    </button>
+    <button class="pick-card" data-view="p4">
+      <div class="num">Project 4</div>
+      <div class="name">Make the Coaching Call</div>
+      <div class="desc">The game is on the line. Use data to make one call.</div>
+    </button>
+    <button class="pick-card" data-view="p5">
+      <div class="num">Bonus</div>
+      <div class="name">Find the Story</div>
+      <div class="desc">Independent teams only. Find something real and say what to do about it.</div>
+    </button>
+  </div>
+</section>
+
+<!-- ================= PROJECT 1 ================= -->
+<section class="view" id="view-p1">
+  <div class="banner">
+    <div class="kicker">Project 1</div>
+    <h2>Build, Balance, and Predict</h2>
+    <div class="scenario">You are the league organizers. Build fair teams from today's class data, then predict a winner.</div>
+  </div>
+
+  <div class="dataset"><span class="dot"></span><span><b>Dataset:</b> Today's class data (the data you collected this morning)</span></div>
+
+  <div class="progress"><div class="count"><span class="done-num">0</span>/8</div><div class="bar"><span></span></div></div>
+  <ol class="steps" data-track="p1">
+    <li><label><input type="checkbox"><span class="step-text">Download the class data as a CSV and check it (see Start Here).</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">As a team, pick 2 or 3 columns that best show basketball performance. Write them down.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Start a new chat, upload the CSV, and send your first prompt describing the data.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Ask the AI to build the teams. Example prompt below.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Check the roster: does every student appear exactly once? No repeats, no one missing?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Pick one team and recalculate its average for one column with a calculator. Does it match what the AI said?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Ask for a prediction: which team would win a shooting contest, using only the data?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Decide as a group: is this way of building teams fair? What does the data NOT measure (effort, teamwork, improvement)?</span></label></li>
+  </ol>
+
+  <h3>Example prompts</h3>
+  <div class="prompt" id="pr-p1a"><button class="copy-btn" data-copy="pr-p1a">Copy</button>Using the columns [your columns], split the students into [number] balanced teams. Show each team's members and each team's average for each column.</div>
+  <div class="prompt" id="pr-p1b"><button class="copy-btn" data-copy="pr-p1b">Copy</button>If these teams played a shooting contest, which team would win? Explain using only the data.</div>
+
+  <div class="callout">
+    <div class="ctitle">Stretch: Run a Tournament</div>
+    <p>Ask the AI to set up a bracket with your teams and predict each matchup winner. For every prediction, make it point to the exact numbers it used, then find those numbers in your real file.</p>
+  </div>
+
+  <div class="callout orange">
+    <div class="ctitle">Prepare your 2-minute share-out</div>
+    <ul>
+      <li>The question you investigated.</li>
+      <li>The dataset you used.</li>
+      <li>The most important evidence.</li>
+      <li>Your final decision or recommendation.</li>
+      <li>One thing the AI said that you had to check, and what you found.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= PROJECT 2 ================= -->
+<section class="view" id="view-p2">
+  <div class="banner">
+    <div class="kicker">Project 2</div>
+    <h2>Add the Missing Player</h2>
+    <div class="scenario">You are the scouting department. Find your team's weakness, then recruit a pro to fix it.</div>
+  </div>
+
+  <div class="dataset"><span class="dot"></span><span><b>Datasets:</b> Today's class data (Phase 1) and the NBA or WNBA player CSV (Phase 2). You will only upload the pro file.</span></div>
+
+  <div class="callout orange">
+    <div class="ctitle">This project has two phases</div>
+    <p>MagicSchool reads one CSV per chat. So you find the weakness with your own eyes first, then describe it to the AI in words.</p>
+  </div>
+
+  <h3>Phase 1: Find the need (no AI yet)</h3>
+  <div class="progress"><div class="count"><span class="done-num">0</span>/4</div><div class="bar"><span></span></div></div>
+  <ol class="steps" data-track="p2a">
+    <li><label><input type="checkbox"><span class="step-text">Open today's class data or your Jupyter Notebook results.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Pick one team (yours, or one built earlier today).</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Find its weakest area. Which column has the lowest numbers compared to other teams?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Write one sentence: <em>"Our team is weakest at ______ because ______."</em></span></label></li>
+  </ol>
+
+  <h3>Phase 2: Recruit the pro</h3>
+  <div class="progress"><div class="count"><span class="done-num">0</span>/6</div><div class="bar"><span></span></div></div>
+  <ol class="steps" data-track="p2b">
+    <li><label><input type="checkbox"><span class="step-text">Download the NBA or WNBA player file as a CSV.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Start a new chat and upload ONLY the pro CSV.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Describe your need in words. Example prompt below.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Verify: find each recommended player's row in your real CSV. Are the stats the AI quoted actually there and correct?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Pick your one recruit as a team. Be ready to defend the choice with real numbers.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Discuss: is comparing a pro to your student team useful? What makes it unfair?</span></label></li>
+  </ol>
+
+  <h3>Example prompt</h3>
+  <div class="prompt" id="pr-p2a"><button class="copy-btn" data-copy="pr-p2a">Copy</button>I uploaded a CSV of pro players. Each row is one player. My student team is weak at [your weakness]. Recommend 3 players from this file who are strongest in that area. Show their exact stats from the file.</div>
+
+  <div class="callout orange">
+    <div class="ctitle">Prepare your 2-minute share-out</div>
+    <ul>
+      <li>The question you investigated.</li>
+      <li>The dataset you used.</li>
+      <li>The most important evidence.</li>
+      <li>Your final decision or recommendation.</li>
+      <li>One thing the AI said that you had to check, and what you found.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= PROJECT 3 ================= -->
+<section class="view" id="view-p3">
+  <div class="banner">
+    <div class="kicker">Project 3</div>
+    <h2>Build the Best Pro Lineup</h2>
+    <div class="scenario">You are the general manager. Build a five-player lineup for one specific purpose.</div>
+  </div>
+
+  <div class="dataset"><span class="dot"></span><span><b>Dataset:</b> The NBA or WNBA player CSV provided by your facilitator</span></div>
+
+  <div class="progress"><div class="count"><span class="done-num">0</span>/8</div><div class="bar"><span></span></div></div>
+  <ol class="steps" data-track="p3">
+    <li><label><input type="checkbox"><span class="step-text">As a team, pick your lineup's purpose: best scoring, best defense, most balanced, best passing, youngest with potential, or best rebounding.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Download the pro player file as a CSV.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Look at the column names. Which 2 or 3 columns actually measure your purpose? Write them down.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Start a new chat, upload the CSV, and send your first prompt describing the data.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Ask for the lineup. Example prompt below.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Verify every player: find each one's row in your real CSV. Confirm the stats the AI quoted are real. If a player or number is not in the file, tell the AI and ask again.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Challenge it: what does this dataset NOT measure that a real GM would care about? Discuss whether you agree.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Lock in your final five as a team. You can overrule the AI if you have a reason.</span></label></li>
+  </ol>
+
+  <h3>Example prompts</h3>
+  <div class="prompt" id="pr-p3a"><button class="copy-btn" data-copy="pr-p3a">Copy</button>Recommend a 5-player lineup for [your purpose] using the columns [your columns]. For each player, show their exact stats from the file and explain why they made the cut.</div>
+  <div class="prompt" id="pr-p3b"><button class="copy-btn" data-copy="pr-p3b">Copy</button>What does this dataset NOT measure that a real general manager would care about?</div>
+
+  <div class="callout orange">
+    <div class="ctitle">Prepare your 2-minute share-out</div>
+    <ul>
+      <li>The question you investigated.</li>
+      <li>The dataset you used.</li>
+      <li>The most important evidence.</li>
+      <li>Your final decision or recommendation.</li>
+      <li>One thing the AI said that you had to check, and what you found.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= PROJECT 4 ================= -->
+<section class="view" id="view-p4">
+  <div class="banner">
+    <div class="kicker">Project 4</div>
+    <h2>Make the Coaching Call</h2>
+    <div class="scenario">You are the coaching staff. The game is on the line. Use data to make one call.</div>
+  </div>
+
+  <div class="dataset"><span class="dot"></span><span><b>Dataset:</b> The Five Hoops data from this morning (or today's class data for Scenario C)</span></div>
+
+  <h3>Pick ONE scenario</h3>
+  <div class="scenarios" role="group" aria-label="Choose a scenario">
+    <button class="scenario-opt" data-sc="A"><span class="letter">A</span><b>The Final Shot.</b> One student takes the last shot of the game. Who should it be, and from which spot?</button>
+    <button class="scenario-opt" data-sc="B"><span class="letter">B</span><b>Practice Priority.</b> The team gets one extra practice. Which hoop or location needs it most?</button>
+    <button class="scenario-opt" data-sc="C"><span class="letter">C</span><b>The Strategy Call.</b> Based on the data, which strategy from this morning's activity should the team use?</button>
+  </div>
+
+  <div class="progress"><div class="count"><span class="done-num">0</span>/8</div><div class="bar"><span></span></div></div>
+  <ol class="steps" data-track="p4">
+    <li><label><input type="checkbox"><span class="step-text">Pick your scenario above and write your question in one sentence.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Download the matching dataset as a CSV and check it.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Start a new chat, upload the CSV, and send your first prompt describing the data.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Ask your question and demand evidence. Example prompt below.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Recalculate one success rate yourself: makes divided by attempts. Does it match the AI?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Push back once: what is the second-best option, and how close is it? A confident answer built on a tiny difference is a weak answer.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Make the call as a coaching staff. The AI suggests. You decide.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Discuss: how many attempts is enough to trust this decision? What would change your mind?</span></label></li>
+  </ol>
+
+  <h3>Example prompts</h3>
+  <div class="prompt" id="pr-p4a"><button class="copy-btn" data-copy="pr-p4a">Copy</button>Based only on this data, who should take the final shot and from where? Show the exact makes, attempts, and success rates you used.</div>
+  <div class="prompt" id="pr-p4b"><button class="copy-btn" data-copy="pr-p4b">Copy</button>What is the second-best option, and how close is it to your first choice?</div>
+
+  <div class="callout orange">
+    <div class="ctitle">Prepare your 2-minute share-out</div>
+    <ul>
+      <li>The question you investigated.</li>
+      <li>The dataset you used.</li>
+      <li>The most important evidence.</li>
+      <li>Your final decision or recommendation.</li>
+      <li>One thing the AI said that you had to check, and what you found.</li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= BONUS ================= -->
+<section class="view" id="view-p5">
+  <div class="banner">
+    <div class="kicker">Bonus Project</div>
+    <h2>Find the Story and Make the Call</h2>
+    <div class="scenario">You are the analysts. Find something interesting in the data and tell people what to do about it.</div>
+  </div>
+
+  <div class="callout orange">
+    <div class="ctitle">Independent teams only</div>
+    <p>This card gives you the least direction on purpose. Choose it only if your team already has an idea and can manage its own time.</p>
+  </div>
+
+  <div class="dataset"><span class="dot"></span><span><b>Dataset:</b> Any one approved dataset: class data, Five Hoops data, NBA, or WNBA</span></div>
+
+  <div class="progress"><div class="count"><span class="done-num">0</span>/6</div><div class="bar"><span></span></div></div>
+  <ol class="steps" data-track="p5">
+    <li><label><input type="checkbox"><span class="step-text">Pick one dataset and download it as a CSV.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Start a new chat, upload it, and send your first prompt describing the data.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Go hunting. Example prompt below.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Find those rows and values in your real file. If they are not there, the story is fake. Hunt again.</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Pick your best real finding and answer: why does it matter, and to whom?</span></label></li>
+    <li><label><input type="checkbox"><span class="step-text">Turn it into a recommendation: what should someone DO because of this finding?</span></label></li>
+  </ol>
+
+  <h3>Example prompt</h3>
+  <div class="prompt" id="pr-p5a"><button class="copy-btn" data-copy="pr-p5a">Copy</button>What is the most surprising pattern, outlier, or comparison in this data? Point to the exact rows and values.</div>
+
+  <div class="callout orange">
+    <div class="ctitle">Prepare your 2-minute share-out</div>
+    <ul>
+      <li>The question you investigated.</li>
+      <li>The dataset you used.</li>
+      <li>The most important evidence.</li>
+      <li>Your final decision or recommendation.</li>
+      <li>One thing the AI said that you had to check, and what you found.</li>
+    </ul>
+  </div>
+</section>
+
+</main>
+
+<footer>Data Dunkers FUNdamentals &bull; Buffalo Public Schools Summer Intern Program</footer>
+
+<script>
+(function () {
+  // ---- tab navigation ----
+  var tabs = document.querySelectorAll('.tab');
+  var views = document.querySelectorAll('.view');
+  function show(viewId) {
+    views.forEach(function (v) { v.classList.toggle('active', v.id === 'view-' + viewId); });
+    tabs.forEach(function (t) { t.classList.toggle('active', t.dataset.view === viewId); });
+    window.scrollTo({ top: 0, behavior: 'auto' });
+  }
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () { show(t.dataset.view); });
+  });
+  document.querySelectorAll('.pick-card').forEach(function (c) {
+    c.addEventListener('click', function () { show(c.dataset.view); });
+  });
+
+  // ---- checklist progress (in-memory only) ----
+  document.querySelectorAll('ol.steps').forEach(function (list) {
+    var boxes = list.querySelectorAll('input[type="checkbox"]');
+    // find the nearest preceding .progress element, if any
+    var prog = list.previousElementSibling;
+    while (prog && !prog.classList.contains('progress')) prog = prog.previousElementSibling;
+    function update() {
+      var done = list.querySelectorAll('input:checked').length;
+      boxes.forEach(function (b) {
+        b.closest('li').classList.toggle('checked', b.checked);
+      });
+      if (prog) {
+        prog.querySelector('.done-num').textContent = done;
+        prog.querySelector('.bar span').style.width = (done / boxes.length * 100) + '%';
+      }
+    }
+    boxes.forEach(function (b) { b.addEventListener('change', update); });
+  });
+
+  // ---- scenario picker ----
+  document.querySelectorAll('.scenario-opt').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      document.querySelectorAll('.scenario-opt').forEach(function (b) { b.classList.remove('picked'); });
+      btn.classList.add('picked');
+    });
+  });
+
+  // ---- copy buttons ----
+  function copyText(text, btn) {
+    function ok() {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(function () { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 1600);
+    }
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(ok, function () { fallback(text, ok); });
+    } else {
+      fallback(text, ok);
+    }
+  }
+  function fallback(text, ok) {
+    var ta = document.createElement('textarea');
+    ta.value = text; document.body.appendChild(ta);
+    ta.select();
+    try { document.execCommand('copy'); ok(); } catch (e) {}
+    document.body.removeChild(ta);
+  }
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var box = document.getElementById(btn.dataset.copy);
+      var clone = box.cloneNode(true);
+      var cb = clone.querySelector('.copy-btn');
+      if (cb) cb.remove();
+      copyText(clone.textContent.trim(), btn);
+    });
+  });
+
+  // ---- prompt builder ----
+  var fields = {
+    what: document.getElementById('b-what'),
+    row: document.getElementById('b-row'),
+    cols: document.getElementById('b-cols'),
+    goal: document.getElementById('b-goal')
+  };
+  var out = document.getElementById('built-text');
+  function build() {
+    var what = fields.what.value.trim() || '[what the data is]';
+    var row = fields.row.value.trim() || '[student / player]';
+    var cols = fields.cols.value.trim() || '[column names]';
+    var goal = fields.goal.value.trim() || '[what you are trying to decide]';
+    out.textContent =
+      'I uploaded a CSV dataset about ' + what + '.\n' +
+      'Each row is one ' + row + '.\n' +
+      'The important columns are: ' + cols + '.\n' +
+      'My goal is to ' + goal + '.\n' +
+      'Use only the data in the file. If something is not in the data, say so.';
+  }
+  Object.keys(fields).forEach(function (k) {
+    fields[k].addEventListener('input', build);
+  });
+})();
+</script>
+
+</body>
+</html>
