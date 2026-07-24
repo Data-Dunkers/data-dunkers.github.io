@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Dunkers: AI Activities</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #172B53;
+    --navy-deep: #0E1C3A;
+    --coral: #F45D48;
+    --coral-dark: #D14732;
+    --bg: #F3F6FB;
+    --card: #FFFFFF;
+    --ink: #1A2233;
+    --muted: #5A6A85;
+    --line: #D9E1EE;
+    --prompt-bg: #0E1C3A;
+    --prompt-ink: #E8EEF9;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; scroll-padding-top: 76px; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header */
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 48px 0 40px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    /* half-court arc */
+    content: "";
+    position: absolute;
+    right: -120px;
+    top: -140px;
+    width: 420px;
+    height: 420px;
+    border: 3px solid rgba(255,255,255,0.12);
+    border-radius: 50%;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    right: 60px;
+    top: 40px;
+    width: 90px;
+    height: 90px;
+    border: 3px solid rgba(244,93,72,0.55);
+    border-radius: 50%;
+  }
+  .eyebrow {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--coral);
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2.1rem, 5.5vw, 3.2rem);
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .lede { max-width: 560px; color: #C9D4E8; font-size: 1.05rem; }
+  .lede strong { color: #fff; }
+  .stat-strip {
+    display: flex;
+    gap: 26px;
+    margin-top: 26px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+  }
+  .stat b {
+    display: block;
+    font-size: 1.5rem;
+    font-weight: 900;
+    color: var(--coral);
+  }
+  .stat span { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: #C9D4E8; }
+
+  /* Sticky nav */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: var(--navy-deep);
+    padding: 10px 0;
+    box-shadow: 0 2px 10px rgba(14,28,58,0.25);
+  }
+  nav .wrap {
+    display: flex;
+    gap: 8px;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  nav .wrap::-webkit-scrollbar { display: none; }
+  nav a {
+    flex: 0 0 auto;
+    color: #C9D4E8;
+    text-decoration: none;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.04em;
+    padding: 6px 12px;
+    border-radius: 999px;
+    border: 1px solid rgba(255,255,255,0.18);
+    white-space: nowrap;
+    transition: background 0.15s, color 0.15s;
+  }
+  nav a:hover, nav a:focus-visible { background: var(--coral); color: #fff; border-color: var(--coral); }
+  nav a:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+
+  /* Sections */
+  main { padding: 40px 0 70px; }
+  section { margin-bottom: 44px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .section-tag {
+    display: inline-block;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--coral);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .section-tag.navy { background: var(--navy); }
+  h2 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 1.55rem;
+    margin-bottom: 6px;
+  }
+  .goal { color: var(--muted); font-weight: 600; margin-bottom: 16px; }
+  h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    margin: 20px 0 8px;
+  }
+  section p { margin-bottom: 10px; }
+  ol.steps, ul.plain { margin: 0 0 12px 22px; }
+  ol.steps li, ul.plain li { margin-bottom: 7px; }
+  .note { color: var(--muted); font-size: 0.93rem; }
+  a { color: var(--coral-dark); font-weight: 600; }
+
+  /* Prompt boxes */
+  .prompt {
+    background: var(--prompt-bg);
+    color: var(--prompt-ink);
+    border-radius: 12px;
+    padding: 0;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+  .prompt-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .prompt-label {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--coral);
+  }
+  .copy-btn {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #fff;
+    background: var(--coral);
+    border: none;
+    border-radius: 7px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: var(--coral-dark); }
+  .copy-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .copy-btn.copied { background: #2C9E6B; }
+  .prompt pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.86rem;
+    line-height: 1.6;
+    padding: 16px 18px;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .prompt .fill { color: #FFB59F; font-weight: 600; }
+
+  .check {
+    border-left: 4px solid var(--coral);
+    background: #FFF3F0;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 0.95rem;
+  }
+  .check b { font-family: 'Archivo', sans-serif; }
+
+  /* Reality check grid */
+  .rc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    gap: 12px;
+    margin-top: 16px;
+  }
+  .rc-item {
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    background: #FAFCFF;
+    font-size: 0.93rem;
+  }
+  .rc-item b {
+    display: block;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--navy);
+  }
+  .aside {
+    background: var(--navy);
+    color: #DCE5F4;
+    border-radius: 12px;
+    padding: 18px 20px;
+    margin-top: 18px;
+    font-size: 0.93rem;
+  }
+  .aside b { color: #fff; }
+  .aside .prompt-label { display: block; margin-bottom: 6px; }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.92rem; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.78rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: #EEF2F9;
+  }
+
+  footer {
+    background: var(--navy-deep);
+    color: #9FB0CC;
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 0.9rem;
+  }
+  footer a { color: var(--coral); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+  }
+  @media (max-width: 560px) {
+    .card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Data Dunkers</div>
+    <h1>AI Activities</h1>
+    <p class="lede">Explore your class data with an AI chatbot. <strong>Do Activity 1 first.</strong> After that, pick any activity in any order.</p>
+    <div class="stat-strip">
+      <div class="stat"><b>9</b><span>Activities</span></div>
+      <div class="stat"><b>5&ndash;10</b><span>Minutes each</span></div>
+      <div class="stat"><b>Any</b><span>Order after #1</span></div>
+    </div>
+  </div>
+</header>
+
+<nav aria-label="Activities">
+  <div class="wrap">
+    <a href="#start">Start Here</a>
+    <a href="#reality">Reality Check</a>
+    <a href="#a1">1 Meet Your Data</a>
+    <a href="#a2">2 Notice</a>
+    <a href="#a3">3 Relationship</a>
+    <a href="#a4">4 Picture It</a>
+    <a href="#a5">5 Build Teams</a>
+    <a href="#a6">6 Tournament</a>
+    <a href="#a7">7 Siakam</a>
+    <a href="#a8">8 Best Lineup</a>
+    <a href="#a9">9 Prompt Detective</a>
+    <a href="#pascal">Pascal's Data</a>
+  </div>
+</nav>
+
+<main class="wrap">
+
+  <section id="start">
+    <div class="card">
+      <span class="section-tag navy">Read first</span>
+      <h2>Start Here</h2>
+
+      <h3>What you need</h3>
+      <ul class="plain">
+        <li><b>An AI chatbot</b> you have access to, such as <a href="https://chatjimmy.ai">ChatJimmy</a>, MagicSchool AI, or Gemini. Any text chatbot works.</li>
+        <li><b>Your class data</b> from your time with Data Dunkers. Your leader will share the spreadsheet.</li>
+        <li><b>Earlier activities:</b> <a href="https://datadunkers.ca">datadunkers.ca</a></li>
+      </ul>
+
+      <h3>Get your data (do this once)</h3>
+      <ol class="steps">
+        <li>Open your class data spreadsheet.</li>
+        <li>Click File, then Download, then Comma Separated Values (.csv).</li>
+        <li>Open the downloaded file. Select all of it and copy.</li>
+      </ol>
+      <p class="note">That copied text is your dataset. Many chatbots cannot open links or spreadsheets, so you paste the data straight into the chat.</p>
+
+      <h3>Three rules for your chatbot</h3>
+      <ol class="steps">
+        <li>Start a new chat for every activity. Long chats get worse.</li>
+        <li>Paste the prompt first, then your data below it, then send.</li>
+        <li>Check its math. Fast does not mean right.</li>
+      </ol>
+
+      <h3>Level up (optional)</h3>
+      <p>Turn your chatbot into a personal data coach. If it has a settings area with a System Prompt or custom instructions box, paste this in:</p>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">System prompt</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>You are a friendly data scientist coaching a student team at a basketball data event. Keep answers short and simple. Base every claim on the data the students paste and point to the evidence. End each answer with one suggestion for what to analyze next.</pre>
+      </div>
+      <p class="note">Now it will nudge you toward your next analysis after every answer.</p>
+    </div>
+  </section>
+
+  <section id="reality">
+    <div class="card">
+      <span class="section-tag navy">Before you trust any answer</span>
+      <h2>Reality Check</h2>
+      <div class="rc-grid">
+        <div class="rc-item"><b>It makes things up.</b> Chatbots sound confident even when they are wrong. Always ask: where is the evidence in the data?</div>
+        <div class="rc-item"><b>Its math can be wrong.</b> It predicts text. It does not calculate. Check totals and averages yourself.</div>
+        <div class="rc-item"><b>It may not see the internet.</b> Many chatbots cannot open links, spreadsheets, or websites. Paste your data as text to be safe.</div>
+        <div class="rc-item"><b>It may not draw.</b> Some chatbots cannot make charts or images. They can still help you design one.</div>
+        <div class="rc-item"><b>It has a short memory.</b> Long chats get worse. Start a new chat for each activity.</div>
+        <div class="rc-item"><b>Patterns are not proof.</b> A correlation does not mean one thing caused the other. And your data may be missing something important.</div>
+        <div class="rc-item"><b>Fairness matters.</b> Ranking people from a few numbers misses a lot about who they are.</div>
+        <div class="rc-item"><b>You are the judge.</b> AI suggests. You check, you question, you decide.</div>
+      </div>
+      <div class="aside">
+        <span class="prompt-label">Using ChatJimmy?</span>
+        <b>Why is it so fast?</b> ChatJimmy is a small AI model built directly into a computer chip by a Toronto company called Taalas. That makes it one of the fastest chatbots in the world. Speed is its superpower. Accuracy is not. That is exactly why data checkers like you matter.
+      </div>
+    </div>
+  </section>
+
+  <section id="a1">
+    <div class="card">
+      <span class="section-tag">Activity 1 &middot; Do this first</span>
+      <h2>Meet Your Data</h2>
+      <p class="goal">Goal: Find out what the chatbot understands about your data.</p>
+      <ol class="steps">
+        <li>Start a new chat.</li>
+        <li>Copy the prompt below and paste it into your chatbot.</li>
+        <li>Paste your data directly below the prompt. Send.</li>
+        <li>Read the answer together. Did it get anything wrong?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>I am pasting data from students at a basketball data event. Each row is one student. Initials are an anonymous ID. The columns are: shots made out of five from 4 feet, time to complete ten passes in seconds, how much they like basketball from 1 to 5, years played on a basketball team, resting heart rate in bpm, height in cm, wingspan in cm, hand span in cm, shoe size, vertical leap in cm, reaction time in ms, handedness, birth month, and hair colour. Explain what you understand about this dataset in simple words. Then suggest two things we could analyze. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Did the chatbot describe anything that is not actually in the data?</div>
+    </div>
+  </section>
+
+  <section id="a2">
+    <div class="card">
+      <span class="section-tag">Activity 2</span>
+      <h2>What Do You Notice?</h2>
+      <p class="goal">Goal: Hunt for patterns, surprises, and outliers.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data.</li>
+        <li>Pick the most interesting claim it makes.</li>
+        <li>Find the rows in your spreadsheet that back it up.</li>
+        <li>Share your best find with your group or wherever your leader collects them.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one student. Look for patterns, surprises, and outliers. Tell me the three most interesting things you notice. For each one, name the rows or numbers that support it. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> If you cannot find the supporting rows yourself, the claim may be made up.</div>
+    </div>
+  </section>
+
+  <section id="a3">
+    <div class="card">
+      <span class="section-tag">Activity 3</span>
+      <h2>Find a Relationship</h2>
+      <p class="goal">Goal: See if two columns move together.</p>
+      <ol class="steps">
+        <li>Pick two columns you think might be connected. Ideas: height and wingspan, reaction time and shots made, years played and shots made.</li>
+        <li>New chat. Fill in your two columns in the prompt, paste your data, send.</li>
+        <li>Ask a follow up: why might this relationship exist?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; fill in the columns, then copy</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one student. Compare <span class="fill">[COLUMN A]</span> and <span class="fill">[COLUMN B]</span>. Do they seem related? Describe the relationship in simple words and point to examples in the data. Do not assume one thing causes the other. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> A pattern is not proof. What else could explain what you found?</div>
+    </div>
+  </section>
+
+  <section id="a4">
+    <div class="card">
+      <span class="section-tag">Activity 4</span>
+      <h2>Picture the Data</h2>
+      <p class="goal">Goal: Design the chart that tells your story.</p>
+      <p class="note">Heads up: some chatbots cannot draw charts. Either way, the AI helps you design the chart, and then you build it.</p>
+      <ol class="steps">
+        <li>New chat. Tell the prompt what you want to show. Paste your data.</li>
+        <li>Sketch the chart on paper, or build it in a spreadsheet or notebook.</li>
+        <li>Show your sketch to another group. Can they read it without help?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; fill in the blank, then copy</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one student. We want to show <span class="fill">[WHAT YOU NOTICED]</span> to the class. What kind of chart would show this best? Tell us what goes on each axis and why this chart fits. Then describe what the chart would probably look like with this data. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Would a stranger understand your chart in five seconds?</div>
+    </div>
+  </section>
+
+  <section id="a5">
+    <div class="card">
+      <span class="section-tag">Activity 5</span>
+      <h2>Build the Teams</h2>
+      <p class="goal">Goal: Split the class into fair teams, backed by data.</p>
+      <ol class="steps">
+        <li>Decide how many teams you want and fill in the blank in the prompt.</li>
+        <li>New chat. Paste the prompt, then your data.</li>
+        <li>Check the output before you trust it. See Check It below.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; fill in the number of teams, then copy</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one player. Build balanced basketball teams using only these columns: shots made out of five from 4 feet, time to complete ten passes in seconds, vertical leap in cm, and reaction time in ms. Score each player from 1 to 5 in each column, where 5 is best. Remember that a lower number is better for passes time and reaction time. Add up each player's points to get a total. Sort players from highest total to lowest. There will be <span class="fill">___</span> teams. Assign players with an alternating draft: the highest scorer goes to Team 1, the next to Team 2, and so on, cycling through the teams until everyone is placed. Give each team a fun, school friendly name. Show a table with each team, its players, and each player's total points. Here is the data:</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Follow up &middot; send in the same chat</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Now assume each player on each team shoots 5 baskets. Using the data, estimate the total baskets each team would make. The maximum per player is 5. List each team, its estimated total, and one fun but polite catchphrase for that team.</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Pick one player and recalculate their points yourself. Is every player on exactly one team?</div>
+    </div>
+  </section>
+
+  <section id="a6">
+    <div class="card">
+      <span class="section-tag">Activity 6</span>
+      <h2>Run a Tournament</h2>
+      <p class="goal">Goal: Predict winners and defend your picks with evidence.</p>
+      <p class="note">This activity stands alone. You do not need Activity 5 first.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data.</li>
+        <li>For each prediction, find the numbers it points to in your spreadsheet.</li>
+        <li>Disagree with a pick? Argue back with data. Then run it again for a new random draw.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one player. Pick 8 players at random and pair them into 4 teams of two. Then set up a bracket: Team A plays Team B, and Team C plays Team D. Predict the winner of each matchup. For every prediction, point to the numbers in the data that support it. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Does each of the 8 players appear exactly once? Is the evidence really in the data?</div>
+    </div>
+  </section>
+
+  <section id="a7">
+    <div class="card">
+      <span class="section-tag">Activity 7</span>
+      <h2>Add Pascal Siakam</h2>
+      <p class="goal">Goal: See what one NBA star does to your numbers.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data. Pascal's numbers are already inside the prompt.</li>
+        <li>Ask follow ups: would he change your team draft? Your tournament picks?</li>
+        <li>His full row is in <a href="#pascal">Pascal's Data</a> if you want to paste it another way.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one player. A new player is joining: NBA star Pascal Siakam. His numbers: shots made from 4 feet: 5, time for ten passes: 8 seconds, likes basketball: 5 out of 5, years on a team: 14, resting heart rate: 52 bpm, height: 203 cm, wingspan: 221 cm, hand span: 25 cm, shoe size: 14, vertical leap: 84 cm, reaction time: 190 ms, right handed, born in April, black hair. How would adding him change the average height, average wingspan, and average shots made? Would he rank first in every category? Which students come closest to any of his numbers? Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Verify one new average by hand. And ask your group: is it fair to compare students to a pro?</div>
+    </div>
+  </section>
+
+  <section id="a8">
+    <div class="card">
+      <span class="section-tag">Activity 8</span>
+      <h2>Best Lineup</h2>
+      <p class="goal">Goal: Build the strongest possible five, then find its weak spot.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data.</li>
+        <li>Challenge the picks. Would you swap anyone? Why?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is data from students at a basketball data event. Each row is one player. Build the strongest possible team of five players using the data. Explain why you chose each player, pointing to their numbers. Then tell us the team's biggest strength and one weakness it still has. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> What does the data miss? Teamwork, effort, and hustle are not columns.</div>
+    </div>
+  </section>
+
+  <section id="a9">
+    <div class="card">
+      <span class="section-tag">Activity 9</span>
+      <h2>Prompt Detective</h2>
+      <p class="goal">Goal: Crack the code of why good prompts work.</p>
+      <p>The Build the Teams prompt was written very carefully. Here is why each part is there.</p>
+      <table>
+        <thead><tr><th>The prompt says</th><th>Why it is there</th></tr></thead>
+        <tbody>
+          <tr><td>Here is data from students at a basketball data event. Each row is one player.</td><td><b>Context.</b> It tells the AI what the data is, so it does not have to guess.</td></tr>
+          <tr><td>using only these columns: shots made, passes time, vertical leap, reaction time</td><td><b>Scope.</b> Four columns keep the job small. AI models can get confused when you ask for everything at once.</td></tr>
+          <tr><td>Score each player from 1 to 5. A lower number is better for passes time and reaction time.</td><td><b>Rules.</b> The AI does not know that a fast pass time is good unless you say so. Unstated rules become wrong guesses.</td></tr>
+          <tr><td>Add up the points. Sort highest to lowest. Assign with an alternating draft.</td><td><b>Steps in order.</b> One clear procedure beats a vague ask like "make fair teams."</td></tr>
+          <tr><td>There will be ___ teams.</td><td><b>Your decision.</b> You choose the number. The AI should not make choices that belong to you.</td></tr>
+          <tr><td>Show a table with each team, its players, and their points.</td><td><b>Output format.</b> Asking for a table gets you an answer you can actually check.</td></tr>
+        </tbody>
+      </table>
+      <h3>Now try it yourself</h3>
+      <ol class="steps">
+        <li>New chat. Send this weak prompt with your data:</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Weak prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Make teams from this data.</pre>
+      </div>
+      <ol class="steps" start="2">
+        <li>New chat again. Send the full <a href="#a5">Build the Teams</a> prompt with the same data.</li>
+        <li>Compare the two answers. What did the weak prompt guess, skip, or get wrong?</li>
+      </ol>
+      <div class="check"><b>Check it:</b> Context, rules, steps, and format. That is prompt engineering in four words.</div>
+    </div>
+  </section>
+
+  <section id="pascal">
+    <div class="card">
+      <span class="section-tag navy">Reference</span>
+      <h2>Pascal's Data</h2>
+      <p>Pascal Siakam's row, matching the Data Dunkers attributes form. PS43 is not a coincidence. His initials are PS and his jersey number is 43.</p>
+      <table>
+        <thead><tr><th>Form question</th><th>Pascal's answer</th></tr></thead>
+        <tbody>
+          <tr><td>Initials</td><td>PS43</td></tr>
+          <tr><td>Shots made (out of five) from 4 feet</td><td>5</td></tr>
+          <tr><td>Time to complete ten passes (seconds)</td><td>8</td></tr>
+          <tr><td>How much do you like basketball? (1 to 5)</td><td>5</td></tr>
+          <tr><td>How many years have you played on a basketball team?</td><td>14</td></tr>
+          <tr><td>Resting heart rate (bpm)</td><td>52</td></tr>
+          <tr><td>Height (cm)</td><td>203</td></tr>
+          <tr><td>Wingspan (cm)</td><td>221</td></tr>
+          <tr><td>Hand span (cm)</td><td>25</td></tr>
+          <tr><td>Shoe size</td><td>14</td></tr>
+          <tr><td>Vertical leap (cm)</td><td>84</td></tr>
+          <tr><td>Reaction time (ms)</td><td>190</td></tr>
+          <tr><td>Handedness</td><td>right</td></tr>
+          <tr><td>Birth month</td><td>April</td></tr>
+          <tr><td>Hair colour</td><td>black</td></tr>
+        </tbody>
+      </table>
+      <p>Need it as one line to paste under your data? Use this, in the same column order as your spreadsheet:</p>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Pascal's row &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>PS43,5,8,5,14,52,203,221,25,14,84,190,right,April,black</pre>
+      </div>
+      <p class="note">If your downloaded file starts with a Timestamp column, add a comma at the front of this line so the columns stay lined up.</p>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Part of the <a href="https://datadunkers.ca">Data Dunkers</a> program. AI suggests. You decide.
+</footer>
+
+<script>
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.closest('.prompt').querySelector('pre');
+      var text = pre.innerText;
+      function done() {
+        var old = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = old;
+          btn.classList.remove('copied');
+        }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(function () { fallback(); });
+      } else {
+        fallback();
+      }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
