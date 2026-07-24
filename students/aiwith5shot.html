@@ -1,0 +1,998 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Data Dunkers: Shot Data Challenges</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;700;900&family=Inter:wght@400;600;700&family=IBM+Plex+Mono:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy: #172B53;
+    --navy-deep: #0E1C3A;
+    --coral: #F45D48;
+    --coral-dark: #D14732;
+    --bg: #F3F6FB;
+    --card: #FFFFFF;
+    --ink: #1A2233;
+    --muted: #5A6A85;
+    --line: #D9E1EE;
+    --prompt-bg: #0E1C3A;
+    --prompt-ink: #E8EEF9;
+    --radius: 14px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    line-height: 1.55;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 20px; }
+
+  header {
+    background: var(--navy);
+    color: #fff;
+    padding: 46px 0 38px;
+    position: relative;
+    overflow: hidden;
+  }
+  header::after {
+    content: "";
+    position: absolute;
+    right: -120px;
+    top: -140px;
+    width: 420px;
+    height: 420px;
+    border: 3px solid rgba(255,255,255,0.12);
+    border-radius: 50%;
+  }
+  header::before {
+    content: "";
+    position: absolute;
+    right: 60px;
+    top: 40px;
+    width: 90px;
+    height: 90px;
+    border: 3px solid rgba(244,93,72,0.55);
+    border-radius: 50%;
+  }
+  .eyebrow {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    font-size: 0.8rem;
+    color: var(--coral);
+    margin-bottom: 8px;
+  }
+  h1 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: clamp(2rem, 5.5vw, 3rem);
+    line-height: 1.05;
+    margin-bottom: 14px;
+  }
+  .lede { max-width: 600px; color: #C9D4E8; font-size: 1.05rem; }
+  .lede strong { color: #fff; }
+  .spots {
+    display: flex;
+    gap: 10px;
+    margin-top: 24px;
+    flex-wrap: wrap;
+  }
+  .spot {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.2);
+    border-radius: 10px;
+    padding: 8px 14px;
+    text-align: center;
+  }
+  .spot b { display: block; font-size: 1.2rem; color: var(--coral); }
+  .spot span { font-size: 0.68rem; letter-spacing: 0.1em; text-transform: uppercase; color: #C9D4E8; }
+
+  main { padding: 36px 0 70px; }
+  section { margin-bottom: 36px; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 28px;
+  }
+  .section-tag {
+    display: inline-block;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: #fff;
+    background: var(--coral);
+    padding: 4px 10px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+  }
+  .section-tag.navy { background: var(--navy); }
+  h2 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 1.55rem;
+    margin-bottom: 6px;
+  }
+  .goal { color: var(--muted); font-weight: 600; margin-bottom: 16px; }
+  h3 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 1.02rem;
+    margin: 20px 0 8px;
+  }
+  section p { margin-bottom: 10px; }
+  ol.steps, ul.plain { margin: 0 0 12px 22px; }
+  ol.steps li, ul.plain li { margin-bottom: 8px; }
+  .note { color: var(--muted); font-size: 0.93rem; }
+  a { color: var(--coral-dark); font-weight: 600; }
+
+  /* Picker */
+  .picker-intro { margin-bottom: 18px; }
+  .picker-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 14px;
+  }
+  .tile {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px;
+    cursor: pointer;
+    text-align: left;
+    font-family: inherit;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: transform 0.12s, border-color 0.12s, box-shadow 0.12s;
+  }
+  .tile:hover, .tile:focus-visible {
+    border-color: var(--coral);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 18px rgba(23,43,83,0.1);
+  }
+  .tile:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+  .tile-top { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .tile-num {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--coral);
+  }
+  .tile-time {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.68rem;
+    color: var(--muted);
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 2px 9px;
+    white-space: nowrap;
+  }
+  .tile h4 {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 1.12rem;
+    color: var(--ink);
+  }
+  .tile p { font-size: 0.9rem; color: var(--muted); }
+  .tile .first-badge {
+    align-self: flex-start;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 900;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    background: var(--navy);
+    color: #fff;
+    border-radius: 6px;
+    padding: 3px 8px;
+  }
+
+  /* Challenge cards */
+  .challenge { display: none; }
+  .challenge.active { display: block; }
+  .back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.82rem;
+    color: var(--navy);
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 7px 16px;
+    cursor: pointer;
+    margin-bottom: 16px;
+    transition: background 0.15s, color 0.15s;
+  }
+  .back-btn:hover, .back-btn:focus-visible { background: var(--navy); color: #fff; }
+  .back-btn:focus-visible { outline: 2px solid var(--coral); outline-offset: 2px; }
+
+  /* Prompt boxes */
+  .prompt {
+    background: var(--prompt-bg);
+    color: var(--prompt-ink);
+    border-radius: 12px;
+    margin: 16px 0;
+    overflow: hidden;
+  }
+  .prompt-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 16px;
+    background: rgba(255,255,255,0.06);
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  .prompt-label {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.72rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--coral);
+  }
+  .copy-btn {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    color: #fff;
+    background: var(--coral);
+    border: none;
+    border-radius: 7px;
+    padding: 6px 14px;
+    cursor: pointer;
+    transition: background 0.15s;
+  }
+  .copy-btn:hover { background: var(--coral-dark); }
+  .copy-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+  .copy-btn.copied { background: #2C9E6B; }
+  .prompt pre {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 0.86rem;
+    line-height: 1.6;
+    padding: 16px 18px;
+    white-space: pre-wrap;
+    word-break: break-word;
+    max-height: 340px;
+    overflow-y: auto;
+  }
+  .prompt .fill { color: #FFB59F; font-weight: 600; }
+
+  .check {
+    border-left: 4px solid var(--coral);
+    background: #FFF3F0;
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin-top: 16px;
+    font-size: 0.95rem;
+  }
+  .check b { font-family: 'Archivo', sans-serif; }
+
+  table { width: 100%; border-collapse: collapse; margin: 14px 0; font-size: 0.9rem; }
+  th, td { text-align: left; padding: 9px 12px; border-bottom: 1px solid var(--line); vertical-align: top; }
+  th {
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--navy);
+    background: #EEF2F9;
+  }
+  td.num, th.num { text-align: center; }
+
+  details { margin: 14px 0; }
+  details summary {
+    cursor: pointer;
+    font-family: 'Archivo', sans-serif;
+    font-weight: 700;
+    color: var(--navy);
+  }
+
+  footer {
+    background: var(--navy-deep);
+    color: #9FB0CC;
+    text-align: center;
+    padding: 28px 20px;
+    font-size: 0.9rem;
+  }
+  footer a { color: var(--coral); }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .tile, .tile:hover { transform: none; transition: none; }
+  }
+  @media (max-width: 560px) {
+    .card { padding: 20px 16px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">Data Dunkers</div>
+    <h1>Shot Data Challenges</h1>
+    <p class="lede">Every player took <strong>5 shots from each of 5 spots</strong>. That's your data. Team up with an AI chatbot to find the stories inside it. <strong>Do Challenge 1 first,</strong> then pick any challenge you like.</p>
+    <div class="spots">
+      <div class="spot"><b>2</b><span>feet</span></div>
+      <div class="spot"><b>4</b><span>feet</span></div>
+      <div class="spot"><b>6</b><span>feet</span></div>
+      <div class="spot"><b>8</b><span>feet</span></div>
+      <div class="spot"><b>10</b><span>feet</span></div>
+    </div>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- START HERE -->
+  <section id="start">
+    <div class="card">
+      <span class="section-tag navy">Read first</span>
+      <h2>Start Here</h2>
+      <h3>What you need</h3>
+      <ul class="plain">
+        <li><b>An AI chatbot</b> you have access to, such as <a href="https://chatjimmy.ai">ChatJimmy</a>, MagicSchool AI, or Gemini.</li>
+        <li><b>Your 5-shot data</b> from your time with Data Dunkers. Your leader will share the spreadsheet. No data yet? Use the example dataset below.</li>
+      </ul>
+      <h3>Get your data (do this once)</h3>
+      <ol class="steps">
+        <li>Open your 5-shot spreadsheet.</li>
+        <li>Click File, then Download, then Comma Separated Values (.csv).</li>
+        <li>Open the downloaded file. Select all of it and copy.</li>
+      </ol>
+      <p class="note">Each row is one turn: a player's initials, the shot distance in feet, and how many shots they made out of 5. One player has several rows, one for each spot. Some players did not get to every spot. That is fine, and it is worth watching how the AI handles it.</p>
+      <h3>Three rules for your chatbot</h3>
+      <ol class="steps">
+        <li>Start a new chat for every challenge. Long chats get worse.</li>
+        <li>Paste the prompt first, then your data below it, then send.</li>
+        <li>Check its claims against the spreadsheet. Confident does not mean correct.</li>
+      </ol>
+      <details>
+        <summary>Example dataset (use this if you don't have your own)</summary>
+        <div class="prompt">
+          <div class="prompt-bar">
+            <span class="prompt-label">Example 5-shot data &middot; copy this</span>
+            <button class="copy-btn" data-copy>Copy</button>
+          </div>
+          <pre>Timestamp,Initials,Shot distance (feet),Shots made
+7/6/2026 5:58:46,PB07,2,5
+7/6/2026 5:58:59,PB07,4,4
+7/6/2026 5:59:10,PB07,6,3
+7/6/2026 5:59:22,PB07,8,2
+7/6/2026 5:59:43,PB07,2,1
+7/6/2026 14:04:31,PB07,2,4
+7/8/2026 8:08:21,JY09,2,5
+7/8/2026 8:08:57,OF05,2,4
+7/8/2026 8:09:00,AR 68,2,5
+7/8/2026 8:09:50,SB28,2,1
+7/8/2026 8:09:59,LS23,2,5
+7/8/2026 8:10:20,WY88,2,4
+7/8/2026 8:10:23,Az22,2,4
+7/8/2026 8:10:23,JS75,2,1
+7/8/2026 8:10:28,KG24 ,2,5
+7/8/2026 8:10:41,RH10,2,5
+7/8/2026 8:10:45,FY18,2,4
+7/8/2026 8:10:55,JS18,2,4
+7/8/2026 8:11:13,AB19,2,5
+7/8/2026 8:11:16,F.L-67,2,2
+7/8/2026 8:11:17,AB03,2,3
+7/8/2026 8:11:19,AS11,2,3
+7/8/2026 8:11:24,FY18,2,1
+7/8/2026 8:11:29,RD59,2,1
+7/8/2026 8:11:29,EL10,2,2
+7/8/2026 8:11:31,F.L-67,4,3
+7/8/2026 8:11:39,JN11,2,3
+7/8/2026 8:11:40,LS23,4,2
+7/8/2026 8:11:42,JH09,2,1
+7/8/2026 8:11:46,F.L-67,6,2
+7/8/2026 8:11:54,F.L-67,8,2
+7/8/2026 8:11:55,AP67,2,3
+7/8/2026 8:11:56,AJ36,2,4
+7/8/2026 8:12:02,F.L-67,10,2
+7/8/2026 8:12:03,JQ77,2,1
+7/8/2026 8:12:04,EL09,2,1
+7/8/2026 8:12:10,AZ09,2,2
+7/8/2026 8:12:14,mp15,2,5
+7/8/2026 8:12:14,JS75,4,4
+7/8/2026 8:12:15,RH10,4,0
+7/8/2026 8:12:32,AR68,4,4
+7/8/2026 8:12:38,YG04,2,3
+7/8/2026 8:12:41,LS23 ,6,2
+7/8/2026 8:12:43,BMR14,2,2
+7/8/2026 8:12:48,AS8,2,2
+7/8/2026 8:12:59,WY88,4,3
+7/8/2026 8:13:15,KT27,2,2
+7/8/2026 8:13:21,JQ77,4,3
+7/8/2026 8:13:22,RH10,6,0
+7/8/2026 8:13:33,LS23 ,8,1
+7/8/2026 8:13:38,FF11,2,2
+7/8/2026 8:13:39,AS20,2,3
+7/8/2026 8:13:41,FY18,4,3
+7/8/2026 8:14:08,AS25,2,4
+7/8/2026 8:14:09,AS11,4,3
+7/8/2026 8:14:12,AB03,4,2
+7/8/2026 8:14:12,JN11,4,3
+7/8/2026 8:14:22,SB28,4,1
+7/8/2026 8:14:28,RH10,8,0
+7/8/2026 8:14:29,AS25,4,4
+7/8/2026 8:14:35,KG24,4,2
+7/8/2026 8:14:41,AS25,6,3
+7/8/2026 8:14:46,JL18,4,4
+7/8/2026 8:14:49,AB19,4,3
+7/8/2026 8:14:51,AS25,8,3
+7/8/2026 8:15:00,LS,10,1
+7/8/2026 8:15:03,RD59,4,3
+7/8/2026 8:15:04,AS25,10,3
+7/8/2026 8:15:11,EL10,4,4
+7/8/2026 8:15:15,AZ09,4,3
+7/8/2026 8:15:24,AJ36,4,2
+7/8/2026 8:15:29,JH09,4,2
+7/8/2026 8:15:29,NK17,2,5
+7/8/2026 8:15:36,KT15,2,3
+7/8/2026 8:15:42,RH10,10,1
+7/8/2026 8:15:44,EL09,4,4
+7/8/2026 8:15:46,NK17,4,3
+7/8/2026 8:15:48,AP67,4,4
+7/8/2026 8:15:51,KT15,4,0
+7/8/2026 8:16:11,mp15,4,3
+7/8/2026 8:16:11,NK17,6,3
+7/8/2026 8:16:14,YG04,4,0
+7/8/2026 8:16:15,JS75,8,1
+7/8/2026 8:16:21,NK17,8,0
+7/8/2026 8:16:28,NK17,10,5
+7/8/2026 8:16:38,AS8,4,3
+7/8/2026 8:16:39,KT27,4,1
+7/8/2026 8:17:01,AR68,6,1
+7/8/2026 8:17:04,FY22,2,4
+7/8/2026 8:17:10,AR68,8,1
+7/8/2026 8:17:12,JN11,6,4
+7/8/2026 8:17:13,FY22,4,3
+7/8/2026 8:17:14,AB03,6,3
+7/8/2026 8:17:21,FF11,4,5
+7/8/2026 8:17:23,WY88,6,3
+7/8/2026 8:17:24,JN11,8,4
+7/8/2026 8:17:33,WY,8,0
+7/8/2026 8:17:36,YG04,6,0
+7/8/2026 8:17:43,DW48,2,5
+7/8/2026 8:17:46,AB19,6,3
+7/8/2026 8:17:48,JL18,6,3
+7/8/2026 8:17:53,DW48,4,2
+7/8/2026 8:18:01,DW48,6,2
+7/8/2026 8:18:06,AS20,4,2
+7/8/2026 8:18:08,AS11,6,3
+7/8/2026 8:18:08,mp15,6,4
+7/8/2026 8:18:09,DW48,8,0
+7/8/2026 8:18:17,SB28,6,4
+7/8/2026 8:18:18,DW48,10,1
+7/8/2026 8:18:24,EL09,6,2
+7/8/2026 8:18:30,AB03,8,0
+7/8/2026 8:18:35,RD59,6,4
+7/8/2026 8:18:54,JL18,8,0
+7/8/2026 8:18:59,JH09,6,2
+7/8/2026 8:19:04,BMR14,4,2
+7/8/2026 8:19:12,AJ36,6,4
+7/8/2026 8:19:29,SB28,8,0
+7/8/2026 8:19:33,JQ77,6,1
+7/8/2026 8:19:51,FY22,6,3
+7/8/2026 8:19:54,AZ09,6,1
+7/8/2026 8:19:54,SM25,2,4
+7/8/2026 8:19:55,mp15,8,4
+7/8/2026 8:19:55,IA10,2,5
+7/8/2026 8:20:07,IA10,4,5
+7/8/2026 8:20:08,SM25,4,4
+7/8/2026 8:20:15,BMR14,6,0
+7/8/2026 8:20:19,IA10,6,3
+7/8/2026 8:20:32,IA10,8,2
+7/8/2026 8:20:38,SM25,6,1
+7/8/2026 8:20:40,AR68,10,1
+7/8/2026 8:20:43,IA10,10,1
+7/8/2026 8:20:46,JH09,8,0
+7/8/2026 8:20:46,SM25,8,3
+7/8/2026 8:20:50,AP67,6,0
+7/8/2026 8:20:52,Az22,4,2
+7/8/2026 8:20:57,WY,10,2
+7/8/2026 8:21:03,SM25,8,3
+7/8/2026 8:21:03,AS8,6,2
+7/8/2026 8:21:03,AP67,8,3
+7/8/2026 8:21:08,AM14,2,5
+7/8/2026 8:21:09,Az22,6,2
+7/8/2026 8:21:13,AP67,10,0
+7/8/2026 8:21:16,KT15,6,2
+7/8/2026 8:21:20,Az22,8,0
+7/8/2026 8:21:24,SM25,10,3
+7/8/2026 8:21:25,AM14,4,4
+7/8/2026 8:21:28,Az22,10,0
+7/8/2026 8:21:35,AM14,6,3
+7/8/2026 8:21:36,KG24,6,3
+7/8/2026 8:21:39,EL10,6,2
+7/8/2026 8:21:45,AB03,10,2
+7/8/2026 8:21:46,AM14,8,2
+7/8/2026 8:21:47,YG04,8,2
+7/8/2026 8:21:56,AM14,10,2
+7/8/2026 8:22:33,JL18,10,1
+7/8/2026 8:22:39,SW37,2,4
+7/8/2026 8:22:41,AJ36 ,8,3
+7/8/2026 8:22:42,AS20,8,3
+7/8/2026 8:22:47,JQ77,8,1
+7/8/2026 8:22:57,SW37,4,3
+7/8/2026 8:23:01,RD59,10,1
+7/8/2026 8:23:05,AZ09,8,4
+7/8/2026 8:23:05,SW37,6,3
+7/8/2026 8:23:15,SW37,8,3
+7/8/2026 8:23:19,FF11,6,1
+7/8/2026 8:23:22,EL09,8,1
+7/8/2026 8:23:28,SW37,10,1
+7/8/2026 8:23:34,SB28,10,1
+7/8/2026 8:23:43,AS11,8,2
+7/8/2026 8:23:47,JH09,10,1
+7/8/2026 8:24:11,BMR14,8,2
+7/8/2026 8:24:17,JS75,10,1
+7/8/2026 8:24:22,TH07,2,4
+7/8/2026 8:24:31,mp15,10,2
+7/8/2026 8:24:34,TH07,4,3
+7/8/2026 8:24:44,TH07,6,3
+7/8/2026 8:24:49,FY22,8,0
+7/8/2026 8:24:53,TH07,8,3
+7/8/2026 8:24:55,EL10,8,2
+7/8/2026 8:24:56,KT15,8,0
+7/8/2026 8:25:03,TH07,10,3
+7/8/2026 8:25:24,AZ09,10,5
+7/8/2026 8:25:28,AS11,10,1
+7/8/2026 8:25:30,YG04,10,3
+7/8/2026 8:25:30,AJ36,10,3
+7/8/2026 8:25:42,OF05,4,4
+7/8/2026 8:25:45,EL09,10,3
+7/8/2026 8:25:52,OF05,6,3
+7/8/2026 8:26:03,OF05,8,3
+7/8/2026 8:26:06,HC02,2,1
+7/8/2026 8:26:13,OF05,10,2
+7/8/2026 8:26:18,MD77,2,3
+7/8/2026 8:26:23,GK22,2,2
+7/8/2026 8:26:26,AMN67,6,5
+7/8/2026 8:26:27,AS8,8,1
+7/8/2026 8:26:29,HC02,4,5
+7/8/2026 8:26:31,MD77,4,5
+7/8/2026 8:26:33,SM25,2,4
+7/8/2026 8:26:36,GK22,4,2
+7/8/2026 8:26:43,SM25,4,4
+7/8/2026 8:26:43,HC02,6,0
+7/8/2026 8:26:43,MD77,6,1
+7/8/2026 8:26:49,GK22,6,2
+7/8/2026 8:26:52,SM25,6,1
+7/8/2026 8:26:53,MD77,8,4
+7/8/2026 8:26:53,SS88,2,3
+7/8/2026 8:26:56,HC02,8,1
+7/8/2026 8:26:58,GK22,8,0
+7/8/2026 8:26:59,SM25,8,3
+7/8/2026 8:27:01,SS88,4,3
+7/8/2026 8:27:08,GK22,10,1
+7/8/2026 8:27:10,SM25,10,3
+7/8/2026 8:27:12,HC02,10,0
+7/8/2026 8:27:13,SS88,6,3
+7/8/2026 8:27:21,SS88,8,0
+7/8/2026 8:27:29,SS88,10,2
+7/8/2026 8:29:05,IH09,2,2
+7/8/2026 8:29:48,IH09,4,4
+7/8/2026 8:29:56,IH09,6,0
+7/8/2026 8:30:05,IH09,8,3
+7/8/2026 8:30:14,IH09,10,5
+7/8/2026 8:55:21,YH04,2,2
+7/8/2026 8:55:56,YH04,4,3
+7/8/2026 8:56:16,YH04,6,1
+7/8/2026 8:56:33,YH04,8,0
+7/8/2026 8:56:46,YH04,10,1
+7/8/2026 9:23:21,AB03,2,3
+7/8/2026 9:23:37,AB03,4,2
+7/8/2026 9:23:50,AB03,6,3
+7/8/2026 9:24:06,AB03,8,0
+7/8/2026 9:24:16,AB03,10,2</pre>
+        </div>
+        <p class="note">This is real data from a past Data Dunkers group. It has quirks: repeated rows, missing spots, messy initials. Real data always does.</p>
+      </details>
+    </div>
+  </section>
+
+  <!-- PICKER -->
+  <section id="picker">
+    <div class="picker-intro">
+      <span class="section-tag">Pick your challenge</span>
+      <h2>Choose a card</h2>
+      <p class="note">Each card gives you every step. Do Challenge 1 first. After that, any order.</p>
+    </div>
+    <div class="picker-grid">
+      <button class="tile" data-target="c1">
+        <div class="tile-top"><span class="tile-num">Challenge 1</span><span class="tile-time">5&ndash;10 min</span></div>
+        <h4>Meet the Shot Data</h4>
+        <p>Find out what the AI understands about your data, and what it gets wrong.</p>
+        <span class="first-badge">Do this first</span>
+      </button>
+      <button class="tile" data-target="c2">
+        <div class="tile-top"><span class="tile-num">Challenge 2</span><span class="tile-time">5&ndash;10 min</span></div>
+        <h4>Shooting Profiles</h4>
+        <p>Who stays deadly from deep? Who is a close-range specialist?</p>
+      </button>
+      <button class="tile" data-target="c3">
+        <div class="tile-top"><span class="tile-num">Challenge 3</span><span class="tile-time">5&ndash;10 min</span></div>
+        <h4>The Training Plan</h4>
+        <p>What should you train on, and can the AI back it up with your numbers?</p>
+      </button>
+      <button class="tile" data-target="c4">
+        <div class="tile-top"><span class="tile-num">Challenge 4</span><span class="tile-time">15&ndash;20 min</span></div>
+        <h4>Game Day</h4>
+        <p>Draft two teams, then run an imaginary shootout between them.</p>
+      </button>
+      <button class="tile" data-target="c5">
+        <div class="tile-top"><span class="tile-num">Challenge 5</span><span class="tile-time">15&ndash;20 min</span></div>
+        <h4>Sign a Pro</h4>
+        <p>Your team signs one NBA or WNBA player. Who, and why?</p>
+      </button>
+      <button class="tile" data-target="c6">
+        <div class="tile-top"><span class="tile-num">Challenge 6</span><span class="tile-time">5&ndash;10 min</span></div>
+        <h4>The Trade</h4>
+        <p>The AI argues both sides of a player trade. You make the ruling.</p>
+      </button>
+      <button class="tile" data-target="c7">
+        <div class="tile-top"><span class="tile-num">Challenge 7</span><span class="tile-time">5&ndash;10 min</span></div>
+        <h4>The Rematch</h4>
+        <p>Predict tomorrow's scores. Then ask: can 5 shots really tell you?</p>
+      </button>
+      <button class="tile" data-target="c8">
+        <div class="tile-top"><span class="tile-num">Challenge 8</span><span class="tile-time">5&ndash;10 min</span></div>
+        <h4>The Broadcast</h4>
+        <p>An AI commentator recaps shot day. You fact-check every claim.</p>
+      </button>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 1 -->
+  <section class="challenge" id="c1">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 1 &middot; Do this first</span>
+      <h2>Meet the Shot Data</h2>
+      <p class="goal">Goal: Find out what the AI understands about your data, and catch what it gets wrong.</p>
+      <ol class="steps">
+        <li>Start a new chat.</li>
+        <li>Copy the prompt below and paste it into your chatbot.</li>
+        <li>Paste your data directly below the prompt. Send.</li>
+        <li>Read the answer together. Did it understand that each player has several rows?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>I am pasting shooting data from students at a basketball data event. Each player took 5 shots from each of 5 spots: 2, 4, 6, 8, and 10 feet. Each row is one turn: the player's initials, the shot distance in feet, and how many shots they made out of 5. Some players did not get to every spot. Explain what you understand about this dataset in simple words. Then tell me one thing that looks interesting and one thing that looks odd or messy. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> This data has quirks: repeated rows, missing spots, messy initials. Did the AI notice any of them? Did you?</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 2 -->
+  <section class="challenge" id="c2">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 2</span>
+      <h2>Shooting Profiles</h2>
+      <p class="goal">Goal: Find the snipers and the close-range specialists.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data. Send.</li>
+        <li>Pick two players it names and find their rows in the spreadsheet. Is the AI right?</li>
+        <li>Ask a follow up: which player surprised you the most, and why?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is shooting data from students at a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. Find the players who stay accurate as the distance grows, and the players who are strong up close but fade from far away. Name the players and point to the rows that show it. Do not invent numbers. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> A profile built on one great turn is thin evidence. How many rows back up each claim?</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 3 -->
+  <section class="challenge" id="c3">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 3</span>
+      <h2>The Training Plan</h2>
+      <p class="goal">Goal: Get a training plan built on your real numbers, then find its blind spots.</p>
+      <ol class="steps">
+        <li>Pick a player. Yourself is the best choice if this is your own data.</li>
+        <li>New chat. Fill the initials into the prompt, paste your data, send.</li>
+        <li>Read the plan. For every recommendation, find the numbers behind it.</li>
+        <li>Ask your group: would a real coach agree with this plan?</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; fill in the initials, then copy</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is shooting data from students at a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. I am player <span class="fill">[INITIALS]</span>. Look at my results at each distance. What should I train on first, and why? Point to my real numbers for every recommendation. Then tell me the important things this data cannot know about my shooting. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> What did the AI say the data cannot know? Form, fatigue, pressure, and effort are not columns. Neither is having a bad day.</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 4 -->
+  <section class="challenge" id="c4">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 4</span>
+      <h2>Game Day</h2>
+      <p class="goal">Goal: Draft two balanced teams, then run an imaginary shootout between them.</p>
+      <ol class="steps">
+        <li>New chat. Paste the draft prompt, then your data. Send.</li>
+        <li>Review the rosters. You are the general managers: overrule any pick you disagree with, and tell the AI why.</li>
+        <li>When both teams look fair, send the game prompt in the same chat.</li>
+        <li>Enjoy the play by play. Then do the check below.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Draft prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is shooting data from students at a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. Split the players into two balanced teams. Do not calculate scores. Look at who is strong up close and who is strong from deep, and give each team a mix of both. Explain each pick in one short line. Give each team a fun, school friendly name. Here is the data:</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Game prompt &middot; send in the same chat</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Now run an imaginary shootout game between the two teams. Each player shoots once from all five spots. Base what happens on their real data: a player who went 5 for 5 from 2 feet should almost never miss there, and a player who went 0 for 5 from 10 feet should not suddenly get hot. Give us short, fun play by play commentary and a final score.</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Pick two moments from the commentary and find the numbers behind them. Did anyone perform way outside their data? Run the game again. Different result? Talk about why.</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 5 -->
+  <section class="challenge" id="c5">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 5</span>
+      <h2>Sign a Pro</h2>
+      <p class="goal">Goal: Sign one NBA or WNBA player to your team, and defend the pick with data.</p>
+      <ol class="steps">
+        <li>New chat. Paste the scouting prompt, then your data. It will tell you what kind of shooter your team is missing.</li>
+        <li>As a group, pick your pro. Any NBA or WNBA player you want.</li>
+        <li>Fill your player's name into the prediction prompt and send it in the same chat.</li>
+        <li>Debate the AI's predictions. Would your pro really never miss? Compare with our guesses in the wildcard table below.</li>
+        <li>Bonus: add your pro's wildcard rows to your data and rerun Game Day with them in the lineup.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Scouting prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is my team's shooting data from a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. Our team can sign one professional basketball player, NBA or WNBA. Based on what our data says we are missing, what kind of shooter do we need most? Describe the type of player. Do not name anyone yet. Here is the data:</pre>
+      </div>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prediction prompt &middot; fill in the name, send in the same chat</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>We are signing <span class="fill">[PLAYER NAME]</span>. Predict what they would score in our challenge: 5 shots from each spot at 2, 4, 6, 8, and 10 feet. Give a number out of 5 for each spot and explain your reasoning. Be honest: would they really never miss?</pre>
+      </div>
+      <h3>Wildcard table: our best guesses</h3>
+      <p class="note">These are not real stats. They are our friendly estimates of what each pro might score in our challenge on a normal day. Disagree? Good. That is the point.</p>
+      <table>
+        <thead>
+          <tr><th>Player</th><th class="num">2 ft</th><th class="num">4 ft</th><th class="num">6 ft</th><th class="num">8 ft</th><th class="num">10 ft</th><th class="num">Total /25</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Pascal Siakam (PS43)</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">4</td><td class="num">23</td></tr>
+          <tr><td>Steph Curry (SC30)</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">25</td></tr>
+          <tr><td>Caitlin Clark (CC22)</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">4</td><td class="num">23</td></tr>
+          <tr><td>A'ja Wilson (AW22)</td><td class="num">5</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">3</td><td class="num">22</td></tr>
+          <tr><td>Sabrina Ionescu (SI20)</td><td class="num">5</td><td class="num">4</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">23</td></tr>
+          <tr><td>Giannis Antetokounmpo (GA34)</td><td class="num">5</td><td class="num">5</td><td class="num">4</td><td class="num">3</td><td class="num">2</td><td class="num">19</td></tr>
+        </tbody>
+      </table>
+      <p>Want to add a pro to your dataset? Copy their rows below and paste them under your data. They use the same columns as your file.</p>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Wildcard rows &middot; copy the player you signed</span>
+          <button class="copy-btn" data-copy>Copy all</button>
+        </div>
+        <pre>,PS43,2,5
+,PS43,4,5
+,PS43,6,5
+,PS43,8,4
+,PS43,10,4
+,SC30,2,5
+,SC30,4,5
+,SC30,6,5
+,SC30,8,5
+,SC30,10,5
+,CC22,2,5
+,CC22,4,5
+,CC22,6,4
+,CC22,8,5
+,CC22,10,4
+,AW22,2,5
+,AW22,4,5
+,AW22,6,5
+,AW22,8,4
+,AW22,10,3
+,SI20,2,5
+,SI20,4,4
+,SI20,6,5
+,SI20,8,5
+,SI20,10,4
+,GA34,2,5
+,GA34,4,5
+,GA34,6,4
+,GA34,8,3
+,GA34,10,2</pre>
+      </div>
+      <p class="note">The comma at the front holds the Timestamp column's place so everything stays lined up. If your file has no Timestamp column, remove it.</p>
+      <div class="check"><b>Check it:</b> Steph Curry at a perfect 25 out of 25. Do you believe that row? Nobody is perfect on 5 shots at a random moment. Not even Steph.</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 6 -->
+  <section class="challenge" id="c6">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 6</span>
+      <h2>The Trade</h2>
+      <p class="goal">Goal: Make the AI argue both sides of a trade, then rule on it yourselves.</p>
+      <ol class="steps">
+        <li>Two groups (or two halves of your group) each nominate one player to trade.</li>
+        <li>New chat. Fill both names into the prompt, paste your data, send.</li>
+        <li>Read both arguments out loud, courtroom style.</li>
+        <li>Vote: does the trade happen? Majority rules.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; fill in the players, then copy</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is shooting data from students at a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. Two teams are discussing a trade: <span class="fill">[PLAYER 1]</span> for <span class="fill">[PLAYER 2]</span>. First argue the case FOR the trade, then argue the case AGAINST it, using only the numbers in the data. Do not pick a winner. End with one question each team should ask before deciding. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Did both arguments use real numbers? Which side was stronger, and who says so: you, or the AI?</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 7 -->
+  <section class="challenge" id="c7">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 7</span>
+      <h2>The Rematch</h2>
+      <p class="goal">Goal: Predict tomorrow's scores, then question how much 5 shots can really tell you.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data. Send.</li>
+        <li>Pick one prediction you disagree with and argue back with data.</li>
+        <li>If you get the chance, actually reshoot and compare. Reality is the best fact checker.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is shooting data from students at a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. Imagine everyone shoots again tomorrow: 5 shots from each of the 5 spots. Predict what would change and what would stay the same, and explain your reasoning. Then answer honestly: how much can 5 shots per spot really tell us about a player? Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> If a player went 3 for 5, are they really a 60 percent shooter? What would make you more confident: more shots, more days, or both?</div>
+    </div>
+  </section>
+
+  <!-- CHALLENGE 8 -->
+  <section class="challenge" id="c8">
+    <button class="back-btn" data-back>&larr; All challenges</button>
+    <div class="card">
+      <span class="section-tag">Challenge 8</span>
+      <h2>The Broadcast</h2>
+      <p class="goal">Goal: Get a highlight recap of shot day, then fact-check every claim in it.</p>
+      <ol class="steps">
+        <li>New chat. Paste the prompt, then your data. Send.</li>
+        <li>Read the broadcast out loud in your best commentator voice.</li>
+        <li>Fact-check it as a group: every claim must trace to a real number.</li>
+        <li>Flag anything invented and make the AI correct it.</li>
+      </ol>
+      <div class="prompt">
+        <div class="prompt-bar">
+          <span class="prompt-label">Prompt &middot; copy this</span>
+          <button class="copy-btn" data-copy>Copy</button>
+        </div>
+        <pre>Here is shooting data from students at a basketball data event. Each row is one player's turn: initials, shot distance in feet, and shots made out of 5. You are a fun, energetic sports commentator. Write a short highlight recap of shot day. Every claim must trace back to a real number in the data. Keep it kind: celebrate great shooting, never mock a miss. Here is the data:</pre>
+      </div>
+      <div class="check"><b>Check it:</b> Commentators love a good story. Which lines were backed by data, and which were just good television?</div>
+    </div>
+  </section>
+
+</main>
+
+<footer>
+  Part of the <a href="https://datadunkers.ca">Data Dunkers</a> program. AI suggests. You decide.
+</footer>
+
+<script>
+  var picker = document.getElementById('picker');
+  var start = document.getElementById('start');
+  var challenges = document.querySelectorAll('.challenge');
+
+  function showChallenge(id) {
+    var target = document.getElementById(id);
+    if (!target) return;
+    challenges.forEach(function (c) { c.classList.remove('active'); });
+    target.classList.add('active');
+    picker.style.display = 'none';
+    start.style.display = 'none';
+    window.scrollTo({ top: 0 });
+    if (history.replaceState) history.replaceState(null, '', '#' + id);
+  }
+
+  function showPicker() {
+    challenges.forEach(function (c) { c.classList.remove('active'); });
+    picker.style.display = '';
+    start.style.display = '';
+    if (history.replaceState) history.replaceState(null, '', '#picker');
+    picker.scrollIntoView();
+  }
+
+  document.querySelectorAll('.tile').forEach(function (tile) {
+    tile.addEventListener('click', function () { showChallenge(tile.dataset.target); });
+  });
+  document.querySelectorAll('[data-back]').forEach(function (btn) {
+    btn.addEventListener('click', showPicker);
+  });
+
+  // Support direct links like page.html#c4
+  if (location.hash && /^#c[1-8]$/.test(location.hash)) {
+    showChallenge(location.hash.slice(1));
+  }
+
+  // Copy buttons
+  document.querySelectorAll('.copy-btn').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var pre = btn.closest('.prompt').querySelector('pre');
+      var text = pre.innerText;
+      function done() {
+        var old = btn.textContent;
+        btn.textContent = 'Copied!';
+        btn.classList.add('copied');
+        setTimeout(function () {
+          btn.textContent = old;
+          btn.classList.remove('copied');
+        }, 1600);
+      }
+      function fallback() {
+        var ta = document.createElement('textarea');
+        ta.value = text;
+        document.body.appendChild(ta);
+        ta.select();
+        try { document.execCommand('copy'); done(); } catch (e) {}
+        document.body.removeChild(ta);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done).catch(fallback);
+      } else {
+        fallback();
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
